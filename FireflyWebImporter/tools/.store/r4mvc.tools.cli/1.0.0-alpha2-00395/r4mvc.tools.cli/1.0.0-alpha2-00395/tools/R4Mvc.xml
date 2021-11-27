@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>R4Mvc</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AspNetCore.Mvc.R4MvcExcludeAttribute">
+            <summary>
+            Force exclusion of a class or action for R4MVC code generation
+            </summary>
+        </member>
+        <member name="P:R4Mvc.TagHelpers.AnchorTagHelper.ObjectAction">
+            <summary>
+            The MVC action call (use R4MVC syntax i.e. `MVC.Home.Index()`)
+            </summary>
+        </member>
+        <member name="P:R4Mvc.TagHelpers.FormTagHelper.ObjectAction">
+            <summary>
+            The MVC action call (use R4MVC syntax i.e. `MVC.Home.Index()`)
+            </summary>
+        </member>
+    </members>
+</doc>

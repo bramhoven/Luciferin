@@ -2,7 +2,7 @@
 
 namespace FireflyWebImporter.BusinessLayer.Nordigen.Models.Requests
 {
-    public class NordigenTokenRequests
+    public class NordigenTokenRequest
     {
         #region Properties
 
