@@ -73,6 +73,38 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen
         }
 
         /// <inheritdoc />
+        public async Task<Account> GetAccount(string accountId)
+        {
+            await ValidateToken();
+            
+            return await _store.GetAccount(accountId, _openIdToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Balance>> GetAccountBalance(string accountId)
+        {
+            await ValidateToken();
+            
+            return await _store.GetAccountBalance(accountId, _openIdToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<AccountDetails> GetAccountDetails(string accountId)
+        {
+            await ValidateToken();
+            
+            return await _store.GetAccountDetails(accountId, _openIdToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId)
+        {
+            await ValidateToken();
+            
+            return await _store.GetAccountTransactions(accountId, _openIdToken);
+        }
+
+        /// <inheritdoc />
         public async Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId)
         {
             await ValidateToken();

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.Models;
@@ -27,10 +28,13 @@ namespace FireflyWebImporter.Controllers
 
         public virtual async Task<ActionResult> Index()
         {
+            var requisitions = await _nordigenManager.GetRequisitions();
+            var transactions = await _nordigenManager.GetAccountTransactions(requisitions.First().Accounts.FirstOrDefault());
+            
             var model = new ImportIndexPageModel
             {
                 ConfigurationStartUrl = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
-                RequisitionList = new RequisitionList(await _nordigenManager.GetRequisitions())
+                RequisitionList = new RequisitionList(requisitions)
             };
             return View(model);
         }

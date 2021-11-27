@@ -74,7 +74,6 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Stores
         /// <inheritdoc />
         public async Task<bool> DeleteRequisition(string requisitionId, OpenIdToken openIdToken)
         {
-            
             try
             {
                 await NordigenRoutes
@@ -87,6 +86,46 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Stores
             {
                 return false;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<Account> GetAccount(string accountId, OpenIdToken openIdToken)
+        {
+            var accountResponse = await NordigenRoutes
+                                        .Account(_nordigenBaseUrl, accountId)
+                                        .WithOAuthBearerToken(openIdToken.AccessToken)
+                                        .GetJsonAsync<NordigenAccountResponse>();
+            return accountResponse.MapToAccount();
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Balance>> GetAccountBalance(string accountId, OpenIdToken openIdToken)
+        {
+            var accountBalanceResponse = await NordigenRoutes
+                                               .AccountBalances(_nordigenBaseUrl, accountId)
+                                               .WithOAuthBearerToken(openIdToken.AccessToken)
+                                               .GetJsonAsync<NordigenAccountBalanceResponse>();
+            return accountBalanceResponse.MapToBalanceCollection();
+        }
+
+        /// <inheritdoc />
+        public async Task<AccountDetails> GetAccountDetails(string accountId, OpenIdToken openIdToken)
+        {
+            var accountDetailsResponse = await NordigenRoutes
+                                               .AccountDetails(_nordigenBaseUrl, accountId)
+                                               .WithOAuthBearerToken(openIdToken.AccessToken)
+                                               .GetJsonAsync<NordigenAccountDetailsResponse>();
+            return accountDetailsResponse.MapToAccountDetails();
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId, OpenIdToken openIdToken)
+        {
+            var transactionResponse = await NordigenRoutes
+                                            .AccountTransactions(_nordigenBaseUrl, accountId)
+                                            .WithOAuthBearerToken(openIdToken.AccessToken)
+                                            .GetJsonAsync<NordigenTransactionResponse>();
+            return transactionResponse.MapToTransactionCollection();
         }
 
         /// <inheritdoc />

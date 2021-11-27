@@ -8,7 +8,7 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Models
     {
         #region Properties
 
-        public ICollection<Guid> Accounts { get; set; }
+        public ICollection<string> Accounts { get; set; }
         public bool AccountSelection { get; set; }
         public string Agreement { get; set; }
 

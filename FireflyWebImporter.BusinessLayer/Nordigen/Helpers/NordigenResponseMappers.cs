@@ -13,6 +13,47 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
 
         #region Static Methods
 
+        public static Account MapToAccount(this NordigenAccountResponse accountResponse)
+        {
+            return new Account
+            {
+                Created = accountResponse.Created,
+                Iban = accountResponse.Iban,
+                Id = accountResponse.Id,
+                InstitutionId = accountResponse.InstitutionId,
+                LastAccessed = accountResponse.LastAccessed,
+                Status = accountResponse.Status
+            };
+        }
+
+        public static AccountDetails MapToAccountDetails(this NordigenAccountDetailsResponse accountDetailsResponse)
+        {
+            return new AccountDetails
+            {
+                Currency = accountDetailsResponse.Account.Currency,
+                CashAccountType = accountDetailsResponse.Account.CashAccountType,
+                Iban = accountDetailsResponse.Account.Iban,
+                Name = accountDetailsResponse.Account.Name,
+                Product = accountDetailsResponse.Account.Product,
+                OwnerName = accountDetailsResponse.Account.OwnerName,
+                ResourceId = accountDetailsResponse.Account.ResourceId
+            };
+        }
+
+        public static ICollection<Balance> MapToBalanceCollection(this NordigenAccountBalanceResponse balanceResponse)
+        {
+            return balanceResponse.Balances.Select(b => new Balance
+            {
+                BalanceAmount = new BalanceAmount
+                {
+                    Amount = b.BalanceAmount.Amount,
+                    Currency = b.BalanceAmount.Currency
+                },
+                BalanceType = b.BalanceType,
+                LastChangeDateTime = b.LastChangeDateTime
+            }).ToList();
+        }
+
         public static EndUserAgreement MapToEndUserAgreement(this NordigenEndUserAgreementResponse endUserAgreementResponse)
         {
             return new EndUserAgreement
@@ -61,7 +102,7 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
         {
             return new Requisition
             {
-                Accounts = requisitionResponse.Accounts.Select(a => Guid.Parse(a)).ToList(),
+                Accounts = requisitionResponse.Accounts,
                 Agreement = requisitionResponse.Agreement,
                 AccountSelection = requisitionResponse.AccountSelection,
                 Created = requisitionResponse.Created,
@@ -79,6 +120,34 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
         public static ICollection<Requisition> MapToRequisitionCollection(this IEnumerable<NordigenRequisitionResponse> requisitionResponses)
         {
             return requisitionResponses.Select(r => r.MapToRequisition()).ToList();
+        }
+
+        public static ICollection<Transaction> MapToTransactionCollection(this NordigenTransactionResponse transactionResponse)
+        {
+            var transactions = new List<Transaction>();
+
+            var nordigenTransactions = transactionResponse.Transactions.Booked.Concat(transactionResponse.Transactions.Pending);
+            transactions.AddRange(nordigenTransactions.Select(b => new Transaction
+            {
+                Status = TransactionStatus.Booked,
+                BookingDate = b.BookingDate,
+                CreditorAccount = b.CreditorAccount == null ? null : new CreditorAccount
+                {
+                    Iban = b.CreditorAccount?.Iban
+                },
+                CreditorName = b.CreditorName,
+                DebtorAccount = b.DebtorAccount == null ? null : new CreditorAccount
+                {
+                    Iban = b.DebtorAccount?.Iban
+                },
+                DebtorName = b.DebtorName,
+                TransactionAmount = b.TransactionAmount,
+                TransactionId = b.TransactionId,
+                ValueDate = b.ValueDate,
+                BankTransactionCode = b.BankTransactionCode,
+            }));
+
+            return transactions;
         }
 
         private static RequisitionStatus MapStatus(string status)

@@ -9,6 +9,14 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
 
         #region Static Methods
 
+        public static string Account(string baseUrl, string accountId) => ApiBaseUrl(baseUrl).AppendPathSegments("accounts", $"{accountId}/");
+
+        public static string AccountBalances(string baseUrl, string accountId) => Account(baseUrl, accountId).AppendPathSegment("balances/");
+        
+        public static string AccountTransactions(string baseUrl, string accountId) => Account(baseUrl, accountId).AppendPathSegment("transactions/");
+        
+        public static string AccountDetails(string baseUrl, string accountId) => Account(baseUrl, accountId).AppendPathSegment("details/");
+
         public static string EndUserAgreements(string baseUrl) => ApiBaseUrl(baseUrl).AppendPathSegments("agreements", "enduser/");
 
         public static string EndUserAgreement(string nordigenBaseUrl, string endUserAgreementId) => EndUserAgreements(nordigenBaseUrl).AppendPathSegment($"{endUserAgreementId}/");

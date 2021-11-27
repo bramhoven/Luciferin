@@ -17,6 +17,14 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Stores
 
         Task<bool> DeleteRequisition(string requisitionId, OpenIdToken openIdToken);
 
+        Task<Account> GetAccount(string accountId, OpenIdToken openIdToken);
+
+        Task<ICollection<Balance>> GetAccountBalance(string accountId, OpenIdToken openIdToken);
+
+        Task<AccountDetails> GetAccountDetails(string accountId, OpenIdToken openIdToken);
+
+        Task<ICollection<Transaction>> GetAccountTransactions(string accountId, OpenIdToken openIdToken);
+
         Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId, OpenIdToken openIdToken);
 
         Task<Institution> GetInstitution(string institutionId, OpenIdToken openIdToken);
