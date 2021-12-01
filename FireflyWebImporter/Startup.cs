@@ -1,9 +1,12 @@
 using System.Linq;
+using FireflyWebImporter.BusinessLayer.Firefly;
+using FireflyWebImporter.BusinessLayer.Firefly.Stores;
 using FireflyWebImporter.BusinessLayer.Import;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Stores;
 using FireflyWebImporter.Classes.Helpers;
 using FireflyWebImporter.Classes.Helpers.Interfaces;
+using FireflyWebImporter.Classes.Queue;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -66,9 +69,17 @@ namespace FireflyWebImporter
         {
             services.AddRazorPages();
 
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
+
             services.AddScoped<IConfigurationHelper>(s => new ConfigurationHelper(Configuration));
+            
             services.AddScoped<INordigenStore>(s => new NordigenStore(ConfigurationHelper.NordigenBaseUrl, ConfigurationHelper.NordigenSecretId, ConfigurationHelper.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();
+
+            services.AddScoped<IFireflyStore>(s => new FireflyStore(ConfigurationHelper.FireflyBaseUrl, ConfigurationHelper.FireflyAccessToken));
+            services.AddScoped<IFireflyManager, FireflyManager>();
+            
             services.AddScoped<IImportManager, ImportManager>();
         }
 

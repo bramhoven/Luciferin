@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using FireflyWebImporter.BusinessLayer.Firefly;
+using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
+using Microsoft.Extensions.Logging;
 
 namespace FireflyWebImporter.BusinessLayer.Import
 {
@@ -11,13 +17,19 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         private readonly INordigenManager _nordigenManager;
 
+        private readonly IFireflyManager _fireflyManager;
+
+        private ILogger<ImportManager> _logger;
+
         #endregion
 
         #region Constructors
 
-        public ImportManager(INordigenManager nordigenManager)
+        public ImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, ILogger<ImportManager> logger)
         {
             _nordigenManager = nordigenManager;
+            _fireflyManager = fireflyManager;
+            _logger = logger;
         }
 
         #endregion
@@ -49,6 +61,47 @@ namespace FireflyWebImporter.BusinessLayer.Import
             {
                 return false;
             }
+        }
+
+        /// <inheritdoc />
+        public Task<ICollection<Requisition>> GetRequisitions()
+        {
+            return _nordigenManager.GetRequisitions();
+        }
+
+        /// <param name="cancellationToken"></param>
+        /// <inheritdoc />
+        public async ValueTask StartImport(CancellationToken cancellationToken)
+        {
+            var fireflyTransactions = await GetTransactions();
+            var requisitions = await GetRequisitions();
+            
+            _logger.LogInformation($"Start import for {requisitions.Count} connected banks");
+
+            var newTransactions = new List<Transaction>();
+            foreach (var requisition in requisitions)
+            {
+                var account = requisition.Accounts.FirstOrDefault();
+                
+                var transactions = await _nordigenManager.GetAccountTransactions(account);
+                var details = await _nordigenManager.GetAccountDetails(account);
+                
+                var newAccountTransactions = CompareTransactions(transactions, fireflyTransactions);
+                
+                _logger.LogInformation($"{details.Iban} has {newAccountTransactions.Count}/{transactions.Count} new transactions");
+                
+                newTransactions.AddRange(newAccountTransactions);
+            }
+        }
+
+        private static ICollection<Transaction> CompareTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
+        {
+            return transactions.Where(t => fireflyTransactions.All(ft => ft.ExternalId != t.TransactionId)).ToList();
+        }
+
+        private async Task<ICollection<FireflyTransaction>> GetTransactions()
+        {
+            return await _fireflyManager.GetTransactions();
         }
 
         #endregion

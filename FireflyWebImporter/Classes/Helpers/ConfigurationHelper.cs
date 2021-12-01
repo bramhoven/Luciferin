@@ -14,6 +14,12 @@ namespace FireflyWebImporter.Classes.Helpers
         #region Properties
 
         /// <inheritdoc />
+        public string FireflyBaseUrl => _configuration.GetSection(ConfigurationConstants.FireflyBaseUrl).Value;
+
+        /// <inheritdoc />
+        public string FireflyAccessToken => _configuration.GetSection(ConfigurationConstants.FireflyAccessToken).Value;
+
+        /// <inheritdoc />
         public string NordigenBaseUrl => _configuration.GetSection(ConfigurationConstants.NordigenBaseUrl).Value;
 
         /// <inheritdoc />
