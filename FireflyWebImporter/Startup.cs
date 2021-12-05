@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace FireflyWebImporter
 {
@@ -77,7 +78,7 @@ namespace FireflyWebImporter
             services.AddScoped<INordigenStore>(s => new NordigenStore(ConfigurationHelper.NordigenBaseUrl, ConfigurationHelper.NordigenSecretId, ConfigurationHelper.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();
 
-            services.AddScoped<IFireflyStore>(s => new FireflyStore(ConfigurationHelper.FireflyBaseUrl, ConfigurationHelper.FireflyAccessToken));
+            services.AddScoped<IFireflyStore>(s => new FireflyStore(ConfigurationHelper.FireflyBaseUrl, ConfigurationHelper.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
             services.AddScoped<IFireflyManager, FireflyManager>();
             
             services.AddScoped<IImportManager, ImportManager>();

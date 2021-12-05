@@ -20,6 +20,8 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Models
 
         public string RemittanceInformationUnstructured { get; set; }
 
+        public string RequisitorIban { get; set; }
+
         public TransactionStatus Status { get; set; }
 
         public TransactionAmount TransactionAmount { get; set; }

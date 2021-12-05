@@ -42,7 +42,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 
         public string DestinationIban { get; set; }
 
-        public string DestinationId { get; set; }
+        public int DestinationId { get; set; }
 
         public string DestinationName { get; set; }
 
@@ -110,7 +110,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 
         public string SourceIban { get; set; }
 
-        public string SourceId { get; set; }
+        public int SourceId { get; set; }
 
         public string SourceName { get; set; }
 

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions
+namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Shared
 {
-    public class FireflyTransactionResponseTransaction
+    public class FireflyApiTransaction
     {
         #region Properties
 
@@ -59,10 +59,10 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions
         [JsonProperty("destination_iban")]
         public string DestinationIban { get; set; }
 
-        [JsonProperty("destination_id")]
-        public string DestinationId { get; set; }
+        [JsonProperty("destination_id", NullValueHandling = NullValueHandling.Ignore)]
+        public int DestinationId { get; set; }
 
-        [JsonProperty("destination_name")]
+        [JsonProperty("destination_name", NullValueHandling = NullValueHandling.Ignore)]
         public string DestinationName { get; set; }
 
         [JsonProperty("destination_type")]
@@ -75,7 +75,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions
         public string ExternalId { get; set; }
 
         [JsonProperty("foreign_amount")]
-        public string ForeignAmount { get; set; }
+        public double? ForeignAmount { get; set; }
 
         [JsonProperty("foreign_currency_code")]
         public string ForeignCurrencyCode { get; set; }
@@ -161,10 +161,10 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions
         [JsonProperty("source_iban")]
         public string SourceIban { get; set; }
 
-        [JsonProperty("source_id")]
-        public string SourceId { get; set; }
+        [JsonProperty("source_id", NullValueHandling = NullValueHandling.Ignore)]
+        public int SourceId { get; set; }
 
-        [JsonProperty("source_name")]
+        [JsonProperty("source_name", NullValueHandling = NullValueHandling.Ignore)]
         public string SourceName { get; set; }
 
         [JsonProperty("source_type")]

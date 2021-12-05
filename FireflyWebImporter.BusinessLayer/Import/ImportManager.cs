@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Firefly;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
+using FireflyWebImporter.BusinessLayer.Import.Mappers;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
 using Microsoft.Extensions.Logging;
@@ -15,11 +16,11 @@ namespace FireflyWebImporter.BusinessLayer.Import
     {
         #region Fields
 
-        private readonly INordigenManager _nordigenManager;
-
         private readonly IFireflyManager _fireflyManager;
 
-        private ILogger<ImportManager> _logger;
+        private readonly INordigenManager _nordigenManager;
+
+        private readonly ILogger<ImportManager> _logger;
 
         #endregion
 
@@ -51,10 +52,10 @@ namespace FireflyWebImporter.BusinessLayer.Import
             {
                 var requisition = await _nordigenManager.GetRequisition(requisitionId);
                 var endUserAgreement = await _nordigenManager.GetEndUserAgreement(requisition.Agreement);
-                
+
                 await _nordigenManager.DeleteEndUserAgreement(endUserAgreement.Id);
                 await _nordigenManager.DeleteRequisition(requisition.Id);
-                
+
                 return true;
             }
             catch (Exception)
@@ -75,34 +76,53 @@ namespace FireflyWebImporter.BusinessLayer.Import
         {
             var fireflyTransactions = await GetTransactions();
             var requisitions = await GetRequisitions();
-            
+
             _logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
             {
                 var account = requisition.Accounts.FirstOrDefault();
-                
+
                 var transactions = await _nordigenManager.GetAccountTransactions(account);
                 var details = await _nordigenManager.GetAccountDetails(account);
-                
-                var newAccountTransactions = CompareTransactions(transactions, fireflyTransactions);
-                
-                _logger.LogInformation($"{details.Iban} has {newAccountTransactions.Count}/{transactions.Count} new transactions");
-                
-                newTransactions.AddRange(newAccountTransactions);
-            }
-        }
 
-        private static ICollection<Transaction> CompareTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
-        {
-            return transactions.Where(t => fireflyTransactions.All(ft => ft.ExternalId != t.TransactionId)).ToList();
+                foreach (var transaction in transactions)
+                    transaction.RequisitorIban = details.Iban;
+
+                var newAccountTransactions = CompareTransactions(transactions, fireflyTransactions);
+                newTransactions.AddRange(newAccountTransactions);
+
+                _logger.LogInformation($"{details.Iban} has {newAccountTransactions.Count}/{transactions.Count} new transactions");
+            }
+
+            var accounts = await _fireflyManager.GetAccounts();
+            var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
+
+            if (!newFireflyTransactions.Any())
+            {
+                _logger.LogInformation("No new transactions to import");
+                return;
+            }
+
+            await _fireflyManager.AddNewTransactions(newFireflyTransactions);
+
+            _logger.LogInformation($"Imported {newFireflyTransactions.Count} transactions");
         }
 
         private async Task<ICollection<FireflyTransaction>> GetTransactions()
         {
             return await _fireflyManager.GetTransactions();
         }
+
+        #region Static Methods
+
+        private static ICollection<Transaction> CompareTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
+        {
+            return transactions.Where(t => fireflyTransactions.All(ft => string.Equals(ft.ExternalId, t.TransactionId, StringComparison.InvariantCultureIgnoreCase))).ToList();
+        }
+
+        #endregion
 
         #endregion
     }

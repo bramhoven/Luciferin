@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Firefly.Stores;
 
@@ -23,6 +24,24 @@ namespace FireflyWebImporter.BusinessLayer.Firefly
         #endregion
 
         #region Methods
+
+        /// <inheritdoc />
+        public Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions)
+        {
+            return _store.AddNewTransactions(transactions);
+        }
+
+        /// <inheritdoc />
+        public Task<ICollection<FireflyAccount>> GetAccounts(AccountType accountType)
+        {
+            return _store.GetAccounts(accountType);
+        }
+
+        /// <inheritdoc />
+        public Task<ICollection<FireflyAccount>> GetAccounts()
+        {
+            return _store.GetAccounts();
+        }
 
         /// <inheritdoc />
         public Task<ICollection<FireflyTransaction>> GetTransactions()
