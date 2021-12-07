@@ -119,7 +119,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         private static ICollection<Transaction> CompareTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
         {
-            return transactions.Where(t => fireflyTransactions.All(ft => string.Equals(ft.ExternalId, t.TransactionId, StringComparison.InvariantCultureIgnoreCase))).ToList();
+            return transactions.Where(t => fireflyTransactions.All(ft => !string.Equals(ft.ExternalId, t.TransactionId, StringComparison.InvariantCultureIgnoreCase))).ToList();
         }
 
         #endregion

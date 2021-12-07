@@ -46,11 +46,11 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
                 try
                 {
                     var response = await FireflyRoutes
-                          .Transactions(_fireflyBaseUrl)
-                          .WithOAuthBearerToken(_fireflyAccessToken)
-                          .WithHeader("Accept", "application/json")
-                          .PostJsonAsync(request)
-                          .ConfigureAwait(false);
+                                         .Transactions(_fireflyBaseUrl)
+                                         .WithOAuthBearerToken(_fireflyAccessToken)
+                                         .WithHeader("Accept", "application/json")
+                                         .PostJsonAsync(request)
+                                         .ConfigureAwait(false);
 
                     _logger.LogInformation($"Imported transaction {transaction.Description}");
                 }
@@ -100,11 +100,21 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
         /// <inheritdoc />
         public async Task<ICollection<FireflyTransaction>> GetTransactions()
         {
-            var transactionResponse = await FireflyRoutes
-                                            .Transactions(_fireflyBaseUrl)
-                                            .WithOAuthBearerToken(_fireflyAccessToken)
-                                            .GetJsonAsync<FireflyTransactionResponse>();
-            return transactionResponse.Data.MapToFireflyTransactionCollection();
+            var transactions = new List<FireflyTransaction>();
+            FireflyTransactionResponse response;
+            int page = 0;
+
+            do
+            {
+                response = await FireflyRoutes
+                                 .Transactions(_fireflyBaseUrl)
+                                 .WithOAuthBearerToken(_fireflyAccessToken)
+                                 .SetQueryParam("page", ++page)
+                                 .GetJsonAsync<FireflyTransactionResponse>();
+                transactions.AddRange(response.Data.MapToFireflyTransactionCollection());
+            } while (response.Meta.Pagination.CurrentPage < response.Meta.Pagination.TotalPages);
+
+            return transactions;
         }
 
         #region Static Methods
