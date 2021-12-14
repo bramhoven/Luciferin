@@ -15,12 +15,12 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
 
         #region Static Methods
 
-        public static FireflyAccount MapToFireflyAccount(this FireflyDataContainer<FireflyAccountAttributes> fireflyDataContainer)
+        private static FireflyAccount MapToFireflyAccount(this FireflyDataContainer<FireflyAccountAttributes> fireflyDataContainer)
         {
             var account = fireflyDataContainer.Attributes;
             if (account == null)
                 throw new ArgumentNullException(nameof(fireflyDataContainer.Attributes));
-            
+
             return new FireflyAccount
             {
                 Active = account.Active,
@@ -50,7 +50,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
                 Order = account.Order ?? 0,
                 OpeningBalance = account.OpeningBalance,
                 OpeningBalanceDate = account.OpeningBalanceDate,
-                Type = account.Type,
+                Type = MapAccountType(account.Type),
                 VirtualBalance = account.VirtualBalance,
                 ZoomLevel = account.ZoomLevel
             };
@@ -126,7 +126,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
             };
         }
 
-        public static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
+        private static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
         {
             var transaction = fireflyDataContainer.Attributes.Transactions.FirstOrDefault();
             if (transaction == null)
@@ -200,6 +200,23 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
             return fireflyDataContainers.Select(dc => dc.MapToFireflyTransaction()).ToList();
         }
 
+        private static AccountType MapAccountType(string type)
+        {
+            switch (type)
+            {
+                case "expense":
+                    return AccountType.Expense;
+                case "asset":
+                    return AccountType.Asset;
+                case "liability":
+                    return AccountType.Liability;
+                case "revenue":
+                    return AccountType.Revenue;
+            }
+
+            return AccountType.Unknown;
+        }
+
         private static string MapApiTransactionType(TransactionType type)
         {
             switch (type)
@@ -208,6 +225,8 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
                     return "withdrawal";
                 case TransactionType.Deposit:
                     return "deposit";
+                case TransactionType.Transfer:
+                    return "transfer";
                 default:
                     return "";
             }

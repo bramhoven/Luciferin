@@ -1,4 +1,5 @@
 ﻿using System;
+using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 
 namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 {
@@ -60,7 +61,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 
         public int Order { get; set; }
 
-        public string Type { get; set; }
+        public AccountType Type { get; set; }
 
         public string VirtualBalance { get; set; }
 

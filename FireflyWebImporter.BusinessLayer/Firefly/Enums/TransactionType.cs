@@ -6,6 +6,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Enums
     {
         Unknown,
         Withdrawal,
+        Transfer,
         Deposit
     }
 }

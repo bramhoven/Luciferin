@@ -145,6 +145,7 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
                 TransactionId = b.TransactionId,
                 ValueDate = b.ValueDate,
                 BankTransactionCode = b.BankTransactionCode,
+                RemittanceInformationUnstructured = b.RemittanceInformationUnstructured
             }));
 
             return transactions;
