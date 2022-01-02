@@ -105,6 +105,14 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen
         }
 
         /// <inheritdoc />
+        public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate)
+        {
+            await ValidateToken();
+            
+            return await _store.GetAccountTransactions(accountId, fromDate, _openIdToken);
+        }
+
+        /// <inheritdoc />
         public async Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId)
         {
             await ValidateToken();

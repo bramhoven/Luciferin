@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FireflyWebImporter.BusinessLayer.Firefly.Enums;
+using Newtonsoft.Json;
 
 namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 {
@@ -61,6 +62,8 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
         public string ForeignCurrencyId { get; set; }
 
         public string ForeignCurrencySymbol { get; set; }
+
+        public string Id { get; set; }
 
         public string ImportHashV2 { get; set; }
 
@@ -125,6 +128,16 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
         public string User { get; set; }
 
         public int? ZoomLevel { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
 
         #endregion
     }

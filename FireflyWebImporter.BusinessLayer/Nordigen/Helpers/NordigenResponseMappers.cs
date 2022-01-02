@@ -143,6 +143,7 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Helpers
                 DebtorName = b.DebtorName,
                 TransactionAmount = b.TransactionAmount,
                 TransactionId = b.TransactionId,
+                EntryReference = b.EntryReference,
                 ValueDate = b.ValueDate,
                 BankTransactionCode = b.BankTransactionCode,
                 RemittanceInformationUnstructured = b.RemittanceInformationUnstructured

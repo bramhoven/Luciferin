@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace FireflyWebImporter.BusinessLayer.Import
 {
-    public class ImportManager : ImportManagerBase
+    public class TestImportManager : ImportManagerBase
     {
         #region Constructors
 
-        public ImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, ICompareConfiguration compareConfiguration, ILogger<ImportManager> logger) : base(nordigenManager, fireflyManager, compareConfiguration, logger) { }
+        public TestImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, ICompareConfiguration compareConfiguration, ILogger<ImportManager> logger) : base(nordigenManager, fireflyManager, compareConfiguration, logger) { }
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 
-            Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
+            Logger.LogInformation($"Start test import for {requisitions.Count} connected banks");
 
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
@@ -45,8 +45,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
                 return;
             }
 
-            newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
-            await ImportTransactions(newFireflyTransactions);
+            Logger.LogInformation($"Would import {newFireflyTransactions.Count} transactions");
         }
 
         #endregion

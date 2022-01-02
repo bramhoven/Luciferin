@@ -1,13 +1,13 @@
-﻿namespace FireflyWebImporter.Classes.Helpers.Interfaces
+﻿namespace FireflyWebImporter.BusinessLayer.Configuration.Interfaces
 {
-    public interface IConfigurationHelper
+    public interface INordigenConfiguration
     {
         #region Properties
 
-        string FireflyBaseUrl { get; }
-        string FireflyAccessToken { get; }
         string NordigenBaseUrl { get; }
+        
         string NordigenSecretId { get; }
+        
         string NordigenSecretKey { get; }
 
         #endregion

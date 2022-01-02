@@ -162,6 +162,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
                 ForeignCurrencyId = transaction.ForeignCurrencyId,
                 ForeignCurrencySymbol = transaction.ForeignCurrencySymbol,
                 ImportHashV2 = transaction.ImportHashV2,
+                Id = fireflyDataContainer.Id,
                 InterestDate = transaction.InterestDate,
                 InternalReference = transaction.InternalReference,
                 Latitude = transaction.Latitude,
@@ -240,6 +241,8 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
                     return TransactionType.Withdrawal;
                 case "deposit":
                     return TransactionType.Deposit;
+                case "transfer":
+                    return TransactionType.Transfer;
                 default:
                     return TransactionType.Unknown;
             }

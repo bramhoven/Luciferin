@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
 
@@ -23,6 +24,8 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen
         Task<AccountDetails> GetAccountDetails(string accountId);
 
         Task<ICollection<Transaction>> GetAccountTransactions(string accountId);
+        
+        Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate);
 
         Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId);
 

@@ -1,12 +1,8 @@
-﻿namespace FireflyWebImporter.Classes
+﻿namespace FireflyWebImporter.BusinessLayer.Configuration
 {
-    public static class ConfigurationConstants
+    internal static class NordigenConfigurationConstants
     {
         #region Fields
-
-        public const string FireflyBaseUrl = "FIREFLY_BASE_URL";
-
-        public const string FireflyAccessToken = "FIREFLY_ACCESS_TOKEN";
 
         public const string NordigenBaseUrl = "NORDIGEN_BASE_URL";
 

@@ -5,6 +5,7 @@ using FireflyWebImporter.BusinessLayer.Nordigen.Helpers;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models.Requests;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models.Responses;
+using Flurl;
 using Flurl.Http;
 
 namespace FireflyWebImporter.BusinessLayer.Nordigen.Stores
@@ -123,6 +124,17 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Stores
         {
             var transactionResponse = await NordigenRoutes
                                             .AccountTransactions(_nordigenBaseUrl, accountId)
+                                            .WithOAuthBearerToken(openIdToken.AccessToken)
+                                            .GetJsonAsync<NordigenTransactionResponse>();
+            return transactionResponse.MapToTransactionCollection();
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate, OpenIdToken openIdToken)
+        {
+            var transactionResponse = await NordigenRoutes
+                                            .AccountTransactions(_nordigenBaseUrl, accountId)
+                                            .SetQueryParam("date_from", fromDate.ToString("yyyy-MM-dd"))
                                             .WithOAuthBearerToken(openIdToken.AccessToken)
                                             .GetJsonAsync<NordigenTransactionResponse>();
             return transactionResponse.MapToTransactionCollection();

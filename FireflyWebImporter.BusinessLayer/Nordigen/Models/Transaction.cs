@@ -1,4 +1,5 @@
 ﻿using System;
+using FireflyWebImporter.BusinessLayer.Converters.Enums;
 
 namespace FireflyWebImporter.BusinessLayer.Nordigen.Models
 {
@@ -18,7 +19,11 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Models
 
         public string DebtorName { get; set; }
 
+        public string EntryReference { get; set; }
+
         public string RemittanceInformationUnstructured { get; set; }
+
+        public BankType RequisitorBank { get; set; }
 
         public string RequisitorIban { get; set; }
 

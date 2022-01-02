@@ -1,11 +1,11 @@
 using System.Linq;
+using FireflyWebImporter.BusinessLayer.Configuration;
+using FireflyWebImporter.BusinessLayer.Configuration.Interfaces;
 using FireflyWebImporter.BusinessLayer.Firefly;
 using FireflyWebImporter.BusinessLayer.Firefly.Stores;
 using FireflyWebImporter.BusinessLayer.Import;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Stores;
-using FireflyWebImporter.Classes.Helpers;
-using FireflyWebImporter.Classes.Helpers.Interfaces;
 using FireflyWebImporter.Classes.Queue;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +21,7 @@ namespace FireflyWebImporter
         #region Properties
 
         private IConfiguration Configuration { get; }
-        private IConfigurationHelper ConfigurationHelper { get; }
+        private ICombinedConfiguration CombinedConfiguration { get; }
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace FireflyWebImporter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            ConfigurationHelper = new ConfigurationHelper(Configuration);
+            CombinedConfiguration = new Configuration(Configuration);
         }
 
         #endregion
@@ -73,15 +73,19 @@ namespace FireflyWebImporter
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
 
-            services.AddScoped<IConfigurationHelper>(s => new ConfigurationHelper(Configuration));
-            
-            services.AddScoped<INordigenStore>(s => new NordigenStore(ConfigurationHelper.NordigenBaseUrl, ConfigurationHelper.NordigenSecretId, ConfigurationHelper.NordigenSecretKey));
+            services.AddScoped<ICombinedConfiguration>(s => new Configuration(Configuration));
+            services.AddScoped<INordigenConfiguration>(s => new Configuration(Configuration));
+            services.AddScoped<IFireflyConfiguration>(s => new Configuration(Configuration));
+            services.AddScoped<ICompareConfiguration>(s => new Configuration(Configuration));
+
+            services.AddScoped<INordigenStore>(s => new NordigenStore(CombinedConfiguration.NordigenBaseUrl, CombinedConfiguration.NordigenSecretId, CombinedConfiguration.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();
 
-            services.AddScoped<IFireflyStore>(s => new FireflyStore(ConfigurationHelper.FireflyBaseUrl, ConfigurationHelper.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
+            services.AddScoped<IFireflyStore>(s => new FireflyStore(CombinedConfiguration.FireflyBaseUrl, CombinedConfiguration.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
             services.AddScoped<IFireflyManager, FireflyManager>();
-            
+
             services.AddScoped<IImportManager, ImportManager>();
+            // services.AddScoped<IImportManager, TestImportManager>();
         }
 
         #endregion

@@ -25,6 +25,9 @@ namespace FireflyWebImporter.BusinessLayer.Nordigen.Models.Responses
         [JsonProperty("DebtorName")]
         public string DebtorName { get; set; }
 
+        [JsonProperty("entryReference")]
+        public string EntryReference { get; set; }
+
         [JsonProperty("remittanceInformationUnstructured")]
         public string RemittanceInformationUnstructured { get; set; }
 

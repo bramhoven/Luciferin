@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FireflyWebImporter.BusinessLayer.Converters.Helper;
 using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
@@ -18,43 +19,36 @@ namespace FireflyWebImporter.BusinessLayer.Import.Mappers
             return transactions.Select(t => MapTransactionToFireflyTransaction(t, fireflyAccounts)).Where(t => t != null).ToList();
         }
 
-        public static FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts)
+        private static FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts)
         {
-            var fireflyTransaction = new FireflyTransaction
-            {
-                Amount = transaction.TransactionAmount.Amount.Replace("-", ""),
-                Date = transaction.BookingDate,
-                Description = transaction.CreditorName ?? transaction.DebtorName,
-                ExternalId = transaction.TransactionId,
-            };
-
+            var converter = ConverterHelper.GetTransactionConverter(transaction.RequisitorBank);
+            var fireflyTransaction = converter.ConvertTransaction(transaction);
+            
             FireflyAccount source;
             FireflyAccount destination;
 
             if (!string.IsNullOrWhiteSpace(transaction.CreditorName))
             {
-                source = GetAccount(fireflyAccounts, transaction.RequisitorIban, new [] {AccountType.Asset});
-                destination = GetAccount(fireflyAccounts, transaction.CreditorName, transaction.CreditorAccount?.Iban, new [] {AccountType.Asset, AccountType.Expense});
+                source = GetAccount(fireflyAccounts, transaction.RequisitorIban, new[] { AccountType.Asset });
+                destination = GetAccount(fireflyAccounts, transaction.CreditorName, transaction.CreditorAccount?.Iban, new[] { AccountType.Asset, AccountType.Expense });
                 fireflyTransaction.Type = source.Type == AccountType.Asset && destination.Type == AccountType.Asset ? TransactionType.Transfer : TransactionType.Withdrawal;
             }
             else if (!string.IsNullOrWhiteSpace(transaction.DebtorName))
             {
-                source = GetAccount(fireflyAccounts, transaction.DebtorName, transaction.DebtorAccount?.Iban, new [] {AccountType.Asset, AccountType.Revenue});
-                destination = GetAccount(fireflyAccounts, transaction.RequisitorIban, new [] {AccountType.Asset});
+                source = GetAccount(fireflyAccounts, transaction.DebtorName, transaction.DebtorAccount?.Iban, new[] { AccountType.Asset, AccountType.Revenue });
+                destination = GetAccount(fireflyAccounts, transaction.RequisitorIban, new[] { AccountType.Asset });
                 fireflyTransaction.Type = source.Type == AccountType.Asset && destination.Type == AccountType.Asset ? TransactionType.Transfer : TransactionType.Deposit;
             }
-            else if(transaction.TransactionAmount.Amount.Contains("-"))
+            else if (transaction.TransactionAmount.Amount.Contains("-"))
             {
-                source = GetAccount(fireflyAccounts, transaction.RequisitorIban, new [] {AccountType.Asset});
-                destination = GetAccount(fireflyAccounts, transaction.RemittanceInformationUnstructured, string.Empty, new [] {AccountType.Asset, AccountType.Expense});
-                fireflyTransaction.Description = transaction.RemittanceInformationUnstructured;
+                source = GetAccount(fireflyAccounts, transaction.RequisitorIban, new[] { AccountType.Asset });
+                destination = GetAccount(fireflyAccounts, fireflyTransaction.Description, string.Empty, new[] { AccountType.Asset, AccountType.Expense });
                 fireflyTransaction.Type = source.Type == AccountType.Asset && destination.Type == AccountType.Asset ? TransactionType.Transfer : TransactionType.Withdrawal;
             }
             else
             {
-                source = GetAccount(fireflyAccounts, "Bank", string.Empty, new [] {AccountType.Revenue});
-                destination = GetAccount(fireflyAccounts, transaction.RequisitorIban, new [] {AccountType.Asset, AccountType.Expense});
-                fireflyTransaction.Description = "Deposit";
+                source = GetAccount(fireflyAccounts, fireflyTransaction.Description, string.Empty, new[] { AccountType.Revenue });
+                destination = GetAccount(fireflyAccounts, transaction.RequisitorIban, new[] { AccountType.Asset, AccountType.Expense });
                 fireflyTransaction.Type = source.Type == AccountType.Asset && destination.Type == AccountType.Asset ? TransactionType.Transfer : TransactionType.Deposit;
             }
 
