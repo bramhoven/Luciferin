@@ -14,7 +14,7 @@ namespace FireflyWebImporter.BusinessLayer.Configuration
         #region Properties
 
         /// <inheritdoc />
-        public int DuplicateTransactionDayRange => int.Parse(_configuration.GetSection(CompareConfigurationConstants.DuplicateTransactionDayRange).Value);
+        public int DaysToSync => int.Parse(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value);
 
         /// <inheritdoc />
         public string FireflyAccessToken => _configuration.GetSection(FireflyConfigurationConstants.FireflyAccessToken).Value;

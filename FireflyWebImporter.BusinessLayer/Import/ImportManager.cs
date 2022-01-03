@@ -15,7 +15,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
     {
         #region Constructors
 
-        public ImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, ICompareConfiguration compareConfiguration, ILogger<ImportManager> logger) : base(nordigenManager, fireflyManager, compareConfiguration, logger) { }
+        public ImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, logger) { }
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
+            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions).ToList();
 
             if (!newFireflyTransactions.Any())
             {

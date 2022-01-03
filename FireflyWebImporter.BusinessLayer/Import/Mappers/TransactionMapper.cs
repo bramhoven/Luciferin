@@ -69,7 +69,7 @@ namespace FireflyWebImporter.BusinessLayer.Import.Mappers
 
         private static FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string name, string iban, AccountType[] accountTypes)
         {
-            var account = accounts.FirstOrDefault(a => (string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) || string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type)) ?? new FireflyAccount
+            var account = accounts.FirstOrDefault(a => (!string.IsNullOrWhiteSpace(iban) && string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) || string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type)) ?? new FireflyAccount
             {
                 Iban = iban,
                 Name = name

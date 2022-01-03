@@ -95,6 +95,8 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models
 
         public int? RecurrenceTotal { get; set; }
 
+        public string RequisitionIban { get; set; }
+
         public string SepaBatchId { get; set; }
 
         public string SepaCc { get; set; }

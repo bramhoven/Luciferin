@@ -15,6 +15,7 @@ namespace FireflyWebImporter.BusinessLayer.Converters
 
             var fireflyTransaction = new FireflyTransaction
             {
+                RequisitionIban = transaction.RequisitorIban,
                 Amount = $"{amount}{new string('0', decimalPlacesMissing)}",
                 Date = transaction.BookingDate,
             };

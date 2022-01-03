@@ -1,10 +1,10 @@
 ﻿namespace FireflyWebImporter.BusinessLayer.Configuration.Interfaces
 {
-    public interface ICompareConfiguration
+    public interface IImportConfiguration
     {
         #region Properties
 
-        int DuplicateTransactionDayRange { get; }
+        int DaysToSync { get; }
 
         #endregion
     }

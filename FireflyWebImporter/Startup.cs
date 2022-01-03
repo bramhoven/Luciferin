@@ -76,7 +76,7 @@ namespace FireflyWebImporter
             services.AddScoped<ICompositeConfiguration>(s => new Configuration(Configuration));
             services.AddScoped<INordigenConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IFireflyConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
-            services.AddScoped<ICompareConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+            services.AddScoped<IImportConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
 
             services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();

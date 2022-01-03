@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Configuration.Interfaces;
 using FireflyWebImporter.BusinessLayer.Converters.Helper;
 using FireflyWebImporter.BusinessLayer.Firefly;
+using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
@@ -18,7 +19,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
     {
         #region Fields
 
-        private readonly ICompareConfiguration _compareConfiguration;
+        private readonly IImportConfiguration _importConfiguration;
 
         private readonly INordigenManager _nordigenManager;
 
@@ -30,11 +31,11 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ICompareConfiguration compareConfiguration, ILogger<IImportManager> logger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<IImportManager> logger)
         {
             _nordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
-            _compareConfiguration = compareConfiguration;
+            _importConfiguration = importConfiguration;
             Logger = logger;
         }
 
@@ -79,61 +80,36 @@ namespace FireflyWebImporter.BusinessLayer.Import
         public abstract ValueTask StartImport(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Checks for duplicate transactions.
-        /// For example:
-        /// A transfer from one asset account to another.
+        /// Checks for duplicate transfers.
         /// </summary>
         /// <param name="transactions">The new transactions.</param>
         /// <param name="fireflyTransactions">The existing firefly transactions.</param>
         /// <returns></returns>
-        protected IEnumerable<FireflyTransaction> CheckForDuplicateTransactions(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
+        protected IEnumerable<FireflyTransaction> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
         {
-            Logger.LogInformation("Checking transactions for duplicates");
-            
-            var nonDuplicateTransactions = new List<FireflyTransaction>();
+            Logger.LogInformation("Checking transactions for duplicates transfers");
+
+            var nonDuplicateTransactions = transactions.Where(t => t.Type != TransactionType.Transfer).ToList();
 
             var combinedTransactions = transactions.Concat(fireflyTransactions);
-            var groupedByType = combinedTransactions.GroupBy(t => t.Type);
-            foreach (var typedTransactionGroup in groupedByType)
+            combinedTransactions = combinedTransactions.DistinctBy(t => t.ExternalId);
+            var groups = combinedTransactions
+                         .Where(t => t.Type == TransactionType.Transfer)
+                         .GroupBy(t => (t.SourceIban, t.DestinationIban, t.Amount).GetConsistentHash());
+            foreach (var group in groups)
             {
-                var possibleDuplicates = typedTransactionGroup.GroupBy(t => (t.SourceIban, t.DestinationIban, t.Amount).GetConsistentHash());
-                foreach (var duplicateGroup in possibleDuplicates)
+                var possibleDuplicates = group.ToList();
+                if (possibleDuplicates.Count == 1)
                 {
-                    var duplicates = duplicateGroup.ToList();
-                    if (duplicates.Count == 1)
-                    {
-                        nonDuplicateTransactions.Add(duplicates.FirstOrDefault());
-                        continue;
-                    }
-
-                    var orderedDuplicateGroup = duplicates.OrderBy(t => t.Date).ToList();
-                    var first = orderedDuplicateGroup.FirstOrDefault();
-                    if (first == null)
-                        continue;
-
-                    var maxDate = first.Date.AddDays(_compareConfiguration.DuplicateTransactionDayRange);
-                    var nonDuplicates = orderedDuplicateGroup.Skip(1).Where(t => t.Date < first.Date && t.Date > maxDate).ToList();
-                    if (nonDuplicates.Any())
-                    {
-                        nonDuplicateTransactions.AddRange(nonDuplicates);
-                        foreach (var nonDuplicate in nonDuplicates)
-                            duplicates.Remove(nonDuplicate);
-                    }
-
-                    if(duplicates.Any(d => !string.IsNullOrWhiteSpace(d.Id)))
-                        continue;
-
-                    if (fireflyTransactions.Contains(first))
-                        continue;
-                    
-                    nonDuplicateTransactions.Add(first);
-
-                    Logger.LogInformation($"Detected duplicate for {first.Description} ({first.Amount:F2}) [{first.SourceIban} -> {first.DestinationIban}]. Keeping the first one.");
+                    nonDuplicateTransactions.Add(possibleDuplicates.FirstOrDefault());
+                    continue;
                 }
+
+                nonDuplicateTransactions.AddRange(group.Where(t => t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)));
             }
 
             nonDuplicateTransactions = nonDuplicateTransactions.Where(t => transactions.Contains(t) && !fireflyTransactions.Contains(t)).ToList();
-            
+
             Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
 
             return nonDuplicateTransactions;
@@ -166,7 +142,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
             Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
-            var transactions = await _nordigenManager.GetAccountTransactions(account);
+            var transactions = await _nordigenManager.GetAccountTransactions(account, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
 
             foreach (var transaction in transactions)
                 ExtendData(transaction, requisition, details);
@@ -196,8 +172,6 @@ namespace FireflyWebImporter.BusinessLayer.Import
             }
         }
 
-        #region Static Methods
-
         /// <summary>
         /// Removes the existing transactions from the new transactions list.
         /// </summary>
@@ -207,13 +181,15 @@ namespace FireflyWebImporter.BusinessLayer.Import
         protected IEnumerable<FireflyTransaction> RemoveExistingTransactions(IEnumerable<FireflyTransaction> newTransactions, ICollection<FireflyTransaction> existingTransactions)
         {
             Logger.LogInformation("Checking existing Firefly transactions");
-            
+
             var transactions = newTransactions.Where(t => existingTransactions.All(ft => !string.Equals(ft.ExternalId, t.ExternalId, StringComparison.InvariantCultureIgnoreCase))).ToList();
-            
+
             Logger.LogInformation($"{transactions.Count} transactions left after existing check");
 
             return transactions;
         }
+
+        #region Static Methods
 
         /// <summary>
         /// Extends the transaction data with requisition data.
