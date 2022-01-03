@@ -15,7 +15,11 @@ namespace FireflyWebImporter.BusinessLayer.Firefly
 
         Task<ICollection<FireflyAccount>> GetAccounts();
 
+        Task<FireflyTransaction> GetFirstTransactionOfAccount(int accountId);
+
         Task<ICollection<FireflyTransaction>> GetTransactions();
+
+        Task UpdateAccount(FireflyAccount fireflyAccount);
 
         #endregion
     }

@@ -8,7 +8,11 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
 
         #region Static Methods
 
+        public static string Account(string baseUrl, int accountId) => Accounts(baseUrl).AppendPathSegment(accountId);
+
         public static string Accounts(string baseUrl) => ApiBaseUrl(baseUrl).AppendPathSegment("accounts");
+
+        public static string AccountTransactions(string baseUrl, int accountId) => Account(baseUrl, accountId).AppendPathSegment("transactions");
 
         public static string Transactions(string baseUrl) => ApiBaseUrl(baseUrl).AppendPathSegment("transactions");
 

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
+using FireflyWebImporter.BusinessLayer.Firefly.Helpers;
+using Flurl.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Firefly.Enums;
-using FireflyWebImporter.BusinessLayer.Firefly.Helpers;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Requests;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Accounts;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Shared;
-using Flurl.Http;
 using Microsoft.Extensions.Logging;
 
 namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
@@ -42,7 +42,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
         public async Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions)
         {
             var fireflyTransactions = transactions.ToList();
-            
+
             var totalTransactions = fireflyTransactions.Count;
             var index = 0;
             foreach (var transaction in fireflyTransactions)
@@ -103,6 +103,30 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
         }
 
         /// <inheritdoc />
+        public async Task<FireflyTransaction> GetFirstTransactionOfAccount(int accountId)
+        {
+            var infoResponse = await FireflyRoutes
+                                     .AccountTransactions(_fireflyBaseUrl, accountId)
+                                     .WithOAuthBearerToken(_fireflyAccessToken)
+                                     .WithHeader("Accept", "application/json")
+                                     .SetQueryParam("limit", 1)
+                                     .GetJsonAsync<FireflyTransactionResponse>();
+
+            var lastPage = infoResponse.Meta.Pagination.TotalPages;
+            var response = await FireflyRoutes
+                                 .AccountTransactions(_fireflyBaseUrl, accountId)
+                                 .WithOAuthBearerToken(_fireflyAccessToken)
+                                 .WithHeader("Accept", "application/json")
+                                 .SetQueryParams(new
+                                 {
+                                     limit = 1,
+                                     page = lastPage
+                                 })
+                                 .GetJsonAsync<FireflyTransactionResponse>();
+            return response.Data.FirstOrDefault()?.MapToFireflyTransaction();
+        }
+
+        /// <inheritdoc />
         public async Task<ICollection<FireflyTransaction>> GetTransactions()
         {
             var transactions = new List<FireflyTransaction>();
@@ -122,6 +146,24 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
             return transactions;
         }
 
+        /// <inheritdoc />
+        public async Task UpdateAccount(FireflyAccount fireflyAccount)
+        {
+            try
+            {
+                await FireflyRoutes
+                      .Account(_fireflyBaseUrl, fireflyAccount.Id)
+                      .WithOAuthBearerToken(_fireflyAccessToken)
+                      .WithHeader("Accept", "application/json")
+                      .PutJsonAsync(MapToFireflyAccount(fireflyAccount));
+            }
+            catch (FlurlHttpException e)
+            {
+                if (e.StatusCode == 422)
+                    _logger.LogError(await e.Call.Response.GetStringAsync());
+            }
+        }
+
         #region Static Methods
 
         private static FireflyStoreTransactionsRequest GetCreateTransactionRequest(FireflyTransaction transaction)
@@ -133,6 +175,37 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
                 GroupTitle = transaction.Description,
                 ErrorIfDuplicateHash = false,
                 Transactions = new List<FireflyApiTransaction> { transaction.MapToFireflyApiTransaction() }
+            };
+        }
+
+        private static FireflyAccountAttributes MapToFireflyAccount(FireflyAccount fireflyAccount)
+        {
+            return new FireflyAccountAttributes
+            {
+                AccountNumber = fireflyAccount.AccountNumber,
+                Active = fireflyAccount.Active,
+                AccountRole = fireflyAccount.AccountRole,
+                Bic = fireflyAccount.Bic,
+                Order = fireflyAccount.Order,
+                CurrentBalance = fireflyAccount.CurrentBalance,
+                CurrencyCode = fireflyAccount.CurrencyCode,
+                CurrencyId = fireflyAccount.CurrencyId,
+                CurrencySymbol = fireflyAccount.CurrencySymbol,
+                CreditCardType = fireflyAccount.CreditCardType,
+                Iban = fireflyAccount.Iban,
+                Interest = fireflyAccount.Interest,
+                IncludeNetWorth = fireflyAccount.IncludeNetWorth,
+                InterestPeriod = fireflyAccount.InterestPeriod,
+                Latitude = fireflyAccount.Latitude,
+                Longitude = fireflyAccount.Longitude,
+                LiabilityDirection = fireflyAccount.LiabilityDirection,
+                LiabilityType = fireflyAccount.LiabilityType,
+                MonthlyPaymentDate = fireflyAccount.MonthlyPaymentDate,
+                Name = fireflyAccount.Name,
+                Notes = fireflyAccount.Notes,
+                OpeningBalance = fireflyAccount.OpeningBalance,
+                OpeningBalanceDate = fireflyAccount.OpeningBalanceDate,
+                ZoomLevel = fireflyAccount.ZoomLevel
             };
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Responses;
+using FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Accounts;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Transactions;
 using FireflyWebImporter.BusinessLayer.Firefly.Models.Shared;
 
@@ -126,7 +127,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Helpers
             };
         }
 
-        private static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
+        public static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
         {
             var transaction = fireflyDataContainer.Attributes.Transactions.FirstOrDefault();
             if (transaction == null)

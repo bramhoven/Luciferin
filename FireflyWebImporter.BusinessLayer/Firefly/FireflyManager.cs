@@ -44,9 +44,21 @@ namespace FireflyWebImporter.BusinessLayer.Firefly
         }
 
         /// <inheritdoc />
+        public Task<FireflyTransaction> GetFirstTransactionOfAccount(int accountId)
+        {
+            return _store.GetFirstTransactionOfAccount(accountId);
+        }
+
+        /// <inheritdoc />
         public Task<ICollection<FireflyTransaction>> GetTransactions()
         {
             return _store.GetTransactions();
+        }
+
+        /// <inheritdoc />
+        public Task UpdateAccount(FireflyAccount fireflyAccount)
+        {
+            return _store.UpdateAccount(fireflyAccount);
         }
 
         #endregion

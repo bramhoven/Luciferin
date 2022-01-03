@@ -29,14 +29,16 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
             Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
-            var requisitionIbans = new List<string>();
+            var firstImport = !existingFireflyTransactions.Any();
+            var balances = new Dictionary<string, string>();
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
             {
                 newTransactions.AddRange(await GetTransactionForRequisition(requisition));
                 
                 var details = await NordigenManager.GetAccountDetails(requisition.Accounts.FirstOrDefault());
-                requisitionIbans.Add(details.Iban);
+                var balance = await NordigenManager.GetAccountBalance(requisition.Accounts.FirstOrDefault());
+                balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
             }
             
             Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
@@ -45,7 +47,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, requisitionIbans).ToList();
+            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys).ToList();
 
             if (!newFireflyTransactions.Any())
             {
@@ -54,7 +56,11 @@ namespace FireflyWebImporter.BusinessLayer.Import
             }
 
             newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
+            
             await ImportTransactions(newFireflyTransactions);
+            
+            accounts = await FireflyManager.GetAccounts();
+            await SetStartingBalances(balances, accounts);
         }
 
         #endregion

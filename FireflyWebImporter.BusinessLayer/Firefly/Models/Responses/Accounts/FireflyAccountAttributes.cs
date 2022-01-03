@@ -1,7 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
+using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
-namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses
+namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses.Accounts
 {
     public class FireflyAccountAttributes : FireflyAttributesBase
     {
@@ -49,19 +50,19 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses
         [JsonProperty("include_net_worth")]
         public bool IncludeNetWorth { get; set; }
 
-        [JsonProperty("interest")]
+        [JsonProperty("interest", NullValueHandling = NullValueHandling.Ignore)]
         public string Interest { get; set; }
 
-        [JsonProperty("interest_period")]
+        [JsonProperty("interest_period", NullValueHandling = NullValueHandling.Ignore)]
         public string InterestPeriod { get; set; }
 
         [JsonProperty("latitude")]
         public double? Latitude { get; set; }
 
-        [JsonProperty("liability_direction")]
+        [JsonProperty("liability_direction", NullValueHandling = NullValueHandling.Ignore)]
         public string LiabilityDirection { get; set; }
 
-        [JsonProperty("liability_type")]
+        [JsonProperty("liability_type", NullValueHandling = NullValueHandling.Ignore)]
         public string LiabilityType { get; set; }
 
         [JsonProperty("longitude")]
@@ -85,10 +86,10 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Models.Responses
         [JsonProperty("order")]
         public int? Order { get; set; }
 
-        [JsonProperty("type")]
+        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
         public string Type { get; set; }
 
-        [JsonProperty("virtual_balance")]
+        [JsonProperty("virtual_balance", NullValueHandling = NullValueHandling.Ignore)]
         public string VirtualBalance { get; set; }
 
         [JsonProperty("zoom_level")]

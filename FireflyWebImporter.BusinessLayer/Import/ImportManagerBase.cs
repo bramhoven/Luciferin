@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using FireflyWebImporter.BusinessLayer.Helpers;
 using System.Linq;
 using System.Threading;
@@ -117,6 +118,41 @@ namespace FireflyWebImporter.BusinessLayer.Import
             Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
 
             return nonDuplicateTransactions;
+        }
+
+        /// <summary>
+        /// Sets the correct starting balances.
+        /// </summary>
+        /// <param name="currentBalances">The dictionary with iban and current balance.</param>
+        /// <param name="fireflyAccounts">The list of all Firefly accounts.</param>
+        protected async Task SetStartingBalances(IDictionary<string, string> currentBalances, ICollection<FireflyAccount> fireflyAccounts)
+        {
+            Logger.LogInformation("First import detected");
+            Logger.LogInformation("Start setting starting balances");
+
+            foreach (var account in currentBalances)
+            {
+                var iban = account.Key;
+                var bankBalance = decimal.Parse(account.Value, new CultureInfo("en-US"));
+
+                var fireflyAccount = fireflyAccounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.InvariantCultureIgnoreCase));
+                if(fireflyAccount == null)
+                    continue;
+
+                var transaction = await FireflyManager.GetFirstTransactionOfAccount(fireflyAccount.Id);
+
+                var currentFireflyBalance = decimal.Parse(fireflyAccount.CurrentBalance, new CultureInfo("en-US"));
+                var openingBalance =  bankBalance - currentFireflyBalance;
+                
+                fireflyAccount.OpeningBalanceDate = transaction.Date.Date.AddDays(-1);
+                fireflyAccount.OpeningBalance = openingBalance.ToString("0.00", CultureInfo.InvariantCulture);
+
+                await FireflyManager.UpdateAccount(fireflyAccount);
+                
+                Logger.LogInformation($"[{fireflyAccount.Name}] Set opening balance to: {openingBalance.ToString("0.00", CultureInfo.InvariantCulture)}");
+            }
+            
+            Logger.LogInformation("Finished setting starting balances");
         }
 
         /// <summary>
