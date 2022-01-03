@@ -29,9 +29,15 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
             Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
+            var requisitionIbans = new List<string>();
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
+            {
                 newTransactions.AddRange(await GetTransactionForRequisition(requisition));
+                
+                var details = await NordigenManager.GetAccountDetails(requisition.Accounts.FirstOrDefault());
+                requisitionIbans.Add(details.Iban);
+            }
             
             Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
@@ -39,7 +45,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions).ToList();
+            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, requisitionIbans).ToList();
 
             if (!newFireflyTransactions.Any())
             {

@@ -29,15 +29,21 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
             Logger.LogInformation($"Start test import for {requisitions.Count} connected banks");
 
+            var requisitionIbans = new List<string>();
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
+            {
                 newTransactions.AddRange(await GetTransactionForRequisition(requisition));
+                
+                var details = await NordigenManager.GetAccountDetails(requisition.Accounts.FirstOrDefault());
+                requisitionIbans.Add(details.Iban);
+            }
 
             var accounts = await FireflyManager.GetAccounts();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions).ToList();
+            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, requisitionIbans).ToList();
 
             if (!newFireflyTransactions.Any())
             {

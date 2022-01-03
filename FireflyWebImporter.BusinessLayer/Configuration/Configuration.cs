@@ -14,7 +14,7 @@ namespace FireflyWebImporter.BusinessLayer.Configuration
         #region Properties
 
         /// <inheritdoc />
-        public int DaysToSync => int.Parse(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value);
+        public int DaysToSync => _configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value != null ? int.Parse(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value) : -1;
 
         /// <inheritdoc />
         public string FireflyAccessToken => _configuration.GetSection(FireflyConfigurationConstants.FireflyAccessToken).Value;

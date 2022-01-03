@@ -21,7 +21,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         private readonly IImportConfiguration _importConfiguration;
 
-        private readonly INordigenManager _nordigenManager;
+        protected readonly INordigenManager NordigenManager;
 
         protected readonly IFireflyManager FireflyManager;
 
@@ -33,7 +33,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<IImportManager> logger)
         {
-            _nordigenManager = nordigenManager;
+            NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
             _importConfiguration = importConfiguration;
             Logger = logger;
@@ -46,9 +46,9 @@ namespace FireflyWebImporter.BusinessLayer.Import
         /// <inheritdoc />
         public async Task<Requisition> AddNewBank(string institutionId, string name, string redirectUrl)
         {
-            var institution = await _nordigenManager.GetInstitution(institutionId);
-            var endUserAgreement = await _nordigenManager.CreateEndUserAgreement(institution);
-            return await _nordigenManager.CreateRequisition(institution, name, endUserAgreement, redirectUrl);
+            var institution = await NordigenManager.GetInstitution(institutionId);
+            var endUserAgreement = await NordigenManager.CreateEndUserAgreement(institution);
+            return await NordigenManager.CreateRequisition(institution, name, endUserAgreement, redirectUrl);
         }
 
         /// <inheritdoc />
@@ -56,11 +56,11 @@ namespace FireflyWebImporter.BusinessLayer.Import
         {
             try
             {
-                var requisition = await _nordigenManager.GetRequisition(requisitionId);
-                var endUserAgreement = await _nordigenManager.GetEndUserAgreement(requisition.Agreement);
+                var requisition = await NordigenManager.GetRequisition(requisitionId);
+                var endUserAgreement = await NordigenManager.GetEndUserAgreement(requisition.Agreement);
 
-                await _nordigenManager.DeleteEndUserAgreement(endUserAgreement.Id);
-                await _nordigenManager.DeleteRequisition(requisition.Id);
+                await NordigenManager.DeleteEndUserAgreement(endUserAgreement.Id);
+                await NordigenManager.DeleteRequisition(requisition.Id);
 
                 return true;
             }
@@ -73,7 +73,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
         /// <inheritdoc />
         public Task<ICollection<Requisition>> GetRequisitions()
         {
-            return _nordigenManager.GetRequisitions();
+            return NordigenManager.GetRequisitions();
         }
 
         /// <inheritdoc />
@@ -84,8 +84,9 @@ namespace FireflyWebImporter.BusinessLayer.Import
         /// </summary>
         /// <param name="transactions">The new transactions.</param>
         /// <param name="fireflyTransactions">The existing firefly transactions.</param>
+        /// <param name="requisitionIbans">The list of requisition ibans.</param>
         /// <returns></returns>
-        protected IEnumerable<FireflyTransaction> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions)
+        protected IEnumerable<FireflyTransaction> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions, ICollection<string> requisitionIbans)
         {
             Logger.LogInformation("Checking transactions for duplicates transfers");
 
@@ -105,7 +106,10 @@ namespace FireflyWebImporter.BusinessLayer.Import
                     continue;
                 }
 
-                nonDuplicateTransactions.AddRange(group.Where(t => t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)));
+                var nonDuplicates = group.Where(t => requisitionIbans.Contains(t.SourceIban) && t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)
+                                                     || !requisitionIbans.Contains(t.SourceIban) &&  t.DestinationIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                if(nonDuplicates.Any())
+                    nonDuplicateTransactions.AddRange(nonDuplicates);
             }
 
             nonDuplicateTransactions = nonDuplicateTransactions.Where(t => transactions.Contains(t) && !fireflyTransactions.Contains(t)).ToList();
@@ -138,11 +142,15 @@ namespace FireflyWebImporter.BusinessLayer.Import
         protected async Task<ICollection<Transaction>> GetTransactionForRequisition(Requisition requisition)
         {
             var account = requisition.Accounts.FirstOrDefault();
-            var details = await _nordigenManager.GetAccountDetails(account);
+            var details = await NordigenManager.GetAccountDetails(account);
 
             Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
-            var transactions = await _nordigenManager.GetAccountTransactions(account, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
+            ICollection<Transaction> transactions;
+            if (_importConfiguration.DaysToSync > 0)
+                transactions = await NordigenManager.GetAccountTransactions(account, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
+            else
+                transactions = await NordigenManager.GetAccountTransactions(account);
 
             foreach (var transaction in transactions)
                 ExtendData(transaction, requisition, details);
