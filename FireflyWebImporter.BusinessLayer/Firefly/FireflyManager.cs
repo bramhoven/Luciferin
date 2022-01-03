@@ -49,9 +49,6 @@ namespace FireflyWebImporter.BusinessLayer.Firefly
             return _store.GetTransactions();
         }
 
-        /// <inheritdoc />
-        public async Task Test() { }
-
         #endregion
     }
 }

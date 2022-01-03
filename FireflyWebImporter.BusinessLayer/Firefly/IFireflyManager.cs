@@ -17,8 +17,6 @@ namespace FireflyWebImporter.BusinessLayer.Firefly
 
         Task<ICollection<FireflyTransaction>> GetTransactions();
 
-        Task Test();
-
         #endregion
     }
 }

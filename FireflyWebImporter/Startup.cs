@@ -21,7 +21,7 @@ namespace FireflyWebImporter
         #region Properties
 
         private IConfiguration Configuration { get; }
-        private ICombinedConfiguration CombinedConfiguration { get; }
+        private ICompositeConfiguration CompositeConfiguration { get; }
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace FireflyWebImporter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            CombinedConfiguration = new Configuration(Configuration);
+            CompositeConfiguration = new Configuration(Configuration);
         }
 
         #endregion
@@ -73,15 +73,15 @@ namespace FireflyWebImporter
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
 
-            services.AddScoped<ICombinedConfiguration>(s => new Configuration(Configuration));
-            services.AddScoped<INordigenConfiguration>(s => new Configuration(Configuration));
-            services.AddScoped<IFireflyConfiguration>(s => new Configuration(Configuration));
-            services.AddScoped<ICompareConfiguration>(s => new Configuration(Configuration));
+            services.AddScoped<ICompositeConfiguration>(s => new Configuration(Configuration));
+            services.AddScoped<INordigenConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+            services.AddScoped<IFireflyConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+            services.AddScoped<ICompareConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
 
-            services.AddScoped<INordigenStore>(s => new NordigenStore(CombinedConfiguration.NordigenBaseUrl, CombinedConfiguration.NordigenSecretId, CombinedConfiguration.NordigenSecretKey));
+            services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();
 
-            services.AddScoped<IFireflyStore>(s => new FireflyStore(CombinedConfiguration.FireflyBaseUrl, CombinedConfiguration.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
+            services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
             services.AddScoped<IFireflyManager, FireflyManager>();
 
             services.AddScoped<IImportManager, ImportManager>();

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace FireflyWebImporter.BusinessLayer.Configuration
 {
-    public class Configuration : ICombinedConfiguration
+    public class Configuration : ICompositeConfiguration
     {
         #region Fields
 
