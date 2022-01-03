@@ -32,6 +32,8 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
                 newTransactions.AddRange(await GetTransactionForRequisition(requisition));
+            
+            Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();

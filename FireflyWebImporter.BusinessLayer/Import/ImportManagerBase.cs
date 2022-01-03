@@ -128,7 +128,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
                     
                     nonDuplicateTransactions.Add(first);
 
-                    Logger.LogInformation($"Detected duplicate for {first.Description} ({first.Amount:F2}) [{first.SourceIban} -> {first.DestinationIban}]. Inserting first one.");
+                    Logger.LogInformation($"Detected duplicate for {first.Description} ({first.Amount:F2}) [{first.SourceIban} -> {first.DestinationIban}]. Keeping the first one.");
                 }
             }
 
@@ -166,7 +166,7 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
             Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
-            var transactions = await _nordigenManager.GetAccountTransactions(account, DateTime.Today.AddDays(-10));
+            var transactions = await _nordigenManager.GetAccountTransactions(account);
 
             foreach (var transaction in transactions)
                 ExtendData(transaction, requisition, details);

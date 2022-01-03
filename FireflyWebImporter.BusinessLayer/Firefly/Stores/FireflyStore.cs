@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Helpers;
@@ -40,7 +41,11 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
         /// <inheritdoc />
         public async Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions)
         {
-            foreach (var transaction in transactions)
+            var fireflyTransactions = transactions.ToList();
+            
+            var totalTransactions = fireflyTransactions.Count;
+            var index = 0;
+            foreach (var transaction in fireflyTransactions)
             {
                 var request = GetCreateTransactionRequest(transaction);
                 try
@@ -52,7 +57,7 @@ namespace FireflyWebImporter.BusinessLayer.Firefly.Stores
                                          .PostJsonAsync(request)
                                          .ConfigureAwait(false);
 
-                    _logger.LogInformation($"Imported transaction {transaction.Description}");
+                    _logger.LogInformation($"Imported transaction [{++index}/{totalTransactions}] [{transaction.Type.ToString()}] {transaction.Description}");
                 }
                 catch (FlurlHttpException e)
                 {

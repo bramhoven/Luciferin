@@ -10,6 +10,8 @@ namespace FireflyWebImporter.BusinessLayer.Converters
         #region Fields
 
         private const string _descriptionFieldName = "Omschrijving";
+        
+        private const string _nameFieldName = "Naam";
 
         #endregion
 
@@ -21,7 +23,7 @@ namespace FireflyWebImporter.BusinessLayer.Converters
             var fireflyTransaction = base.ConvertTransaction(transaction);
             fireflyTransaction.ExternalId = transaction.TransactionId;
 
-            var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured ?? transaction.CreditorName ?? transaction.DebtorName);
+            var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured, transaction.CreditorName, transaction.DebtorName);
             fireflyTransaction.Description = description;
             fireflyTransaction.Notes = notes;
 
@@ -30,10 +32,20 @@ namespace FireflyWebImporter.BusinessLayer.Converters
 
         #region Static Methods
 
-        private static (string, string) GetTextFields(string description)
+        private static (string, string) GetTextFields(string description, string creditorName, string debtorName)
         {
             var splitDescription = description.Split("<br>");
-            var descriptionText = splitDescription.FirstOrDefault(d => d.Contains(_descriptionFieldName))?.Replace($"{_descriptionFieldName}:", "").Trim() ?? splitDescription[0];
+            var descriptionText = splitDescription.FirstOrDefault(d => d.Contains(_descriptionFieldName))?.Replace($"{_descriptionFieldName}:", "").Trim();
+            
+            if (string.IsNullOrWhiteSpace(descriptionText))
+                descriptionText = splitDescription[0].Replace($"{_nameFieldName}:", "").Trim();
+            
+            if (string.IsNullOrWhiteSpace(descriptionText))
+                descriptionText = creditorName;
+            
+            if (string.IsNullOrWhiteSpace(descriptionText))
+                descriptionText = debtorName;
+            
             var notesText = string.Join(Environment.NewLine, splitDescription);
             return (descriptionText, notesText);
         }
