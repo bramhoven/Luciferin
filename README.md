@@ -9,5 +9,6 @@ The goal is to create an easy to use importer that anyone can use to import thei
 ### Features
 - Easy to use web UI
 - Importing through the Nordigen API
+- Automatically importing transactions
 
-# THIS IS STILL WORK IN PROGRESS
+## THIS IS STILL WORK IN PROGRESS
