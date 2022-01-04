@@ -7,16 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["FireflyWebImporter/FireflyWebImporter.csproj", "FireflyWebImporter/"]
-RUN dotnet restore "FireflyWebImporter/FireflyWebImporter.csproj"
+COPY ["FireflyImporter/FireflyImporter.csproj", "FireflyImporter/"]
+COPY ["FireflyImporter.BusinessLayer/FireflyImporter.BusinessLayer.csproj", "FireflyImporter.BusinessLayer/"]
+RUN dotnet restore "FireflyImporter/FireflyImporter.csproj"
 COPY . .
-WORKDIR "/src/FireflyWebImporter"
-RUN dotnet build "FireflyWebImporter.csproj" -c Release -o /app/build
+WORKDIR "/src/FireflyImporter"
+RUN dotnet build "FireflyImporter.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FireflyWebImporter.csproj" -c Release -o /app/publish
+RUN dotnet publish "FireflyImporter.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FireflyWebImporter.dll"]
+ENTRYPOINT ["dotnet", "FireflyImporter.dll"]
