@@ -1,0 +1,22 @@
+﻿@model FireflyImporter.Models.Import.ImportIndexPageModel
+
+<div class="text-center">
+    <h1 class="display-4">Start the web importer</h1>
+
+    @Html.DisplayFor(m => m.RequisitionList)
+
+    @if (!Model.RequisitionList.AnyRequisitions)
+    {
+        <h3>First connect a bank to the importer</h3>
+        <a role="button" class="btn btn-primary" href="@Model.ConfigurationStartUrl">Start configuration</a>
+    }
+    else
+    {
+        <h4 class="mt-5 mb-3">Are you ready to import all possible transactions for the accounts above?</h4>
+        
+        @using (Html.BeginForm(MVC.Import.ActionNames.StartImport, MVC.Import.Name))
+        {
+            <button type="submit" class="btn btn-success">I am ready to import!</button>
+        }
+    }
+</div>
