@@ -1,0 +1,16 @@
+﻿@model FireflyImporter.Website.Models.Home.HomeIndexPageModel
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Firefly III Web Importer</h1>
+    
+    @Html.DisplayFor(m => m.RequisitionList)
+    
+    <div class="mt-5">
+        <a role="button" class="btn btn-primary" href="@Model.ConfigurationStartUrl">Start configuration</a>
+        
+        @if (Model.RequisitionList.AnyRequisitions)
+        {
+            <a role="button" class="btn btn-primary" href="@Model.ImportStartUrl">Start import</a>
+        }
+    </div>
+</div>

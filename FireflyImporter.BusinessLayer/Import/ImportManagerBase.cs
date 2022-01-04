@@ -12,7 +12,6 @@ using FireflyImporter.BusinessLayer.Firefly.Enums;
 using FireflyImporter.BusinessLayer.Firefly.Models;
 using FireflyImporter.BusinessLayer.Nordigen;
 using FireflyImporter.BusinessLayer.Nordigen.Models;
-using FireflyImporter.BusinessLayer.Nordigen.Models.Requests;
 using Microsoft.Extensions.Logging;
 
 namespace FireflyImporter.BusinessLayer.Import
@@ -191,15 +190,15 @@ namespace FireflyImporter.BusinessLayer.Import
             {
                 var dateString = DateTime.Now.ToString("hh:mm:ss dd-MM-yyyy");
                 var tag = $"Imported by Firefly III Importer | {dateString}";
-                
+
                 foreach (var transaction in fireflyTransactions)
                 {
                     if (transaction.Tags == null)
                         transaction.Tags = new List<string>();
-                    
+
                     transaction.Tags.Add(tag);
                 }
-                
+
                 await FireflyManager.AddNewTransactions(fireflyTransactions);
                 Logger.LogInformation($"Imported {fireflyTransactions.Count} transactions");
             }
