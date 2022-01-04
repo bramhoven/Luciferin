@@ -11,7 +11,7 @@ namespace FireflyWebImporter.BusinessLayer.Converters
         public override FireflyTransaction ConvertTransaction(Transaction transaction)
         {
             var fireflyTransaction = base.ConvertTransaction(transaction);
-            fireflyTransaction.ExternalId = transaction.EntryReference;
+            fireflyTransaction.ExternalId = transaction.TransactionId;
 
             var text = transaction.CreditorName ?? transaction.DebtorName;
             fireflyTransaction.Description = text;
