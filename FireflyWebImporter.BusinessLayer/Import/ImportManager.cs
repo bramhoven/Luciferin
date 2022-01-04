@@ -34,11 +34,14 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
             {
-                newTransactions.AddRange(await GetTransactionForRequisition(requisition));
-                
-                var details = await NordigenManager.GetAccountDetails(requisition.Accounts.FirstOrDefault());
-                var balance = await NordigenManager.GetAccountBalance(requisition.Accounts.FirstOrDefault());
-                balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
+                foreach (var account in requisition.Accounts)
+                {
+                    newTransactions.AddRange(await GetTransactionForRequisitionAccount(account, requisition));
+                    
+                    var details = await NordigenManager.GetAccountDetails(account);
+                    var balance = await NordigenManager.GetAccountBalance(account);
+                    balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
+                }
             }
             
             Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
@@ -58,6 +61,9 @@ namespace FireflyWebImporter.BusinessLayer.Import
             newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
             
             await ImportTransactions(newFireflyTransactions);
+
+            if (!firstImport)
+                return;
             
             accounts = await FireflyManager.GetAccounts();
             await SetStartingBalances(balances, accounts);

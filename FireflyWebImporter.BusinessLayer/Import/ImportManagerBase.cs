@@ -12,6 +12,7 @@ using FireflyWebImporter.BusinessLayer.Firefly.Enums;
 using FireflyWebImporter.BusinessLayer.Firefly.Models;
 using FireflyWebImporter.BusinessLayer.Nordigen;
 using FireflyWebImporter.BusinessLayer.Nordigen.Models;
+using FireflyWebImporter.BusinessLayer.Nordigen.Models.Requests;
 using Microsoft.Extensions.Logging;
 
 namespace FireflyWebImporter.BusinessLayer.Import
@@ -22,11 +23,11 @@ namespace FireflyWebImporter.BusinessLayer.Import
 
         private readonly IImportConfiguration _importConfiguration;
 
-        protected readonly INordigenManager NordigenManager;
-
         protected readonly IFireflyManager FireflyManager;
 
         protected readonly ILogger<IImportManager> Logger;
+
+        protected readonly INordigenManager NordigenManager;
 
         #endregion
 
@@ -72,9 +73,25 @@ namespace FireflyWebImporter.BusinessLayer.Import
         }
 
         /// <inheritdoc />
-        public Task<ICollection<Requisition>> GetRequisitions()
+        public async Task<ICollection<Requisition>> GetRequisitions()
         {
-            return NordigenManager.GetRequisitions();
+            var requisitions = await NordigenManager.GetRequisitions();
+
+            foreach (var requisition in requisitions)
+            {
+                var removableAccounts = new List<string>();
+                foreach (var currentAccount in requisition.Accounts)
+                {
+                    var details = await NordigenManager.GetAccountDetails(currentAccount);
+                    if (string.IsNullOrWhiteSpace(details.Iban))
+                        removableAccounts.Add(currentAccount);
+                }
+
+                foreach (var removableAccount in removableAccounts)
+                    requisition.Accounts.Remove(removableAccount);
+            }
+
+            return requisitions;
         }
 
         /// <inheritdoc />
@@ -108,8 +125,8 @@ namespace FireflyWebImporter.BusinessLayer.Import
                 }
 
                 var nonDuplicates = group.Where(t => requisitionIbans.Contains(t.SourceIban) && t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)
-                                                     || !requisitionIbans.Contains(t.SourceIban) &&  t.DestinationIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                if(nonDuplicates.Any())
+                                                     || !requisitionIbans.Contains(t.SourceIban) && t.DestinationIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                if (nonDuplicates.Any())
                     nonDuplicateTransactions.AddRange(nonDuplicates);
             }
 
@@ -118,41 +135,6 @@ namespace FireflyWebImporter.BusinessLayer.Import
             Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
 
             return nonDuplicateTransactions;
-        }
-
-        /// <summary>
-        /// Sets the correct starting balances.
-        /// </summary>
-        /// <param name="currentBalances">The dictionary with iban and current balance.</param>
-        /// <param name="fireflyAccounts">The list of all Firefly accounts.</param>
-        protected async Task SetStartingBalances(IDictionary<string, string> currentBalances, ICollection<FireflyAccount> fireflyAccounts)
-        {
-            Logger.LogInformation("First import detected");
-            Logger.LogInformation("Start setting starting balances");
-
-            foreach (var account in currentBalances)
-            {
-                var iban = account.Key;
-                var bankBalance = decimal.Parse(account.Value, new CultureInfo("en-US"));
-
-                var fireflyAccount = fireflyAccounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.InvariantCultureIgnoreCase));
-                if(fireflyAccount == null)
-                    continue;
-
-                var transaction = await FireflyManager.GetFirstTransactionOfAccount(fireflyAccount.Id);
-
-                var currentFireflyBalance = decimal.Parse(fireflyAccount.CurrentBalance, new CultureInfo("en-US"));
-                var openingBalance =  bankBalance - currentFireflyBalance;
-                
-                fireflyAccount.OpeningBalanceDate = transaction.Date.Date.AddDays(-1);
-                fireflyAccount.OpeningBalance = openingBalance.ToString("0.00", CultureInfo.InvariantCulture);
-
-                await FireflyManager.UpdateAccount(fireflyAccount);
-                
-                Logger.LogInformation($"[{fireflyAccount.Name}] Set opening balance to: {openingBalance.ToString("0.00", CultureInfo.InvariantCulture)}");
-            }
-            
-            Logger.LogInformation("Finished setting starting balances");
         }
 
         /// <summary>
@@ -173,20 +155,20 @@ namespace FireflyWebImporter.BusinessLayer.Import
         /// <summary>
         /// Gets all the transactions for a requisition.
         /// </summary>
-        /// <param name="requisition">The requisition.</param>
+        /// <param name="accountId">The account id for which to get the transactions.</param>
+        /// <param name="requisition">The requisition to extend data.</param>
         /// <returns></returns>
-        protected async Task<ICollection<Transaction>> GetTransactionForRequisition(Requisition requisition)
+        protected async Task<ICollection<Transaction>> GetTransactionForRequisitionAccount(string accountId, Requisition requisition)
         {
-            var account = requisition.Accounts.FirstOrDefault();
-            var details = await NordigenManager.GetAccountDetails(account);
+            var details = await NordigenManager.GetAccountDetails(accountId);
 
             Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
             ICollection<Transaction> transactions;
             if (_importConfiguration.DaysToSync > 0)
-                transactions = await NordigenManager.GetAccountTransactions(account, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
+                transactions = await NordigenManager.GetAccountTransactions(accountId, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
             else
-                transactions = await NordigenManager.GetAccountTransactions(account);
+                transactions = await NordigenManager.GetAccountTransactions(accountId);
 
             foreach (var transaction in transactions)
                 ExtendData(transaction, requisition, details);
@@ -231,6 +213,41 @@ namespace FireflyWebImporter.BusinessLayer.Import
             Logger.LogInformation($"{transactions.Count} transactions left after existing check");
 
             return transactions;
+        }
+
+        /// <summary>
+        /// Sets the correct starting balances.
+        /// </summary>
+        /// <param name="currentBalances">The dictionary with iban and current balance.</param>
+        /// <param name="fireflyAccounts">The list of all Firefly accounts.</param>
+        protected async Task SetStartingBalances(IDictionary<string, string> currentBalances, ICollection<FireflyAccount> fireflyAccounts)
+        {
+            Logger.LogInformation("First import detected");
+            Logger.LogInformation("Start setting starting balances");
+
+            foreach (var account in currentBalances)
+            {
+                var iban = account.Key;
+                var bankBalance = decimal.Parse(account.Value, new CultureInfo("en-US"));
+
+                var fireflyAccount = fireflyAccounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.InvariantCultureIgnoreCase));
+                if (fireflyAccount == null)
+                    continue;
+
+                var transaction = await FireflyManager.GetFirstTransactionOfAccount(fireflyAccount.Id);
+
+                var currentFireflyBalance = decimal.Parse(fireflyAccount.CurrentBalance, new CultureInfo("en-US"));
+                var openingBalance = bankBalance - currentFireflyBalance;
+
+                fireflyAccount.OpeningBalanceDate = transaction.Date.Date.AddDays(-1);
+                fireflyAccount.OpeningBalance = openingBalance.ToString("0.00", CultureInfo.InvariantCulture);
+
+                await FireflyManager.UpdateAccount(fireflyAccount);
+
+                Logger.LogInformation($"[{fireflyAccount.Name}] Set opening balance to: {openingBalance.ToString("0.00", CultureInfo.InvariantCulture)}");
+            }
+
+            Logger.LogInformation("Finished setting starting balances");
         }
 
         #region Static Methods

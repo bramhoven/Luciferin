@@ -4,6 +4,7 @@
     {
         UNKNOWN,
         ING,
-        SNS
+        SNS,
+        N26
     }
 }

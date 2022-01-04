@@ -27,23 +27,30 @@ namespace FireflyWebImporter.BusinessLayer.Import
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 
-            Logger.LogInformation($"Start test import for {requisitions.Count} connected banks");
+            Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
-            var requisitionIbans = new List<string>();
+            var firstImport = !existingFireflyTransactions.Any();
+            var balances = new Dictionary<string, string>();
             var newTransactions = new List<Transaction>();
             foreach (var requisition in requisitions)
             {
-                newTransactions.AddRange(await GetTransactionForRequisition(requisition));
-                
-                var details = await NordigenManager.GetAccountDetails(requisition.Accounts.FirstOrDefault());
-                requisitionIbans.Add(details.Iban);
+                foreach (var account in requisition.Accounts)
+                {
+                    newTransactions.AddRange(await GetTransactionForRequisitionAccount(account, requisition));
+                    
+                    var details = await NordigenManager.GetAccountDetails(account);
+                    var balance = await NordigenManager.GetAccountBalance(account);
+                    balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
+                }
             }
+            
+            Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, requisitionIbans).ToList();
+            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys).ToList();
 
             if (!newFireflyTransactions.Any())
             {

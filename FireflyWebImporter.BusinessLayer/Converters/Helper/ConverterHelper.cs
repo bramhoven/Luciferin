@@ -21,6 +21,8 @@ namespace FireflyWebImporter.BusinessLayer.Converters.Helper
                     return new INGConverter();
                 case BankType.SNS:
                     return new SNSConverter();
+                case BankType.N26:
+                    return new N26Converter();
                 default:
                     return new ConverterBase();
             }

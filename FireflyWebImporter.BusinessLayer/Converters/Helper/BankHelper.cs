@@ -16,6 +16,8 @@ namespace FireflyWebImporter.BusinessLayer.Converters.Helper
                     return BankType.ING;
                 case "SNS_BANK_SNSBNL2A":
                     return BankType.SNS;
+                case "N26_NTSBDEB1":
+                    return BankType.N26;
                 default:
                     return BankType.UNKNOWN;
             }
