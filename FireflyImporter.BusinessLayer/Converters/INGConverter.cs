@@ -5,7 +5,7 @@ using FireflyImporter.BusinessLayer.Nordigen.Models;
 
 namespace FireflyImporter.BusinessLayer.Converters
 {
-    public class INGConverter : ConverterBase
+    internal class INGConverter : ConverterBase
     {
         #region Fields
 
@@ -18,9 +18,8 @@ namespace FireflyImporter.BusinessLayer.Converters
         #region Methods
 
         /// <inheritdoc />
-        public override FireflyTransaction ConvertTransaction(Transaction transaction)
+        protected override FireflyTransaction FillTransactions(FireflyTransaction fireflyTransaction, Transaction transaction)
         {
-            var fireflyTransaction = base.ConvertTransaction(transaction);
             fireflyTransaction.ExternalId = transaction.TransactionId;
 
             var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured, transaction.CreditorName, transaction.DebtorName);

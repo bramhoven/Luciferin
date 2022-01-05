@@ -178,6 +178,22 @@ namespace FireflyImporter.BusinessLayer.Import
         }
 
         /// <summary>
+        /// Creates the import tag to add to the transactions.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<string> CreateImportTag()
+        {
+            Logger.LogInformation("Creating the tag to add to the imported transactions");
+            
+            var dateString = DateTime.Now.ToString("hh:mm:ss dd-MM-yyyy");
+            var tag = $"Imported by Firefly III Importer | {dateString}";
+            
+            Logger.LogInformation($"Created the import tag: {tag}");
+
+            return tag;
+        }
+
+        /// <summary>
         /// Imports a list of firefly transactions.
         /// </summary>
         /// <param name="fireflyTransactions">The list of transactions to import.</param>
@@ -188,17 +204,6 @@ namespace FireflyImporter.BusinessLayer.Import
 
             try
             {
-                var dateString = DateTime.Now.ToString("hh:mm:ss dd-MM-yyyy");
-                var tag = $"Imported by Firefly III Importer | {dateString}";
-
-                foreach (var transaction in fireflyTransactions)
-                {
-                    if (transaction.Tags == null)
-                        transaction.Tags = new List<string>();
-
-                    transaction.Tags.Add(tag);
-                }
-
                 await FireflyManager.AddNewTransactions(fireflyTransactions);
                 Logger.LogInformation($"Imported {fireflyTransactions.Count} transactions");
             }

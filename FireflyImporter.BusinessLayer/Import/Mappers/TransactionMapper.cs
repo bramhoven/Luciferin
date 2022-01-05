@@ -14,15 +14,15 @@ namespace FireflyImporter.BusinessLayer.Import.Mappers
 
         #region Static Methods
 
-        public static IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts)
+        public static IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts, string tag)
         {
-            return transactions.Select(t => MapTransactionToFireflyTransaction(t, fireflyAccounts)).Where(t => t != null).ToList();
+            return transactions.Select(t => MapTransactionToFireflyTransaction(t, fireflyAccounts, tag)).Where(t => t != null).ToList();
         }
 
-        private static FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts)
+        private static FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
         {
             var converter = ConverterHelper.GetTransactionConverter(transaction.RequisitorBank);
-            var fireflyTransaction = converter.ConvertTransaction(transaction);
+            var fireflyTransaction = converter.ConvertTransaction(transaction, tag);
             
             FireflyAccount source;
             FireflyAccount destination;

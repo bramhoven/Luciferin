@@ -3,7 +3,7 @@ using FireflyImporter.BusinessLayer.Nordigen.Models;
 
 namespace FireflyImporter.BusinessLayer.Converters
 {
-    internal class N26Converter : ConverterBase
+    internal class DefaultConverter : ConverterBase
     {
         #region Methods
 

@@ -24,7 +24,7 @@ namespace FireflyImporter.BusinessLayer.Converters.Helper
                 case BankType.N26:
                     return new N26Converter();
                 default:
-                    return new ConverterBase();
+                    return new DefaultConverter();
             }
         }
 

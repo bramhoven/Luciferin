@@ -5,14 +5,13 @@ using FireflyImporter.BusinessLayer.Nordigen.Models;
 
 namespace FireflyImporter.BusinessLayer.Converters
 {
-    public class SNSConverter : ConverterBase
+    internal class SNSConverter : ConverterBase
     {
         #region Methods
 
         /// <inheritdoc />
-        public override FireflyTransaction ConvertTransaction(Transaction transaction)
+        protected override FireflyTransaction FillTransactions(FireflyTransaction fireflyTransaction, Transaction transaction)
         {
-            var fireflyTransaction = base.ConvertTransaction(transaction);
             fireflyTransaction.ExternalId = transaction.EntryReference;
 
             var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured ?? transaction.CreditorName ?? transaction.DebtorName);

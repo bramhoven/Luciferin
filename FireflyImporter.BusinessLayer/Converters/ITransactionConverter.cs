@@ -11,8 +11,9 @@ namespace FireflyImporter.BusinessLayer.Converters
         /// Converts the Nordigen transaction to a Firefly transaction.
         /// </summary>
         /// <param name="transaction">The Nordigen transaction.</param>
+        /// <param name="tag">The import tag to add.</param>
         /// <returns></returns>
-        FireflyTransaction ConvertTransaction(Transaction transaction);
+        FireflyTransaction ConvertTransaction(Transaction transaction, string tag);
         
         #endregion
     }
