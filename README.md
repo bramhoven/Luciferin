@@ -111,6 +111,8 @@ foo@bar:~$ docker run \
   bramhoven/firefly-importer:latest
 ```
 
+This will launch the web UI which is accessible at [http://localhost:8080](http://localhost:8080).
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
