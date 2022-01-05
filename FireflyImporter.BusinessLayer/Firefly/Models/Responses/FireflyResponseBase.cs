@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace FireflyImporter.BusinessLayer.Firefly.Models.Responses
 {
@@ -8,14 +7,11 @@ namespace FireflyImporter.BusinessLayer.Firefly.Models.Responses
     {
         #region Properties
         
-        [JsonProperty("data")]
-        public abstract ICollection<FireflyDataContainer<TAttributes>> Data { get; set; }
-        
-        [JsonProperty("meta")]
-        public FireflyMeta Meta { get; set; }
-
         [JsonProperty("links")]
         public FireflyLinks Links { get; set; }
+
+        [JsonProperty("meta")]
+        public FireflyMeta Meta { get; set; }
 
         #endregion
     }

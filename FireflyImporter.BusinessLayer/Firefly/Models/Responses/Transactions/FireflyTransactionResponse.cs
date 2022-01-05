@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace FireflyImporter.BusinessLayer.Firefly.Models.Responses.Transactions
+﻿namespace FireflyImporter.BusinessLayer.Firefly.Models.Responses.Transactions
 {
-    public sealed class FireflyTransactionResponse : FireflyResponseBase<FireflyTransactionAttributes>
+    public class FireflyTransactionResponse : FireflySingleResponseBase<FireflyTransactionAttributes>
     {
         #region Properties
 
-        /// <inheritdoc />
-        public override ICollection<FireflyDataContainer<FireflyTransactionAttributes>> Data { get; set; }
+        public override FireflyDataContainer<FireflyTransactionAttributes> Data { get; set; }
 
         #endregion
     }

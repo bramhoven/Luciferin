@@ -2,7 +2,7 @@
 
 namespace FireflyImporter.BusinessLayer.Firefly.Models.Responses.Accounts
 {
-    public class FireflyAccountResponse : FireflyResponseBase<FireflyAccountAttributes>
+    public class FireflyAccountCollectionResponse : FireflyCollectionResponseBase<FireflyAccountAttributes>
     {
         #region Properties
 
