@@ -1,4 +1,5 @@
-﻿using FireflyImporter.BusinessLayer.Firefly.Models;
+﻿using System.Collections.Generic;
+using FireflyImporter.BusinessLayer.Firefly.Models;
 using FireflyImporter.BusinessLayer.Nordigen.Models;
 
 namespace FireflyImporter.BusinessLayer.Converters
@@ -18,6 +19,8 @@ namespace FireflyImporter.BusinessLayer.Converters
                 RequisitionIban = transaction.RequisitorIban,
                 Amount = $"{amount}{new string('0', decimalPlacesMissing)}",
                 Date = transaction.BookingDate,
+                ExternalId = transaction.TransactionId ?? transaction.EntryReference,
+                Tags = new List<string>()
             };
 
             return fireflyTransaction;
