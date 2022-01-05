@@ -1,0 +1,21 @@
+name: Build Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
+    - name: Build the Docker image 
+      run: docker build .. --file Dockerfile --tag $DOCKER_USERNAME/firefly-importer:$(date +%s)
+      working-directory: ./FireflyImporter.Website
+    - name: Docker push
+      run: docker push $DOCKER_USERNAME/firefly-importer
