@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using FireflyImporter.BusinessLayer.Firefly.Helpers;
 using Flurl.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using FireflyImporter.BusinessLayer.Firefly.Enums;
-using FireflyImporter.BusinessLayer.Firefly.Helpers;
 using FireflyImporter.BusinessLayer.Firefly.Models;
 using FireflyImporter.BusinessLayer.Firefly.Models.Requests;
 using FireflyImporter.BusinessLayer.Firefly.Models.Responses.Accounts;
@@ -39,6 +39,25 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
         #region Methods
 
         /// <inheritdoc />
+        public async Task AddNewTag(FireflyTag tag)
+        {
+            try
+            {
+                await FireflyRoutes
+                      .Tags(_fireflyBaseUrl)
+                      .WithOAuthBearerToken(_fireflyAccessToken)
+                      .WithHeader("Accept", "application/json")
+                      .PostJsonAsync(tag.MapToFireflyApiTag())
+                      .ConfigureAwait(false);
+            }
+            catch (FlurlHttpException e)
+            {
+                if (e.StatusCode == 422)
+                    _logger.LogError(await e.Call.Response.GetStringAsync());
+            }
+        }
+
+        /// <inheritdoc />
         public async Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions)
         {
             var fireflyTransactions = transactions.ToList();
@@ -55,9 +74,10 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                                          .WithOAuthBearerToken(_fireflyAccessToken)
                                          .WithHeader("Accept", "application/json")
                                          .PostJsonAsync(request)
+                                         .ReceiveJson<FireflyTransactionResponse>()
                                          .ConfigureAwait(false);
 
-                    _logger.LogInformation($"Imported transaction [{++index}/{totalTransactions}] [{transaction.Type.ToString()}] {transaction.Description}");
+                    _logger.LogInformation($"Imported transaction [{++index}/{totalTransactions}] [{response.Data.Id}] [{transaction.Type.ToString()}] {transaction.Description}");
                 }
                 catch (FlurlHttpException e)
                 {
@@ -75,7 +95,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                                  .WithOAuthBearerToken(_fireflyAccessToken)
                                  .WithHeader("Accept", "application/json")
                                  .SetQueryParam("type", MapToType(accountType))
-                                 .GetJsonAsync<FireflyAccountResponse>()
+                                 .GetJsonAsync<FireflyAccountCollectionResponse>()
                                  .ConfigureAwait(false);
             return response.Data.MapToFireflyAccountCollection();
         }
@@ -84,7 +104,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
         public async Task<ICollection<FireflyAccount>> GetAccounts()
         {
             var accounts = new List<FireflyAccount>();
-            FireflyAccountResponse response;
+            FireflyAccountCollectionResponse response;
             int page = 0;
 
             do
@@ -94,7 +114,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                                  .WithOAuthBearerToken(_fireflyAccessToken)
                                  .WithHeader("Accept", "application/json")
                                  .SetQueryParam("page", ++page)
-                                 .GetJsonAsync<FireflyAccountResponse>()
+                                 .GetJsonAsync<FireflyAccountCollectionResponse>()
                                  .ConfigureAwait(false);
                 accounts.AddRange(response.Data.MapToFireflyAccountCollection());
             } while (response.Meta.Pagination.CurrentPage < response.Meta.Pagination.TotalPages);
@@ -110,7 +130,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                                      .WithOAuthBearerToken(_fireflyAccessToken)
                                      .WithHeader("Accept", "application/json")
                                      .SetQueryParam("limit", 1)
-                                     .GetJsonAsync<FireflyTransactionResponse>();
+                                     .GetJsonAsync<FireflyTransactionCollectionResponse>();
 
             var lastPage = infoResponse.Meta.Pagination.TotalPages;
             var response = await FireflyRoutes
@@ -122,7 +142,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                                      limit = 1,
                                      page = lastPage
                                  })
-                                 .GetJsonAsync<FireflyTransactionResponse>();
+                                 .GetJsonAsync<FireflyTransactionCollectionResponse>();
             return response.Data.FirstOrDefault()?.MapToFireflyTransaction();
         }
 
@@ -130,18 +150,18 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
         public async Task<ICollection<FireflyTransaction>> GetTransactions()
         {
             var transactions = new List<FireflyTransaction>();
-            FireflyTransactionResponse response;
+            FireflyTransactionCollectionResponse transactionCollectionResponse;
             int page = 0;
 
             do
             {
-                response = await FireflyRoutes
+                transactionCollectionResponse = await FireflyRoutes
                                  .Transactions(_fireflyBaseUrl)
                                  .WithOAuthBearerToken(_fireflyAccessToken)
                                  .SetQueryParam("page", ++page)
-                                 .GetJsonAsync<FireflyTransactionResponse>();
-                transactions.AddRange(response.Data.MapToFireflyTransactionCollection());
-            } while (response.Meta.Pagination.CurrentPage < response.Meta.Pagination.TotalPages);
+                                 .GetJsonAsync<FireflyTransactionCollectionResponse>();
+                transactions.AddRange(transactionCollectionResponse.Data.MapToFireflyTransactionCollection());
+            } while (transactionCollectionResponse.Meta.Pagination.CurrentPage < transactionCollectionResponse.Meta.Pagination.TotalPages);
 
             return transactions;
         }

@@ -26,6 +26,12 @@ namespace FireflyImporter.BusinessLayer.Firefly
         #region Methods
 
         /// <inheritdoc />
+        public Task AddNewTag(FireflyTag tag)
+        {
+            return _store.AddNewTag(tag);
+        }
+
+        /// <inheritdoc />
         public Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions)
         {
             return _store.AddNewTransactions(transactions);

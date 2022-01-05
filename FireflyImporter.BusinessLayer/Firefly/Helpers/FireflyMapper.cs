@@ -10,59 +10,33 @@ using FireflyImporter.BusinessLayer.Firefly.Models.Shared;
 
 namespace FireflyImporter.BusinessLayer.Firefly.Helpers
 {
-    public static class FireflyMapper
+    internal static class FireflyMapper
     {
         #region Methods
 
         #region Static Methods
 
-        private static FireflyAccount MapToFireflyAccount(this FireflyDataContainer<FireflyAccountAttributes> fireflyDataContainer)
-        {
-            var account = fireflyDataContainer.Attributes;
-            if (account == null)
-                throw new ArgumentNullException(nameof(fireflyDataContainer.Attributes));
-
-            return new FireflyAccount
-            {
-                Active = account.Active,
-                AccountNumber = account.AccountNumber,
-                AccountRole = account.AccountRole,
-                Bic = account.Bic,
-                CurrencyCode = account.CurrencyCode,
-                CurrencyId = account.CurrencyId,
-                CurrencySymbol = account.CurrencySymbol,
-                CurrentBalance = account.CurrentBalance,
-                CurrentDebt = account.CurrentDebt,
-                CurrencyDecimalPlaces = account.CurrencyDecimalPlaces,
-                CurrentBalanceDate = account.CurrentBalanceDate,
-                CreditCardType = account.CreditCardType,
-                Id = int.Parse(fireflyDataContainer.Id),
-                Iban = account.Iban,
-                Interest = account.Interest,
-                InterestPeriod = account.InterestPeriod,
-                IncludeNetWorth = account.IncludeNetWorth,
-                Latitude = account.Latitude,
-                Longitude = account.Longitude,
-                LiabilityDirection = account.LiabilityDirection,
-                LiabilityType = account.LiabilityType,
-                MonthlyPaymentDate = account.MonthlyPaymentDate,
-                Name = account.Name,
-                Notes = account.Notes,
-                Order = account.Order ?? 0,
-                OpeningBalance = account.OpeningBalance,
-                OpeningBalanceDate = account.OpeningBalanceDate,
-                Type = MapAccountType(account.Type),
-                VirtualBalance = account.VirtualBalance,
-                ZoomLevel = account.ZoomLevel
-            };
-        }
-
-        public static ICollection<FireflyAccount> MapToFireflyAccountCollection(this IEnumerable<FireflyDataContainer<FireflyAccountAttributes>> fireflyDataContainers)
+        internal static ICollection<FireflyAccount> MapToFireflyAccountCollection(this IEnumerable<FireflyDataContainer<FireflyAccountAttributes>> fireflyDataContainers)
         {
             return fireflyDataContainers.Select(dc => dc.MapToFireflyAccount()).ToList();
         }
 
-        public static FireflyApiTransaction MapToFireflyApiTransaction(this FireflyTransaction transaction)
+        internal static FireflyApiTag MapToFireflyApiTag(this FireflyTag fireflyTag)
+        {
+            return new FireflyApiTag
+            {
+                Created = fireflyTag.Created,
+                Updated = fireflyTag.Updated,
+                Date = fireflyTag.Date,
+                Description = fireflyTag.Description,
+                Latitude = fireflyTag.Latitude,
+                Longitude = fireflyTag.Longitude,
+                Tag = fireflyTag.Tag,
+                ZoomLevel = fireflyTag.ZoomLevel
+            };
+        }
+
+        internal static FireflyApiTransaction MapToFireflyApiTransaction(this FireflyTransaction transaction)
         {
             return new FireflyApiTransaction
             {
@@ -127,7 +101,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Helpers
             };
         }
 
-        public static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
+        internal static FireflyTransaction MapToFireflyTransaction(this FireflyDataContainer<FireflyTransactionAttributes> fireflyDataContainer)
         {
             var transaction = fireflyDataContainer.Attributes.Transactions.FirstOrDefault();
             if (transaction == null)
@@ -197,7 +171,7 @@ namespace FireflyImporter.BusinessLayer.Firefly.Helpers
             };
         }
 
-        public static ICollection<FireflyTransaction> MapToFireflyTransactionCollection(this IEnumerable<FireflyDataContainer<FireflyTransactionAttributes>> fireflyDataContainers)
+        internal static ICollection<FireflyTransaction> MapToFireflyTransactionCollection(this IEnumerable<FireflyDataContainer<FireflyTransactionAttributes>> fireflyDataContainers)
         {
             return fireflyDataContainers.Select(dc => dc.MapToFireflyTransaction()).ToList();
         }
@@ -232,6 +206,47 @@ namespace FireflyImporter.BusinessLayer.Firefly.Helpers
                 default:
                     return "";
             }
+        }
+
+        private static FireflyAccount MapToFireflyAccount(this FireflyDataContainer<FireflyAccountAttributes> fireflyDataContainer)
+        {
+            var account = fireflyDataContainer.Attributes;
+            if (account == null)
+                throw new ArgumentNullException(nameof(fireflyDataContainer.Attributes));
+
+            return new FireflyAccount
+            {
+                Active = account.Active,
+                AccountNumber = account.AccountNumber,
+                AccountRole = account.AccountRole,
+                Bic = account.Bic,
+                CurrencyCode = account.CurrencyCode,
+                CurrencyId = account.CurrencyId,
+                CurrencySymbol = account.CurrencySymbol,
+                CurrentBalance = account.CurrentBalance,
+                CurrentDebt = account.CurrentDebt,
+                CurrencyDecimalPlaces = account.CurrencyDecimalPlaces,
+                CurrentBalanceDate = account.CurrentBalanceDate,
+                CreditCardType = account.CreditCardType,
+                Id = int.Parse(fireflyDataContainer.Id),
+                Iban = account.Iban,
+                Interest = account.Interest,
+                InterestPeriod = account.InterestPeriod,
+                IncludeNetWorth = account.IncludeNetWorth,
+                Latitude = account.Latitude,
+                Longitude = account.Longitude,
+                LiabilityDirection = account.LiabilityDirection,
+                LiabilityType = account.LiabilityType,
+                MonthlyPaymentDate = account.MonthlyPaymentDate,
+                Name = account.Name,
+                Notes = account.Notes,
+                Order = account.Order ?? 0,
+                OpeningBalance = account.OpeningBalance,
+                OpeningBalanceDate = account.OpeningBalanceDate,
+                Type = MapAccountType(account.Type),
+                VirtualBalance = account.VirtualBalance,
+                ZoomLevel = account.ZoomLevel
+            };
         }
 
         private static TransactionType MapTransactionType(string type)

@@ -9,6 +9,8 @@ namespace FireflyImporter.BusinessLayer.Firefly
     {
         #region Methods
 
+        Task AddNewTag(FireflyTag tag);
+
         Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions);
 
         Task<ICollection<FireflyAccount>> GetAccounts(AccountType accountType);

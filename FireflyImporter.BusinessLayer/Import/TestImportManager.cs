@@ -47,7 +47,7 @@ namespace FireflyImporter.BusinessLayer.Import
             Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
-            var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts).ToList();
+            var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, null).ToList();
             
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
             newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys).ToList();
@@ -59,6 +59,11 @@ namespace FireflyImporter.BusinessLayer.Import
             }
 
             Logger.LogInformation($"Would import {newFireflyTransactions.Count} transactions");
+
+            if (!firstImport)
+                return;
+            
+            Logger.LogInformation("Would set asset account opening balances");
         }
 
         #endregion

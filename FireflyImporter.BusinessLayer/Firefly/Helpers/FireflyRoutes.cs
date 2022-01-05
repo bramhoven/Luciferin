@@ -14,6 +14,8 @@ namespace FireflyImporter.BusinessLayer.Firefly.Helpers
 
         public static string AccountTransactions(string baseUrl, int accountId) => Account(baseUrl, accountId).AppendPathSegment("transactions");
 
+        public static string Tags(string baseUrl) => ApiBaseUrl(baseUrl).AppendPathSegment("tags");
+
         public static string Transactions(string baseUrl) => ApiBaseUrl(baseUrl).AppendPathSegment("transactions");
 
         private static string ApiBaseUrl(string baseUrl) => baseUrl.AppendPathSegments("api", "v1");
