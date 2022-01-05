@@ -145,7 +145,7 @@ namespace FireflyImporter.BusinessLayer.Import
             Logger.LogInformation("Creating the tag to add to the imported transactions");
 
             var date = DateTime.Now;
-            var dateString = date.ToString("hh:mm:ss dd-MM-yyyy");
+            var dateString = date.ToString("HH:mm:ss dd-MM-yyyy");
 
             var tagString = $"Imported by Firefly III Importer | {dateString}";
             var tagDescription = $"Tag for transactions that have been imported by the Firefly III Importer on {dateString}";
