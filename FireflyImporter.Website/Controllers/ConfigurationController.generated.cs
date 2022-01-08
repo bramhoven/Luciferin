@@ -10,7 +10,6 @@ using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using FireflyImporter.Website.Models.Configuration.FormModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
@@ -79,16 +78,16 @@ namespace FireflyImporter.Website.Controllers
 
         [NonAction]
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-        public virtual IActionResult DeleteBank()
+        public virtual IActionResult AddBank()
         {
-            return new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.DeleteBank);
+            return new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.AddBank);
         }
 
         [NonAction]
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-        public virtual IActionResult AddBank()
+        public virtual IActionResult DeleteBank()
         {
-            return new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.AddBank);
+            return new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.DeleteBank);
         }
 
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
@@ -106,27 +105,17 @@ namespace FireflyImporter.Website.Controllers
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string DeleteBank = "DeleteBank";
             public readonly string AddBank = "AddBank";
+            public readonly string DeleteBank = "DeleteBank";
             public readonly string Index = "Index";
         }
 
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string DeleteBank = "DeleteBank";
             public const string AddBank = "AddBank";
+            public const string DeleteBank = "DeleteBank";
             public const string Index = "Index";
-        }
-
-        [GeneratedCode("R4Mvc", "1.0")]
-        static readonly ActionParamsClass_DeleteBank s_DeleteBankParams = new ActionParamsClass_DeleteBank();
-        [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-        public ActionParamsClass_DeleteBank DeleteBankParams => s_DeleteBankParams;
-        [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_DeleteBank
-        {
-            public readonly string requisitionId = "requisitionId";
         }
 
         [GeneratedCode("R4Mvc", "1.0")]
@@ -137,6 +126,16 @@ namespace FireflyImporter.Website.Controllers
         public class ActionParamsClass_AddBank
         {
             public readonly string formModel = "formModel";
+        }
+
+        [GeneratedCode("R4Mvc", "1.0")]
+        static readonly ActionParamsClass_DeleteBank s_DeleteBankParams = new ActionParamsClass_DeleteBank();
+        [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DeleteBank DeleteBankParams => s_DeleteBankParams;
+        [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DeleteBank
+        {
+            public readonly string requisitionId = "requisitionId";
         }
 
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
@@ -159,10 +158,21 @@ namespace FireflyImporter.Website.Controllers
     }
 
     [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-    public partial class R4MVC_ConfigurationController : ConfigurationController
+    public partial class R4MVC_ConfigurationController : FireflyImporter.Website.Controllers.ConfigurationController
     {
         public R4MVC_ConfigurationController(): base(Dummy.Instance)
         {
+        }
+
+        [NonAction]
+        partial void AddBankOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo, FireflyImporter.Website.Models.Configuration.FormModels.ConfigurationAddBankFormModel formModel);
+        [NonAction]
+        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> AddBank(FireflyImporter.Website.Models.Configuration.FormModels.ConfigurationAddBankFormModel formModel)
+        {
+            var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.AddBank);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "formModel", formModel);
+            AddBankOverride(callInfo, formModel);
+            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
         }
 
         [NonAction]
@@ -173,17 +183,6 @@ namespace FireflyImporter.Website.Controllers
             var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.DeleteBank);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "requisitionId", requisitionId);
             DeleteBankOverride(callInfo, requisitionId);
-            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
-        }
-
-        [NonAction]
-        partial void AddBankOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo, ConfigurationAddBankFormModel formModel);
-        [NonAction]
-        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> AddBank(ConfigurationAddBankFormModel formModel)
-        {
-            var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.AddBank);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "formModel", formModel);
-            AddBankOverride(callInfo, formModel);
             return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
         }
 

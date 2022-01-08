@@ -3,12 +3,17 @@ using FireflyImporter.BusinessLayer.Configuration;
 using FireflyImporter.BusinessLayer.Configuration.Interfaces;
 using FireflyImporter.BusinessLayer.Firefly;
 using FireflyImporter.BusinessLayer.Firefly.Stores;
+using FireflyImporter.BusinessLayer.Hubs;
 using FireflyImporter.BusinessLayer.Import;
+using FireflyImporter.BusinessLayer.Logger;
 using FireflyImporter.BusinessLayer.Nordigen;
 using FireflyImporter.BusinessLayer.Nordigen.Stores;
+using FireflyImporter.Website.Classes.Logger;
 using FireflyImporter.Website.Classes.Queue;
+using FireflyImporter.Website.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -63,6 +68,7 @@ namespace FireflyImporter.Website
             {
                 endpoints.MapControllerRoute("Home", "{controller=Home}/{action=Index}");
                 endpoints.MapControllerRoute("Configuration", "{controller=Configuration}/{action=Index}");
+                endpoints.MapHub<ImporterHub>("hubs/importer");
             });
         }
 
@@ -70,6 +76,9 @@ namespace FireflyImporter.Website
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddSignalR();
+            
+            services.AddScoped<ICompositeLogger>(s => new HubLogger(s.GetRequiredService<IHubContext<ImporterHub, IImporterHub>>()));
 
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));

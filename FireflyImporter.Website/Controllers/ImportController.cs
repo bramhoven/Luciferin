@@ -43,10 +43,15 @@ namespace FireflyImporter.Website.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult> StartImport()
+        public virtual async Task<ActionResult> Start()
         {
             await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(_importManager.StartImport);
+            return MVC.Import.RedirectToAction(MVC.Import.ActionNames.Status);
+        }
 
+        [HttpGet]
+        public async virtual Task<ActionResult> Status()
+        {
             return View();
         }
 

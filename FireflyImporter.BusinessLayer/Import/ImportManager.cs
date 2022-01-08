@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FireflyImporter.BusinessLayer.Configuration.Interfaces;
 using FireflyImporter.BusinessLayer.Firefly;
 using FireflyImporter.BusinessLayer.Import.Mappers;
+using FireflyImporter.BusinessLayer.Logger;
 using FireflyImporter.BusinessLayer.Nordigen;
 using FireflyImporter.BusinessLayer.Nordigen.Models;
 using Microsoft.Extensions.Logging;
@@ -15,7 +16,11 @@ namespace FireflyImporter.BusinessLayer.Import
     {
         #region Constructors
 
-        public ImportManager(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, logger) { }
+        public ImportManager(INordigenManager nordigenManager,
+                             IFireflyManager fireflyManager,
+                             IImportConfiguration importConfiguration,
+                             ILogger<ImportManager> logger,
+                             ICompositeLogger compositeLogger) : base(nordigenManager, fireflyManager, importConfiguration, logger, compositeLogger) { }
 
         #endregion
 
@@ -24,10 +29,12 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <inheritdoc />
         public override async ValueTask StartImport(CancellationToken cancellationToken)
         {
+            Thread.Sleep(2000);
+            
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 
-            Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
+            await CompositeLogger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
             var firstImport = !existingFireflyTransactions.Any();
             var balances = new Dictionary<string, string>();
@@ -37,25 +44,25 @@ namespace FireflyImporter.BusinessLayer.Import
                 foreach (var account in requisition.Accounts)
                 {
                     newTransactions.AddRange(await GetTransactionForRequisitionAccount(account, requisition));
-                    
+
                     var details = await NordigenManager.GetAccountDetails(account);
                     var balance = await NordigenManager.GetAccountBalance(account);
                     balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
                 }
             }
-            
-            Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
+
+            await CompositeLogger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
             var tag = await CreateImportTag();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, tag.Tag).ToList();
-            
+
             newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
             newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys).ToList();
 
             if (!newFireflyTransactions.Any())
             {
-                Logger.LogInformation("No new transactions to import");
+                await CompositeLogger.LogInformation("No new transactions to import");
                 return;
             }
 
@@ -64,7 +71,7 @@ namespace FireflyImporter.BusinessLayer.Import
 
             if (!firstImport)
                 return;
-            
+
             accounts = await FireflyManager.GetAccounts();
             await SetStartingBalances(balances, accounts);
         }

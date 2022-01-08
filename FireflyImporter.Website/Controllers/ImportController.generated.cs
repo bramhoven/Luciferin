@@ -91,15 +91,17 @@ namespace FireflyImporter.Website.Controllers
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string StartImport = "StartImport";
             public readonly string Index = "Index";
+            public readonly string Start = "Start";
+            public readonly string Status = "Status";
         }
 
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string StartImport = "StartImport";
             public const string Index = "Index";
+            public const string Start = "Start";
+            public const string Status = "Status";
         }
 
         [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
@@ -110,11 +112,13 @@ namespace FireflyImporter.Website.Controllers
             public class _ViewNamesClass
             {
                 public readonly string Index = "Index";
-                public readonly string StartImport = "StartImport";
+                public readonly string Start = "Start";
+                public readonly string Status = "Status";
             }
 
             public readonly string Index = "~/Views/Import/Index.cshtml";
-            public readonly string StartImport = "~/Views/Import/StartImport.cshtml";
+            public readonly string Start = "~/Views/Import/Start.cshtml";
+            public readonly string Status = "~/Views/Import/Status.cshtml";
         }
 
         [GeneratedCode("R4Mvc", "1.0")]
@@ -124,20 +128,10 @@ namespace FireflyImporter.Website.Controllers
     }
 
     [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-    public partial class R4MVC_ImportController : ImportController
+    public partial class R4MVC_ImportController : FireflyImporter.Website.Controllers.ImportController
     {
         public R4MVC_ImportController(): base(Dummy.Instance)
         {
-        }
-
-        [NonAction]
-        partial void StartImportOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo);
-        [NonAction]
-        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> StartImport()
-        {
-            var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.StartImport);
-            StartImportOverride(callInfo);
-            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
         }
 
         [NonAction]
@@ -147,6 +141,26 @@ namespace FireflyImporter.Website.Controllers
         {
             var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
+            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
+        }
+
+        [NonAction]
+        partial void StartOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo);
+        [NonAction]
+        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> Start()
+        {
+            var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.Start);
+            StartOverride(callInfo);
+            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
+        }
+
+        [NonAction]
+        partial void StatusOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo);
+        [NonAction]
+        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> Status()
+        {
+            var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.Status);
+            StatusOverride(callInfo);
             return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
         }
     }

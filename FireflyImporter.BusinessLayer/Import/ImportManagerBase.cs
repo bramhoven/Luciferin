@@ -10,6 +10,7 @@ using FireflyImporter.BusinessLayer.Converters.Helper;
 using FireflyImporter.BusinessLayer.Firefly;
 using FireflyImporter.BusinessLayer.Firefly.Enums;
 using FireflyImporter.BusinessLayer.Firefly.Models;
+using FireflyImporter.BusinessLayer.Logger;
 using FireflyImporter.BusinessLayer.Nordigen;
 using FireflyImporter.BusinessLayer.Nordigen.Models;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,8 @@ namespace FireflyImporter.BusinessLayer.Import
 
         protected readonly IFireflyManager FireflyManager;
 
+        protected readonly ICompositeLogger CompositeLogger;
+
         protected readonly ILogger<IImportManager> Logger;
 
         protected readonly INordigenManager NordigenManager;
@@ -32,12 +35,14 @@ namespace FireflyImporter.BusinessLayer.Import
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<IImportManager> logger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<IImportManager> logger, ICompositeLogger compositeLogger)
         {
             NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
             _importConfiguration = importConfiguration;
             Logger = logger;
+            CompositeLogger = compositeLogger;
+            CompositeLogger.SetLogger(logger);
         }
 
         #endregion
