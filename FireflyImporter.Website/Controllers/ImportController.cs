@@ -52,7 +52,8 @@ namespace FireflyImporter.Website.Controllers
         [HttpGet]
         public async virtual Task<ActionResult> Status()
         {
-            return View();
+            var model = new PageModelBase { FullWidth = true };
+            return View(model);
         }
 
         #endregion

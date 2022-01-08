@@ -3,7 +3,7 @@ using FireflyImporter.Website.Models.Configuration.FormModels;
 
 namespace FireflyImporter.Website.Models.Configuration
 {
-    public class ConfigurationIndexPageModel
+    public class ConfigurationIndexPageModel : PageModelBase
     {
         #region Properties
 
