@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace FireflyImporter.BusinessLayer.Logger
 {
-    public interface ICompositeLogger
+    public interface ICompositeLogger<out TCategoryName>
     {
         #region Methods
 
         Task Log(LogLevel logLevel, string message);
 
-        Task LogInformation(string message);
+        Task Log(LogLevel logLevel, Exception e, string message);
 
-        void SetLogger(ILogger logger);
+        Task LogInformation(string message);
 
         #endregion
     }

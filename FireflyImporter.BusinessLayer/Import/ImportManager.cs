@@ -19,8 +19,7 @@ namespace FireflyImporter.BusinessLayer.Import
         public ImportManager(INordigenManager nordigenManager,
                              IFireflyManager fireflyManager,
                              IImportConfiguration importConfiguration,
-                             ILogger<ImportManager> logger,
-                             ICompositeLogger compositeLogger) : base(nordigenManager, fireflyManager, importConfiguration, logger, compositeLogger) { }
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, logger) { }
 
         #endregion
 
@@ -29,12 +28,10 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <inheritdoc />
         public override async ValueTask StartImport(CancellationToken cancellationToken)
         {
-            Thread.Sleep(2000);
-            
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 
-            await CompositeLogger.LogInformation($"Start import for {requisitions.Count} connected banks");
+            await Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 
             var firstImport = !existingFireflyTransactions.Any();
             var balances = new Dictionary<string, string>();
@@ -51,18 +48,18 @@ namespace FireflyImporter.BusinessLayer.Import
                 }
             }
 
-            await CompositeLogger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
+            await Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
             var tag = await CreateImportTag();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, tag.Tag).ToList();
 
-            newFireflyTransactions = RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions).ToList();
-            newFireflyTransactions = CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys).ToList();
+            newFireflyTransactions = (await RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions)).ToList();
+            newFireflyTransactions = (await CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys)).ToList();
 
             if (!newFireflyTransactions.Any())
             {
-                await CompositeLogger.LogInformation("No new transactions to import");
+                await Logger.LogInformation("No new transactions to import");
                 return;
             }
 

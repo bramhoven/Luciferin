@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FireflyImporter.BusinessLayer.Configuration;
 using FireflyImporter.BusinessLayer.Configuration.Interfaces;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -78,7 +80,8 @@ namespace FireflyImporter.Website
             services.AddRazorPages();
             services.AddSignalR();
             
-            services.AddScoped<ICompositeLogger>(s => new HubLogger(s.GetRequiredService<IHubContext<ImporterHub, IImporterHub>>()));
+            // services.AddScoped<ICompositeLogger>(s => new HubLogger(s.GetRequiredService<IHubContext<ImporterHub, IImporterHub>>()));
+            services.TryAddSingleton(typeof(ICompositeLogger<>), typeof(HubLogger<>));
 
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));

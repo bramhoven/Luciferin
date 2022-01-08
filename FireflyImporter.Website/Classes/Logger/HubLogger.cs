@@ -8,20 +8,21 @@ using Microsoft.Extensions.Logging;
 
 namespace FireflyImporter.Website.Classes.Logger
 {
-    public sealed class HubLogger : ICompositeLogger
+    public sealed class HubLogger<TCategoryName> : ICompositeLogger<TCategoryName>
     {
         #region Fields
 
         private readonly IHubContext<ImporterHub, IImporterHub> _importerHub;
-        private ILogger _logger;
+        private readonly ILogger<TCategoryName> _logger;
 
         #endregion
 
         #region Constructors
 
-        public HubLogger(IHubContext<ImporterHub, IImporterHub> importerHub)
+        public HubLogger(IHubContext<ImporterHub, IImporterHub> importerHub, ILoggerFactory loggerFactory)
         {
             _importerHub = importerHub;
+            _logger = loggerFactory.CreateLogger<TCategoryName>();
         }
 
         #endregion
@@ -34,14 +35,16 @@ namespace FireflyImporter.Website.Classes.Logger
             await _importerHub.Clients.All.ImportMessageEvent(DateTime.Now, message);
         }
 
+        /// <inheritdoc />
+        public async Task Log(LogLevel logLevel, Exception e, string message)
+        {
+            _logger.Log(logLevel, e, message);
+            await _importerHub.Clients.All.ImportMessageEvent(DateTime.Now, message);
+        }
+
         public async Task LogInformation(string message)
         {
             await Log(LogLevel.Information, message);
-        }
-
-        public void SetLogger(ILogger logger)
-        {
-            _logger = logger;
         }
 
         #endregion

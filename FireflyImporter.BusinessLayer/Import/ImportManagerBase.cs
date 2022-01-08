@@ -25,9 +25,7 @@ namespace FireflyImporter.BusinessLayer.Import
 
         protected readonly IFireflyManager FireflyManager;
 
-        protected readonly ICompositeLogger CompositeLogger;
-
-        protected readonly ILogger<IImportManager> Logger;
+        protected readonly ICompositeLogger<IImportManager> Logger;
 
         protected readonly INordigenManager NordigenManager;
 
@@ -35,14 +33,12 @@ namespace FireflyImporter.BusinessLayer.Import
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ILogger<IImportManager> logger, ICompositeLogger compositeLogger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ICompositeLogger<IImportManager> logger)
         {
             NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
             _importConfiguration = importConfiguration;
             Logger = logger;
-            CompositeLogger = compositeLogger;
-            CompositeLogger.SetLogger(logger);
         }
 
         #endregion
@@ -108,9 +104,9 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <param name="fireflyTransactions">The existing firefly transactions.</param>
         /// <param name="requisitionIbans">The list of requisition ibans.</param>
         /// <returns></returns>
-        protected IEnumerable<FireflyTransaction> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions, ICollection<string> requisitionIbans)
+        protected async Task<IEnumerable<FireflyTransaction>> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions, ICollection<string> requisitionIbans)
         {
-            Logger.LogInformation("Checking transactions for duplicates transfers");
+            await Logger.LogInformation("Checking transactions for duplicates transfers");
 
             var nonDuplicateTransactions = transactions.Where(t => t.Type != TransactionType.Transfer).ToList();
 
@@ -136,7 +132,7 @@ namespace FireflyImporter.BusinessLayer.Import
 
             nonDuplicateTransactions = nonDuplicateTransactions.Where(t => transactions.Contains(t) && !fireflyTransactions.Contains(t)).ToList();
 
-            Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
+            await Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
 
             return nonDuplicateTransactions;
         }
@@ -147,7 +143,7 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <returns></returns>
         protected async Task<FireflyTag> CreateImportTag()
         {
-            Logger.LogInformation("Creating the tag to add to the imported transactions");
+            await Logger.LogInformation("Creating the tag to add to the imported transactions");
 
             var date = DateTime.Now;
             var dateString = date.ToString("HH:mm:ss dd-MM-yyyy");
@@ -164,7 +160,7 @@ namespace FireflyImporter.BusinessLayer.Import
 
             await FireflyManager.AddNewTag(tag);
 
-            Logger.LogInformation($"Created the import tag: {tag.Tag}");
+            await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
             return tag;
         }
@@ -175,11 +171,11 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <returns></returns>
         protected async Task<ICollection<FireflyTransaction>> GetExistingFireflyTransactions()
         {
-            Logger.LogInformation("Getting existing Firefly transactions");
+            await Logger.LogInformation("Getting existing Firefly transactions");
 
             var transactions = await FireflyManager.GetTransactions();
 
-            Logger.LogInformation($"Retrieved {transactions.Count} existing Firefly transactions");
+            await Logger.LogInformation($"Retrieved {transactions.Count} existing Firefly transactions");
 
             return transactions;
         }
@@ -194,7 +190,7 @@ namespace FireflyImporter.BusinessLayer.Import
         {
             var details = await NordigenManager.GetAccountDetails(accountId);
 
-            Logger.LogInformation($"Getting all transactions for {details.Iban}");
+            await Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
             ICollection<Transaction> transactions;
             if (_importConfiguration.DaysToSync > 0)
@@ -205,7 +201,7 @@ namespace FireflyImporter.BusinessLayer.Import
             foreach (var transaction in transactions)
                 ExtendData(transaction, requisition, details);
 
-            Logger.LogInformation($"Retrieved {transactions.Count} transactions for {details.Iban}");
+            await Logger.LogInformation($"Retrieved {transactions.Count} transactions for {details.Iban}");
 
             return transactions;
         }
@@ -217,16 +213,16 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <returns></returns>
         protected async Task ImportTransactions(ICollection<FireflyTransaction> fireflyTransactions)
         {
-            Logger.LogInformation($"Start importing {fireflyTransactions.Count} transactions");
+            await Logger.LogInformation($"Start importing {fireflyTransactions.Count} transactions");
 
             try
             {
                 await FireflyManager.AddNewTransactions(fireflyTransactions);
-                Logger.LogInformation($"Imported {fireflyTransactions.Count} transactions");
+                await Logger.LogInformation($"Imported {fireflyTransactions.Count} transactions");
             }
             catch (Exception e)
             {
-                Logger.Log(LogLevel.Error, e, e.Message);
+                await Logger.Log(LogLevel.Error, e, e.Message);
             }
         }
 
@@ -236,13 +232,13 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <param name="newTransactions">The new transactions.</param>
         /// <param name="existingTransactions">The existing transactions.</param>
         /// <returns></returns>
-        protected IEnumerable<FireflyTransaction> RemoveExistingTransactions(IEnumerable<FireflyTransaction> newTransactions, ICollection<FireflyTransaction> existingTransactions)
+        protected async Task<IEnumerable<FireflyTransaction>> RemoveExistingTransactions(IEnumerable<FireflyTransaction> newTransactions, ICollection<FireflyTransaction> existingTransactions)
         {
-            Logger.LogInformation("Checking existing Firefly transactions");
+            await Logger.LogInformation("Checking existing Firefly transactions");
 
             var transactions = newTransactions.Where(t => existingTransactions.All(ft => !string.Equals(ft.ExternalId, t.ExternalId, StringComparison.InvariantCultureIgnoreCase))).ToList();
 
-            Logger.LogInformation($"{transactions.Count} transactions left after existing check");
+            await Logger.LogInformation($"{transactions.Count} transactions left after existing check");
 
             return transactions;
         }
@@ -254,8 +250,8 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <param name="fireflyAccounts">The list of all Firefly accounts.</param>
         protected async Task SetStartingBalances(IDictionary<string, string> currentBalances, ICollection<FireflyAccount> fireflyAccounts)
         {
-            Logger.LogInformation("First import detected");
-            Logger.LogInformation("Start setting starting balances");
+            await Logger.LogInformation("First import detected");
+            await Logger.LogInformation("Start setting starting balances");
 
             foreach (var account in currentBalances)
             {
@@ -276,10 +272,10 @@ namespace FireflyImporter.BusinessLayer.Import
 
                 await FireflyManager.UpdateAccount(fireflyAccount);
 
-                Logger.LogInformation($"[{fireflyAccount.Name}] Set opening balance to: {openingBalance.ToString("0.00", CultureInfo.InvariantCulture)}");
+                await Logger.LogInformation($"[{fireflyAccount.Name}] Set opening balance to: {openingBalance.ToString("0.00", CultureInfo.InvariantCulture)}");
             }
 
-            Logger.LogInformation("Finished setting starting balances");
+            await Logger.LogInformation("Finished setting starting balances");
         }
 
         #region Static Methods
