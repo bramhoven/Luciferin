@@ -120,7 +120,7 @@ This will launch the web UI which is accessible at [http://localhost:8080](http:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [[TODO]](https://github.com/bramhoven/Firefly-III-Importer/issues/2) Importing status updates via websockets to web UI
+- [[IN PROGRESS]](https://github.com/bramhoven/Firefly-III-Importer/issues/2) Importing status updates via websockets to web UI
 - [[TODO]](https://github.com/bramhoven/Firefly-III-Importer/issues/3) Configuring importer via web UI
 - [[TODO]](https://github.com/bramhoven/Firefly-III-Importer/issues/5) Automatically import new transactions
 
