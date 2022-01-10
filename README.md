@@ -91,7 +91,6 @@ foo@bar:~$ docker run `
   --rm `
   -e FIREFLY_III_ACCESS_TOKEN={Firefly III access token} `
   -e FIREFLY_III_URL={Firefly III instance url} `
-  -e NORDIGEN_SECRET_ID={Nordigen secret id} `
   -e NORDIGEN_SECRET_KEY={Nordigen secret key} `
   -e NORDIGEN_SECRET_ID={Nordigen base url} `
   -p 8080:80 `
@@ -104,7 +103,6 @@ foo@bar:~$ docker run \
   --rm \
   -e FIREFLY_III_ACCESS_TOKEN={Firefly III access token} \
   -e FIREFLY_III_URL={Firefly III instance url} \
-  -e NORDIGEN_SECRET_ID={Nordigen secret id} \
   -e NORDIGEN_SECRET_KEY={Nordigen secret key} \
   -e NORDIGEN_SECRET_ID={Nordigen base url} \
   -p 8080:80 \
