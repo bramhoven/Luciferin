@@ -5,17 +5,18 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h1 align="center">Firefly III Importer</h1>
+  <h1 align="center">Luciferin</h1>
+  <h5>A Firefly III importer</h5>
 
   <p align="center">
-    This is an importer for the populair free and open source personal finance manager.
+    Luciferin is an importer for the populair free and open source personal finance manager.
     <br />
-    <a href="https://github.com/bramhoven/Firefly-III-Importer/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/bramhoven/Luciferin/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/bramhoven/Firefly-III-Importer/">Report Bug</a>
+    <a href="https://github.com/bramhoven/Luciferin/">Report Bug</a>
     ·
-    <a href="https://github.com/bramhoven/Firefly-III-Importer/">Request Feature</a>
+    <a href="https://github.com/bramhoven/Luciferin/">Request Feature</a>
   </p>
 </div>
 
@@ -52,7 +53,7 @@
 ## About The Project
 
 The goal is to create an easy to use importer that anyone can use to import their financial information into Firefly III.
-The idea came after I tried too manually import CSV's or any of the other data importers. I could not get it to work reliably and if it worked the importer did not parse the transaction names correctly. This Firefly III Importer tries to solve it by providing a transaction converter per bank (W.I.P.), to always get the correct names and description. 
+The idea came after I tried too manually import CSV's or any of the other data importers. I could not get it to work reliably and if it worked the importer did not parse the transaction names correctly. This Firefly III Importer tries to solve it by providing a transaction converter per bank (W.I.P.), to always get the correct names and description.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -94,7 +95,7 @@ foo@bar:~$ docker run `
   -e NORDIGEN_SECRET_KEY={Nordigen secret key} `
   -e NORDIGEN_SECRET_ID={Nordigen base url} `
   -p 8080:80 `
-  bramhoven/firefly-importer:latest
+  bramhoven/luciferin:latest
 ```
 
 Other:
@@ -106,7 +107,7 @@ foo@bar:~$ docker run \
   -e NORDIGEN_SECRET_KEY={Nordigen secret key} \
   -e NORDIGEN_SECRET_ID={Nordigen base url} \
   -p 8080:80 \
-  bramhoven/firefly-importer:latest
+  bramhoven/luciferin:latest
 ```
 
 This will launch the web UI which is accessible at [http://localhost:8080](http://localhost:8080).
@@ -118,11 +119,11 @@ This will launch the web UI which is accessible at [http://localhost:8080](http:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [[IN PROGRESS]](https://github.com/bramhoven/Firefly-III-Importer/issues/2) Importing status updates via websockets to web UI
-- [[TODO]](https://github.com/bramhoven/Firefly-III-Importer/issues/3) Configuring importer via web UI
-- [[TODO]](https://github.com/bramhoven/Firefly-III-Importer/issues/5) Automatically import new transactions
+- [[IN PROGRESS]](https://github.com/bramhoven/Luciferin/issues/2) Importing status updates via websockets to web UI
+- [[TODO]](https://github.com/bramhoven/Luciferin/issues/3) Configuring importer via web UI
+- [[TODO]](https://github.com/bramhoven/Luciferin/issues/5) Automatically import new transactions
 
-See the [open issues](https://github.com/bramhoven/Firefly-III-Importer/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/bramhoven/Luciferin/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -160,6 +161,6 @@ Distributed under GNU General Public License v3.0. See `LICENSE` for more inform
 
 Bram Hoven [info@bramhoven.nl](mailto:info@bramhoven.nl)
 
-Project Link: [https://github.com/bramhoven/Firefly-III-Importer](https://github.com/bramhoven/Firefly-III-Importer)
+Project Link: [https://github.com/bramhoven/Luciferin](https://github.com/bramhoven/Luciferin)
 
 <p align="right">(<a href="#top">back to top</a>)</p>

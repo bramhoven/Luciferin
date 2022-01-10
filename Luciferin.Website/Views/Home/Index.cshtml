@@ -1,0 +1,17 @@
+﻿@model Luciferin.Website.Models.Home.HomeIndexPageModel
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Luciferin</h1>
+    <h4>A Firefly III Importer</h4>
+    
+    @Html.DisplayFor(m => m.RequisitionList)
+    
+    <div class="mt-5">
+        <a role="button" class="btn btn-primary" href="@Model.ConfigurationStartUrl">Start configuration</a>
+        
+        @if (Model.RequisitionList.AnyRequisitions)
+        {
+            <a role="button" class="btn btn-primary" href="@Model.ImportStartUrl">Start import</a>
+        }
+    </div>
+</div>
