@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FireflyImporter.BusinessLayer.Firefly.Models;
 using FireflyImporter.BusinessLayer.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -15,9 +16,9 @@ namespace FireflyImporter.Website.Hubs
         }
 
         /// <inheritdoc />
-        public async Task ImportTransactionEvent(object transactionEventModel)
+        public async Task ImportTransactionEvent(FireflyTransaction transaction, bool successful)
         {
-            await Clients.All.ImportTransactionEvent(transactionEventModel);
+            await Clients.All.ImportTransactionEvent(transaction, successful);
         }
 
         #endregion

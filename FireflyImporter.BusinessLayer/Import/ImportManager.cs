@@ -28,6 +28,9 @@ namespace FireflyImporter.BusinessLayer.Import
         /// <inheritdoc />
         public override async ValueTask StartImport(CancellationToken cancellationToken)
         {
+            await Task.Delay(1000, cancellationToken);
+            await Logger.LogInformation("Starting import");
+            
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 

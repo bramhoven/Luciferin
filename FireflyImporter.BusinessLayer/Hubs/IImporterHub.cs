@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FireflyImporter.BusinessLayer.Firefly.Models;
 
 namespace FireflyImporter.BusinessLayer.Hubs
 {
@@ -9,7 +10,7 @@ namespace FireflyImporter.BusinessLayer.Hubs
 
         Task ImportMessageEvent(DateTime time, string message);
 
-        Task ImportTransactionEvent(object transactionEventModel);
+        Task ImportTransactionEvent(FireflyTransaction transaction, bool successful);
 
         #endregion
     }

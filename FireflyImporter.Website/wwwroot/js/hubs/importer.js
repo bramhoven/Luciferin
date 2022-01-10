@@ -6,13 +6,41 @@ const IMPORT_TRANSACTION_EVENT = "ImportTransactionEvent";
 const handleImportMessageEvent = (time, message) => {
     let date = new Date(time);
     let li = document.createElement("li");
-    li.textContent = `[${formatDateString(date)}] ${message}`;
+    li.textContent = `[${formatDateString(date)} ${formatTimeString(date)}] ${message}`;
     li.className = "list-group-item"
     let messageList = document.getElementById("message-list");
     messageList.prepend(li);
 };
 
-const handleImportTransactionEvent = (importTransactionEvent) => {
+const handleImportTransactionEvent = (transaction, successful) => {
+    let transactionList = document.getElementById("transaction-list")
+    
+    let card = document.createElement("div");
+    card.className = transactionList.childElementCount === 0 ? "card" : "card mb-4";
+
+    let cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    let cardTitle = document.createElement("h5");
+    cardTitle.className = "card-title";
+    cardTitle.textContent = transaction.description;
+
+    let cardSubTitle = document.createElement("h6");
+    cardSubTitle.className = "card-subtitle mb-2 text-muted";
+
+    let date = new Date(transaction.date);
+    cardSubTitle.textContent = formatDateString(date);
+
+    let cardText = document.createElement("p");
+    cardText.className = "card-text";
+    cardText.textContent = transaction.notes;
+
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardSubTitle);
+    cardBody.appendChild(cardText);
+    card.appendChild(cardBody);
+
+    transactionList.prepend(card);
 };
 
 const setupEvents = (connection) => {
@@ -33,13 +61,18 @@ connection.start()
         return console.error(err.toString());
     });
 
-const formatDateString = (date) => {
-    let day = date.getDate().toString().padStart(2, '0');
-    let month = (date.getMonth()+1).toString().padStart(2, '0');
-    let year = date.getFullYear().toString().padStart(2, '0');
+const formatTimeString = (date) => {
     let hour = date.getHours().toString().padStart(2, '0');
     let minute = date.getMinutes().toString().padStart(2, '0');
     let seconds = date.getSeconds().toString().padStart(2, '0');
 
-    return `${day}-${month}-${year} ${hour}:${minute}:${seconds}`
+    return `${hour}:${minute}:${seconds}`
+}
+
+const formatDateString = (date) => {
+    let day = date.getDate().toString().padStart(2, '0');
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let year = date.getFullYear().toString().padStart(2, '0');
+
+    return `${day}-${month}-${year}`
 }
