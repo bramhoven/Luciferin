@@ -1,0 +1,39 @@
+﻿@model Luciferin.Website.Models.Configuration.ConfigurationIndexPageModel
+
+<div class="text-center">
+    <h1 class="display-4">Configure the web importer</h1>
+
+    @Html.DisplayFor(m => m.RequisitionList)
+
+    <div class="mt-5">
+        <h4>Connect a new bank account:</h4>
+    </div>
+
+    @using(Html.BeginForm(MVC.Configuration.ActionNames.AddBank, MVC.Configuration.Name, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        
+        <div class="input-group mt-2">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="institution-select">Choose your bank</label>
+            </div>
+            <select class="custom-select" id="institution-select" name="@nameof(Model.AddBankFormModel.InstitutionId)">
+                @foreach (var institution in Model.AddBankFormModel.Institutions)
+                {
+                    <option value="@institution.Id">@institution.Name</option>
+                }
+            </select>
+        </div>
+        
+        <div class="input-group mt-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="bank-name">Name</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Give the bank a name" aria-label="Give the bank a name" aria-describedby="bank-name" name="@nameof(Model.AddBankFormModel.BankName)">
+        </div>
+        
+        <div class="input-group mt-2">
+            <button type="submit" class="btn btn-secondary btn-lg btn-block">Add</button>
+        </div>
+    }
+</div>
