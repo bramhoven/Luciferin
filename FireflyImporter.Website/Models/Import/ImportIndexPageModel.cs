@@ -1,6 +1,6 @@
 ﻿namespace FireflyImporter.Website.Models.Import
 {
-    public class ImportIndexPageModel
+    public class ImportIndexPageModel : PageModelBase
     {
         #region Properties
 

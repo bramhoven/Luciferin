@@ -1,16 +1,25 @@
+using System;
 using System.Linq;
 using FireflyImporter.BusinessLayer.Configuration;
 using FireflyImporter.BusinessLayer.Configuration.Interfaces;
 using FireflyImporter.BusinessLayer.Firefly;
 using FireflyImporter.BusinessLayer.Firefly.Stores;
+using FireflyImporter.BusinessLayer.Hubs;
 using FireflyImporter.BusinessLayer.Import;
+using FireflyImporter.BusinessLayer.Logger;
 using FireflyImporter.BusinessLayer.Nordigen;
 using FireflyImporter.BusinessLayer.Nordigen.Stores;
+using FireflyImporter.BusinessLayer.ServiceBus;
+using FireflyImporter.Website.Classes.Logger;
 using FireflyImporter.Website.Classes.Queue;
+using FireflyImporter.Website.Classes.ServiceBus;
+using FireflyImporter.Website.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -63,6 +72,7 @@ namespace FireflyImporter.Website
             {
                 endpoints.MapControllerRoute("Home", "{controller=Home}/{action=Index}");
                 endpoints.MapControllerRoute("Configuration", "{controller=Configuration}/{action=Index}");
+                endpoints.MapHub<ImporterHub>("hubs/importer");
             });
         }
 
@@ -70,6 +80,11 @@ namespace FireflyImporter.Website
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddSignalR();
+            
+            services.TryAddSingleton(typeof(ICompositeLogger<>), typeof(HubLogger<>));
+
+            services.AddScoped<IServiceBus, HubServiceBus>();
 
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
@@ -82,7 +97,7 @@ namespace FireflyImporter.Website
             services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
             services.AddScoped<INordigenManager, NordigenManager>();
 
-            services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, (ILogger<FireflyStore>)s.GetService(typeof(ILogger<FireflyStore>))));
+            services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, s.GetRequiredService<ILogger<FireflyStore>>(), s.GetRequiredService<IServiceBus>()));
             services.AddScoped<IFireflyManager, FireflyManager>();
 
             services.AddScoped<IImportManager, ImportManager>();

@@ -9,6 +9,7 @@ using FireflyImporter.BusinessLayer.Firefly.Models.Requests;
 using FireflyImporter.BusinessLayer.Firefly.Models.Responses.Accounts;
 using FireflyImporter.BusinessLayer.Firefly.Models.Responses.Transactions;
 using FireflyImporter.BusinessLayer.Firefly.Models.Shared;
+using FireflyImporter.BusinessLayer.ServiceBus;
 using Microsoft.Extensions.Logging;
 
 namespace FireflyImporter.BusinessLayer.Firefly.Stores
@@ -23,15 +24,18 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
 
         private readonly ILogger<FireflyStore> _logger;
 
+        private readonly IServiceBus _serviceBus;
+
         #endregion
 
         #region Constructors
 
-        public FireflyStore(string fireflyBaseUrl, string fireflyAccessToken, ILogger<FireflyStore> logger)
+        public FireflyStore(string fireflyBaseUrl, string fireflyAccessToken, ILogger<FireflyStore> logger, IServiceBus serviceBus)
         {
             _fireflyBaseUrl = fireflyBaseUrl;
             _fireflyAccessToken = fireflyAccessToken;
             _logger = logger;
+            _serviceBus = serviceBus;
         }
 
         #endregion
@@ -67,9 +71,10 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
             foreach (var transaction in fireflyTransactions)
             {
                 var request = GetCreateTransactionRequest(transaction);
+                FireflyTransactionResponse response = null;
                 try
                 {
-                    var response = await FireflyRoutes
+                    response = await FireflyRoutes
                                          .Transactions(_fireflyBaseUrl)
                                          .WithOAuthBearerToken(_fireflyAccessToken)
                                          .WithHeader("Accept", "application/json")
@@ -83,6 +88,10 @@ namespace FireflyImporter.BusinessLayer.Firefly.Stores
                 {
                     if (e.StatusCode == 422)
                         _logger.LogError(await e.Call.Response.GetStringAsync());
+                }
+                finally
+                {
+                    await _serviceBus.PublishTransactionEvent(transaction, response == null);
                 }
             }
         }

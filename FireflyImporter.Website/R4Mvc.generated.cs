@@ -86,6 +86,35 @@ public static partial class Links
         public const string UrlPath = "~/js";
         public static string Url() => R4MvcHelpers.ProcessVirtualPath(UrlPath);
         public static string Url(string fileName) => R4MvcHelpers.ProcessVirtualPath(UrlPath + "/" + fileName);
+        public static partial class hubs
+        {
+            public const string UrlPath = "~/js/hubs";
+            public static string Url() => R4MvcHelpers.ProcessVirtualPath(UrlPath);
+            public static string Url(string fileName) => R4MvcHelpers.ProcessVirtualPath(UrlPath + "/" + fileName);
+            public static readonly string importer_js = Url("importer.js");
+        }
+
+        public static partial class signalr
+        {
+            public const string UrlPath = "~/js/signalr";
+            public static string Url() => R4MvcHelpers.ProcessVirtualPath(UrlPath);
+            public static string Url(string fileName) => R4MvcHelpers.ProcessVirtualPath(UrlPath + "/" + fileName);
+            public static partial class dist
+            {
+                public const string UrlPath = "~/js/signalr/dist";
+                public static string Url() => R4MvcHelpers.ProcessVirtualPath(UrlPath);
+                public static string Url(string fileName) => R4MvcHelpers.ProcessVirtualPath(UrlPath + "/" + fileName);
+                public static partial class browser
+                {
+                    public const string UrlPath = "~/js/signalr/dist/browser";
+                    public static string Url() => R4MvcHelpers.ProcessVirtualPath(UrlPath);
+                    public static string Url(string fileName) => R4MvcHelpers.ProcessVirtualPath(UrlPath + "/" + fileName);
+                    public static readonly string signalr_js = Url("signalr.js");
+                    public static readonly string signalr_min_js = Url("signalr.min.js");
+                }
+            }
+        }
+
         public static readonly string site_js = Url("site.js");
     }
 
