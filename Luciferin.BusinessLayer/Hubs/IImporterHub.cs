@@ -10,7 +10,7 @@ namespace Luciferin.BusinessLayer.Hubs
 
         Task ImportMessageEvent(DateTime time, string message);
 
-        Task ImportTransactionEvent(FireflyTransaction transaction, bool successful);
+        Task ImportTransactionEvent(FireflyTransaction transaction, bool successful, string fireflyUrl);
 
         #endregion
     }

@@ -12,12 +12,17 @@ namespace Luciferin.BusinessLayer.Converters
         public virtual FireflyTransaction ConvertTransaction(Transaction transaction, string tag)
         {
             var amount = transaction.TransactionAmount.Amount.Replace("-", "");
-            var decimalPlacesMissing = 24 - amount.Split('.')[1].Length;
+            
+            //var decimalPlacesMissing = 24;
+            //if (amount.Contains("."))
+            //    decimalPlacesMissing -= amount.Split('.')[1].Length;
+            //else
+            //    amount += ".";
 
             var fireflyTransaction = new FireflyTransaction
             {
                 RequisitionIban = transaction.RequisitorIban,
-                Amount = $"{amount}{new string('0', decimalPlacesMissing)}",
+                Amount = amount,
                 Date = transaction.BookingDate,
                 ExternalId = transaction.TransactionId ?? transaction.EntryReference
             };

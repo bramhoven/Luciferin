@@ -7,7 +7,7 @@ namespace Luciferin.BusinessLayer.ServiceBus
     {
         #region Methods
 
-        Task PublishTransactionEvent(FireflyTransaction transaction, bool successful);
+        Task PublishTransactionEvent(FireflyTransaction transaction, bool successful, string fireflyUrl);
 
         #endregion
     }

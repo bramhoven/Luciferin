@@ -20,6 +20,10 @@ namespace Luciferin.BusinessLayer.Firefly.Helpers
 
         private static string ApiBaseUrl(string baseUrl) => baseUrl.AppendPathSegments("api", "v1");
 
+        public static string ShowTransaction(string baseUrl, string transactionId) => WebsiteTransactions(baseUrl).AppendPathSegments("show", transactionId);
+
+        private static string WebsiteTransactions(string baseUrl) => baseUrl.AppendPathSegments("transactions");
+
         #endregion
 
         #endregion
