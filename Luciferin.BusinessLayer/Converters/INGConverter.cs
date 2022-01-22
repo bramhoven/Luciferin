@@ -5,7 +5,7 @@ using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.BusinessLayer.Converters
 {
-    internal class INGConverter : ConverterBase
+    internal class IngConverter : ConverterBase
     {
         #region Fields
 
@@ -24,7 +24,7 @@ namespace Luciferin.BusinessLayer.Converters
 
             var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured, transaction.CreditorName, transaction.DebtorName);
             fireflyTransaction.Description = description;
-            fireflyTransaction.Notes = notes;
+            fireflyTransaction.Notes = GetNotes(transaction, notes);
 
             return fireflyTransaction;
         }
@@ -45,7 +45,7 @@ namespace Luciferin.BusinessLayer.Converters
             if (string.IsNullOrWhiteSpace(descriptionText))
                 descriptionText = debtorName;
             
-            var notesText = string.Join(Environment.NewLine, splitDescription);
+            var notesText = string.Join($"{Environment.NewLine}{Environment.NewLine}", splitDescription);
             return (descriptionText, notesText);
         }
 

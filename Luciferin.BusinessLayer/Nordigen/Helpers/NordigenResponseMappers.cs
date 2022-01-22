@@ -4,6 +4,7 @@ using System.Linq;
 using Luciferin.BusinessLayer.Nordigen.Enums;
 using Luciferin.BusinessLayer.Nordigen.Models;
 using Luciferin.BusinessLayer.Nordigen.Models.Responses;
+using Newtonsoft.Json;
 
 namespace Luciferin.BusinessLayer.Nordigen.Helpers
 {
@@ -146,7 +147,8 @@ namespace Luciferin.BusinessLayer.Nordigen.Helpers
                 EntryReference = b.EntryReference,
                 ValueDate = b.ValueDate,
                 BankTransactionCode = b.BankTransactionCode,
-                RemittanceInformationUnstructured = b.RemittanceInformationUnstructured
+                RemittanceInformationUnstructured = b.RemittanceInformationUnstructured,
+                RawData = JsonConvert.SerializeObject(b, Formatting.Indented)
             }));
 
             return transactions;

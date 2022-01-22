@@ -14,7 +14,7 @@ namespace Luciferin.BusinessLayer.Converters
 
             var text = transaction.CreditorName ?? transaction.DebtorName;
             fireflyTransaction.Description = text;
-            fireflyTransaction.Notes = text;
+            fireflyTransaction.Notes = GetNotes(transaction, text);
 
             return fireflyTransaction;
         }

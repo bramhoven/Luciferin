@@ -31,9 +31,10 @@ const handleImportTransactionEvent = (transaction, successful, fireflyUrl) => {
     let date = new Date(transaction.date);
     cardSubTitle.textContent = formatDateString(date);
 
+    let converter = new showdown.Converter();
     let cardText = document.createElement("p");
     cardText.className = "card-text";
-    cardText.textContent = transaction.notes;
+    cardText.innerHTML = converter.makeHtml(transaction.notes.replaceAll("#", "###"));
     
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardSubTitle);

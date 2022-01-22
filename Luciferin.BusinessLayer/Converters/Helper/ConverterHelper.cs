@@ -18,9 +18,9 @@ namespace Luciferin.BusinessLayer.Converters.Helper
             switch (bankType)
             {
                 case BankType.ING:
-                    return new INGConverter();
+                    return new IngConverter();
                 case BankType.SNS:
-                    return new SNSConverter();
+                    return new SnsConverter();
                 case BankType.N26:
                     return new N26Converter();
                 default:
