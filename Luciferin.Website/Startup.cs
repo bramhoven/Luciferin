@@ -1,10 +1,8 @@
-using System;
 using System.Linq;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Stores;
-using Luciferin.BusinessLayer.Hubs;
 using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
@@ -16,7 +14,6 @@ using Luciferin.Website.Classes.ServiceBus;
 using Luciferin.Website.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -81,7 +78,8 @@ namespace Luciferin.Website
         {
             services.AddRazorPages();
             services.AddSignalR();
-            
+            services.AddRouting(o => o.LowercaseUrls = true);
+
             services.TryAddSingleton(typeof(ICompositeLogger<>), typeof(HubLogger<>));
 
             services.AddScoped<IServiceBus, HubServiceBus>();

@@ -128,7 +128,7 @@ namespace Luciferin.Website.Controllers
     }
 
     [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-    public partial class R4MVC_ImportController : ImportController
+    public partial class R4MVC_ImportController : Luciferin.Website.Controllers.ImportController
     {
         public R4MVC_ImportController(): base(Dummy.Instance)
         {
@@ -157,11 +157,11 @@ namespace Luciferin.Website.Controllers
         [NonAction]
         partial void StatusOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo);
         [NonAction]
-        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> Status()
+        public override Microsoft.AspNetCore.Mvc.ActionResult Status()
         {
             var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.Status);
             StatusOverride(callInfo);
-            return System.Threading.Tasks.Task.FromResult<Microsoft.AspNetCore.Mvc.ActionResult>(callInfo);
+            return callInfo;
         }
     }
 }

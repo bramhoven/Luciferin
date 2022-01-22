@@ -10,7 +10,6 @@ using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Luciferin.Website.Models.Configuration.FormModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
@@ -159,16 +158,16 @@ namespace Luciferin.Website.Controllers
     }
 
     [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-    public partial class R4MVC_ConfigurationController : ConfigurationController
+    public partial class R4MVC_ConfigurationController : Luciferin.Website.Controllers.ConfigurationController
     {
         public R4MVC_ConfigurationController(): base(Dummy.Instance)
         {
         }
 
         [NonAction]
-        partial void AddBankOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo, ConfigurationAddBankFormModel formModel);
+        partial void AddBankOverride(R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult callInfo, Luciferin.Website.Models.Configuration.FormModels.ConfigurationAddBankFormModel formModel);
         [NonAction]
-        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> AddBank(ConfigurationAddBankFormModel formModel)
+        public override System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult> AddBank(Luciferin.Website.Models.Configuration.FormModels.ConfigurationAddBankFormModel formModel)
         {
             var callInfo = new R4Mvc_Microsoft_AspNetCore_Mvc_ActionResult(Area, Name, ActionNames.AddBank);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "formModel", formModel);

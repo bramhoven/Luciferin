@@ -32,12 +32,10 @@ namespace Luciferin.Website.Controllers
 
         public virtual async Task<ActionResult> Index()
         {
-            var requisitions = await _importManager.GetRequisitions();
-
             var model = new ImportIndexPageModel
             {
                 ConfigurationStartUrl = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
-                RequisitionList = new RequisitionList(requisitions)
+                RequisitionList = new RequisitionList(await _importManager.GetRequisitions())
             };
             return View(model);
         }
@@ -50,7 +48,7 @@ namespace Luciferin.Website.Controllers
         }
 
         [HttpGet]
-        public async virtual Task<ActionResult> Status()
+        public virtual ActionResult Status()
         {
             var model = new PageModelBase { FullWidth = true };
             return View(model);
