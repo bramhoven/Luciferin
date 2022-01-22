@@ -34,7 +34,7 @@ const handleImportTransactionEvent = (transaction, successful, fireflyUrl) => {
     let converter = new showdown.Converter();
     let cardText = document.createElement("p");
     cardText.className = "card-text";
-    cardText.innerHTML = converter.makeHtml(transaction.notes.replaceAll("#", "###"));
+    cardText.innerHTML = converter.makeHtml(transaction.notes.replaceAll("#", "####"));
     
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardSubTitle);
