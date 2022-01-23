@@ -6,6 +6,8 @@
 
         public const string DaysToSync = "DAYS_TO_SYNC";
 
+        public const string ExpendedNotes = "EXPENDED_NOTES";
+
         #endregion
     }
 }

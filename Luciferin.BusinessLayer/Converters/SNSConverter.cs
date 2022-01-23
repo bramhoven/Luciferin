@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
 
@@ -7,6 +8,13 @@ namespace Luciferin.BusinessLayer.Converters
 {
     internal class SnsConverter : ConverterBase
     {
+        #region Constructors
+
+        /// <inheritdoc />
+        public SnsConverter(ICompositeConfiguration configuration) : base(configuration) { }
+
+        #endregion
+
         #region Methods
 
         /// <inheritdoc />

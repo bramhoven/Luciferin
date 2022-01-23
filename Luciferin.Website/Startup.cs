@@ -1,9 +1,11 @@
 using System.Linq;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Configuration.Interfaces;
+using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Stores;
 using Luciferin.BusinessLayer.Import;
+using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
@@ -87,20 +89,39 @@ namespace Luciferin.Website
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
 
+            services.AddScoped<ConverterHelper>();
+            services.AddScoped<TransactionMapper>();
+            
+            ConfigureConfiguration(services);
+            ConfigureStores(services);
+            ConfigureManagers(services);
+        }
+
+        private void ConfigureConfiguration(IServiceCollection services)
+        {
             services.AddScoped<ICompositeConfiguration>(s => new Configuration(Configuration));
             services.AddScoped<INordigenConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IFireflyConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IImportConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+        }
 
+        private void ConfigureStores(IServiceCollection services)
+        {
             services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
-            services.AddScoped<INordigenManager, NordigenManager>();
-
             services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, s.GetRequiredService<ILogger<FireflyStore>>(), s.GetRequiredService<IServiceBus>()));
-            services.AddScoped<IFireflyManager, FireflyManager>();
+        }
 
+        #region Static Methods
+
+        private static void ConfigureManagers(IServiceCollection services)
+        {
+            services.AddScoped<INordigenManager, NordigenManager>();
+            services.AddScoped<IFireflyManager, FireflyManager>();
             services.AddScoped<IImportManager, ImportManager>();
             // services.AddScoped<IImportManager, TestImportManager>();
         }
+
+        #endregion
 
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Luciferin.BusinessLayer.Helpers;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +9,8 @@ using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
+using Luciferin.BusinessLayer.Helpers;
+using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
@@ -23,6 +24,8 @@ namespace Luciferin.BusinessLayer.Import
 
         private readonly IImportConfiguration _importConfiguration;
 
+        protected readonly TransactionMapper TransactionMapper;
+
         protected readonly IFireflyManager FireflyManager;
 
         protected readonly ICompositeLogger<IImportManager> Logger;
@@ -33,11 +36,12 @@ namespace Luciferin.BusinessLayer.Import
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, ICompositeLogger<IImportManager> logger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
         {
             NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
             _importConfiguration = importConfiguration;
+            TransactionMapper = transactionMapper;
             Logger = logger;
         }
 

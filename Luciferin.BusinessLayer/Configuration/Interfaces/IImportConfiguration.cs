@@ -5,6 +5,8 @@
         #region Properties
 
         int DaysToSync { get; }
+        
+        bool ExpendedNotes { get; }
 
         #endregion
     }

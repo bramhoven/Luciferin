@@ -8,22 +8,51 @@ using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.BusinessLayer.Import.Mappers
 {
-    public static class TransactionMapper
+    public class TransactionMapper
     {
+        #region Fields
+
+        private readonly ConverterHelper _converterHelper;
+
+        #endregion
+
+        #region Constructors
+
+        public TransactionMapper(ConverterHelper converterHelper)
+        {
+            _converterHelper = converterHelper;
+        }
+
+        #endregion
+
         #region Methods
 
-        #region Static Methods
-
-        public static IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts, string tag)
+        public IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts, string tag)
         {
             return transactions.Select(t => MapTransactionToFireflyTransaction(t, fireflyAccounts, tag)).Where(t => t != null).ToList();
         }
 
-        private static FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
+        private FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string iban, AccountType[] accountTypes)
         {
-            var converter = ConverterHelper.GetTransactionConverter(transaction.RequisitorBank);
+            return accounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) && accountTypes.Contains(a.Type));
+        }
+
+        private FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string name, string iban, AccountType[] accountTypes)
+        {
+            var account = accounts.FirstOrDefault(a => (!string.IsNullOrWhiteSpace(iban) && string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) || string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type)) ?? new FireflyAccount
+            {
+                Iban = iban,
+                Name = name
+            };
+
+            return account;
+        }
+
+        private FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
+        {
+            var converter = _converterHelper.GetTransactionConverter(transaction.RequisitorBank);
             var fireflyTransaction = converter.ConvertTransaction(transaction, tag);
-            
+
             FireflyAccount source;
             FireflyAccount destination;
 
@@ -61,24 +90,6 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
             return fireflyTransaction;
         }
-
-        private static FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string iban, AccountType[] accountTypes)
-        {
-            return accounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) && accountTypes.Contains(a.Type));
-        }
-
-        private static FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string name, string iban, AccountType[] accountTypes)
-        {
-            var account = accounts.FirstOrDefault(a => (!string.IsNullOrWhiteSpace(iban) && string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) || string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type)) ?? new FireflyAccount
-            {
-                Iban = iban,
-                Name = name
-            };
-
-            return account;
-        }
-
-        #endregion
 
         #endregion
     }
