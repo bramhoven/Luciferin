@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.BusinessLayer.Converters
 {
-    internal class SNSConverter : ConverterBase
+    internal class SnsConverter : ConverterBase
     {
+        #region Constructors
+
+        /// <inheritdoc />
+        public SnsConverter(ICompositeConfiguration configuration) : base(configuration) { }
+
+        #endregion
+
         #region Methods
 
         /// <inheritdoc />
@@ -16,7 +24,7 @@ namespace Luciferin.BusinessLayer.Converters
 
             var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured ?? transaction.CreditorName ?? transaction.DebtorName);
             fireflyTransaction.Description = description;
-            fireflyTransaction.Notes = notes;
+            fireflyTransaction.Notes = GetNotes(transaction, notes);
 
             return fireflyTransaction;
         }
@@ -25,10 +33,10 @@ namespace Luciferin.BusinessLayer.Converters
 
         private static (string, string) GetTextFields(string description)
         {
-            const string pattern = @"\s{2,}";
+            const string pattern = @">";
             var splitDescription = Regex.Split(description, pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
             var descriptionText = splitDescription[0];
-            var notesText = string.Join(Environment.NewLine, splitDescription);
+            var notesText = string.Join($"{Environment.NewLine}{Environment.NewLine}", splitDescription);
             return (descriptionText, notesText);
         }
 

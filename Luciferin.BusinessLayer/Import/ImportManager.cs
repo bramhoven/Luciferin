@@ -19,7 +19,8 @@ namespace Luciferin.BusinessLayer.Import
         public ImportManager(INordigenManager nordigenManager,
                              IFireflyManager fireflyManager,
                              IImportConfiguration importConfiguration,
-                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, logger) { }
+                             TransactionMapper transactionMapper,
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, transactionMapper, logger) { }
 
         #endregion
 

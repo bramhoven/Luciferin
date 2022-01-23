@@ -120,7 +120,7 @@ namespace Luciferin.Website.Controllers
     }
 
     [GeneratedCode("R4Mvc", "1.0"), DebuggerNonUserCode]
-    public partial class R4MVC_HomeController : HomeController
+    public partial class R4MVC_HomeController : Luciferin.Website.Controllers.HomeController
     {
         public R4MVC_HomeController(): base(Dummy.Instance)
         {

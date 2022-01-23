@@ -12,7 +12,7 @@ const handleImportMessageEvent = (time, message) => {
     messageList.prepend(li);
 };
 
-const handleImportTransactionEvent = (transaction, successful) => {
+const handleImportTransactionEvent = (transaction, successful, fireflyUrl) => {
     let transactionList = document.getElementById("transaction-list")
     
     let card = document.createElement("div");
@@ -31,14 +31,23 @@ const handleImportTransactionEvent = (transaction, successful) => {
     let date = new Date(transaction.date);
     cardSubTitle.textContent = formatDateString(date);
 
+    let converter = new showdown.Converter();
     let cardText = document.createElement("p");
     cardText.className = "card-text";
-    cardText.textContent = transaction.notes;
-
+    cardText.innerHTML = converter.makeHtml(transaction.notes.replaceAll("#", "####"));
+    
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardSubTitle);
     cardBody.appendChild(cardText);
     card.appendChild(cardBody);
+    
+    if(successful) {
+        let fireflyLink = document.createElement("a");
+        fireflyLink.className = "card-link";
+        fireflyLink.href = fireflyUrl;
+        fireflyLink.textContent = "View in Firefly III";
+        cardBody.appendChild(fireflyLink);
+    }
 
     transactionList.prepend(card);
 };

@@ -14,7 +14,10 @@ namespace Luciferin.BusinessLayer.Configuration
         #region Properties
 
         /// <inheritdoc />
-        public int DaysToSync => _configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value != null ? int.Parse(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value) : -1;
+        public int DaysToSync => !string.IsNullOrWhiteSpace(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value) ? int.Parse(_configuration.GetSection(ImportConfigurationConstants.DaysToSync).Value) : -1;
+
+        /// <inheritdoc />
+        public bool ExpendedNotes => !string.IsNullOrWhiteSpace(_configuration.GetSection(ImportConfigurationConstants.ExpendedNotes).Value) && bool.Parse(_configuration.GetSection(ImportConfigurationConstants.ExpendedNotes).Value);
 
         /// <inheritdoc />
         public string FireflyAccessToken => _configuration.GetSection(FireflyConfigurationConstants.FireflyAccessToken).Value;

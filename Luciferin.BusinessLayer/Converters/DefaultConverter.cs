@@ -1,10 +1,18 @@
-﻿using Luciferin.BusinessLayer.Firefly.Models;
+﻿using Luciferin.BusinessLayer.Configuration.Interfaces;
+using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.BusinessLayer.Converters
 {
     internal class DefaultConverter : ConverterBase
     {
+        #region Constructors
+
+        /// <inheritdoc />
+        public DefaultConverter(ICompositeConfiguration configuration) : base(configuration) { }
+
+        #endregion
+
         #region Methods
 
         /// <inheritdoc />

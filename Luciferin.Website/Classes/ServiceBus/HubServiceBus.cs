@@ -28,9 +28,9 @@ namespace Luciferin.Website.Classes.ServiceBus
         #region Methods
 
         /// <inheritdoc />
-        public Task PublishTransactionEvent(FireflyTransaction transaction, bool successful)
+        public Task PublishTransactionEvent(FireflyTransaction transaction, bool successful, string fireflyUrl)
         {
-            return _importerHub.Clients.All.ImportTransactionEvent(transaction, successful);
+            return _importerHub.Clients.All.ImportTransactionEvent(transaction, successful, fireflyUrl);
         }
 
         #endregion

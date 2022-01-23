@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Linq;
+using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.BusinessLayer.Converters
 {
-    internal class INGConverter : ConverterBase
+    internal class IngConverter : ConverterBase
     {
         #region Fields
 
         private const string _descriptionFieldName = "Omschrijving";
-        
+
         private const string _nameFieldName = "Naam";
+
+        #endregion
+
+        #region Constructors
+
+        /// <inheritdoc />
+        public IngConverter(ICompositeConfiguration configuration) : base(configuration) { }
 
         #endregion
 
@@ -24,7 +32,7 @@ namespace Luciferin.BusinessLayer.Converters
 
             var (description, notes) = GetTextFields(transaction.RemittanceInformationUnstructured, transaction.CreditorName, transaction.DebtorName);
             fireflyTransaction.Description = description;
-            fireflyTransaction.Notes = notes;
+            fireflyTransaction.Notes = GetNotes(transaction, notes);
 
             return fireflyTransaction;
         }
@@ -35,17 +43,17 @@ namespace Luciferin.BusinessLayer.Converters
         {
             var splitDescription = description.Split("<br>");
             var descriptionText = splitDescription.FirstOrDefault(d => d.Contains(_descriptionFieldName))?.Replace($"{_descriptionFieldName}:", "").Trim();
-            
+
             if (string.IsNullOrWhiteSpace(descriptionText))
                 descriptionText = splitDescription[0].Replace($"{_nameFieldName}:", "").Trim();
-            
+
             if (string.IsNullOrWhiteSpace(descriptionText))
                 descriptionText = creditorName;
-            
+
             if (string.IsNullOrWhiteSpace(descriptionText))
                 descriptionText = debtorName;
-            
-            var notesText = string.Join(Environment.NewLine, splitDescription);
+
+            var notesText = string.Join($"{Environment.NewLine}{Environment.NewLine}", splitDescription);
             return (descriptionText, notesText);
         }
 

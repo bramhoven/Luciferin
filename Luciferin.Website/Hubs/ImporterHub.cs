@@ -15,10 +15,9 @@ namespace Luciferin.Website.Hubs
             await Clients.All.ImportMessageEvent(time, message);
         }
 
-        /// <inheritdoc />
-        public async Task ImportTransactionEvent(FireflyTransaction transaction, bool successful)
+        public async Task ImportTransactionEvent(FireflyTransaction transaction, bool successful, string fireflyUrl)
         {
-            await Clients.All.ImportTransactionEvent(transaction, successful);
+            await Clients.All.ImportTransactionEvent(transaction, successful, fireflyUrl);
         }
 
         #endregion

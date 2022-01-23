@@ -21,6 +21,8 @@ namespace Luciferin.BusinessLayer.Nordigen.Models
 
         public string EntryReference { get; set; }
 
+        public string RawData { get; set; }
+
         public string RemittanceInformationUnstructured { get; set; }
 
         public BankType RequisitorBank { get; set; }

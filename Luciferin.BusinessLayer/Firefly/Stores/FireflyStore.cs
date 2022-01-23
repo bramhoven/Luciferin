@@ -91,7 +91,11 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
                 }
                 finally
                 {
-                    await _serviceBus.PublishTransactionEvent(transaction, response == null);
+                    string fireflyUrl = null;
+                    if(!string.IsNullOrWhiteSpace(response.Data?.Id))
+                        fireflyUrl = FireflyRoutes.ShowTransaction(_fireflyBaseUrl, response.Data?.Id);
+                    
+                    await _serviceBus.PublishTransactionEvent(transaction, response.Data != null, fireflyUrl);
                 }
             }
         }
