@@ -34,6 +34,12 @@ namespace Luciferin.BusinessLayer.Configuration
         /// <inheritdoc />
         public string NordigenSecretKey => _configuration.GetSection(NordigenConfigurationConstants.NordigenSecretKey).Value;
 
+        /// <inheritdoc />
+        public string StorageConnectionString => _configuration.GetSection(ImportConfigurationConstants.StorageConnectionString).Value;
+
+        /// <inheritdoc />
+        public string StorageProvider => !string.IsNullOrWhiteSpace(_configuration.GetSection(ImportConfigurationConstants.StorageProvider).Value) ? _configuration.GetSection(ImportConfigurationConstants.StorageProvider).Value.ToLower() : "mysql";
+
         #endregion
 
         #region Constructors

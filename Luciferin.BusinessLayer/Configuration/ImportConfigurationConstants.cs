@@ -8,6 +8,10 @@
 
         public const string ExpendedNotes = "EXPENDED_NOTES";
 
+        public const string StorageConnectionString = "STORAGE_CONNECTION_STRING";
+
+        public const string StorageProvider = "STORAGE_PROVIDER";
+
         #endregion
     }
 }

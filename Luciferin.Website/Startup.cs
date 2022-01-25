@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Configuration.Interfaces;
@@ -10,12 +11,14 @@ using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
 using Luciferin.BusinessLayer.ServiceBus;
+using Luciferin.DataLayer.Storage.Context;
 using Luciferin.Website.Classes.Logger;
 using Luciferin.Website.Classes.Queue;
 using Luciferin.Website.Classes.ServiceBus;
 using Luciferin.Website.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -91,7 +94,9 @@ namespace Luciferin.Website
 
             services.AddScoped<ConverterHelper>();
             services.AddScoped<TransactionMapper>();
-            
+
+            ConfigureStorage(services);
+
             ConfigureConfiguration(services);
             ConfigureStores(services);
             ConfigureManagers(services);
@@ -103,6 +108,24 @@ namespace Luciferin.Website
             services.AddScoped<INordigenConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IFireflyConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IImportConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+        }
+
+        private void ConfigureStorage(IServiceCollection services)
+        {
+            switch (CompositeConfiguration.StorageProvider)
+            {
+                case "mysql":
+                    var version = ServerVersion.AutoDetect(CompositeConfiguration.StorageConnectionString);
+                    services.AddDbContext<StorageContext>(options =>
+                    {
+                        options
+                            .UseMySql(CompositeConfiguration.StorageConnectionString, version)
+                            .LogTo(Console.WriteLine, LogLevel.Information)
+                            .EnableSensitiveDataLogging()
+                            .EnableDetailedErrors();
+                    });
+                    break;
+            }
         }
 
         private void ConfigureStores(IServiceCollection services)
