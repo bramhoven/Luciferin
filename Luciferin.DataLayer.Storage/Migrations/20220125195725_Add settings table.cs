@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
 namespace Luciferin.DataLayer.Storage.Migrations
 {
     public partial class Addsettingstable : Migration
