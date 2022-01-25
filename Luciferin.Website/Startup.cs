@@ -78,6 +78,8 @@ namespace Luciferin.Website
                 endpoints.MapControllerRoute("Configuration", "{controller=Configuration}/{action=Index}");
                 endpoints.MapHub<ImporterHub>("hubs/importer");
             });
+
+            MigrateAndSeedDatabases(app);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -136,6 +138,18 @@ namespace Luciferin.Website
             services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
             services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, s.GetRequiredService<ILogger<FireflyStore>>(), s.GetRequiredService<IServiceBus>()));
             services.AddScoped<ISettingsStore, StorageSettingStore>();
+        }
+
+        private void MigrateAndSeedDatabases(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var storageContext = serviceScope.ServiceProvider.GetRequiredService<StorageContext>();
+                storageContext.Database.Migrate();
+
+                var settingsDal = serviceScope.ServiceProvider.GetRequiredService<SettingsDal>();
+                settingsDal.SeedSettings();
+            }
         }
 
         #region Static Methods

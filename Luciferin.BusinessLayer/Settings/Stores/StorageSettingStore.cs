@@ -46,7 +46,7 @@ namespace Luciferin.BusinessLayer.Settings.Stores
         {
             if (setting.HasValue)
                 throw new InvalidOperationException(nameof(setting));
-            
+
             var entity = _settingsDal.GetSetting(setting.Key);
 
             switch (setting.ValueType)
@@ -74,16 +74,19 @@ namespace Luciferin.BusinessLayer.Settings.Stores
 
         private static ISetting MapSetting(Setting entity)
         {
-            if (entity.BooleanValue.HasValue)
-                return new BooleanSetting(entity.Id, entity.Key, entity.BooleanValue.Value);
-
-            if (entity.IntValue.HasValue)
-                return new IntegerSetting(entity.Id, entity.Key, entity.IntValue.Value);
-
-            if (entity.TimeSpanValue.HasValue)
-                return new TimeSpanSetting(entity.Id, entity.Key, entity.TimeSpanValue.Value);
-
-            return new StringSetting(entity.Id, entity.Key, entity.StringValue);
+            switch (entity.ValueType)
+            {
+                case "bool":
+                    return new BooleanSetting(entity.Id, entity.Key, entity.BooleanValue.Value);
+                case "int":
+                    return new IntegerSetting(entity.Id, entity.Key, entity.IntValue.Value);
+                case "timespan":
+                    return new TimeSpanSetting(entity.Id, entity.Key, entity.TimeSpanValue.Value);
+                case "string":
+                    return new StringSetting(entity.Id, entity.Key, entity.StringValue);
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         #endregion

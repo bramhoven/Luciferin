@@ -22,6 +22,10 @@ namespace Luciferin.DataLayer.Storage.Entities
 
         public TimeSpan? TimeSpanValue { get; set; }
 
+        [Column(Order = 2)]
+        [StringLength(10)]
+        public string ValueType { get; set; }
+
         #endregion
     }
 }
