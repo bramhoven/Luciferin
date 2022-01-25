@@ -19,6 +19,8 @@ namespace Luciferin.DataLayer.Storage.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValueType = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     BooleanValue = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     IntValue = table.Column<int>(type: "int", nullable: true),
                     StringValue = table.Column<string>(type: "longtext", nullable: false)

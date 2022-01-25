@@ -43,6 +43,12 @@ namespace Luciferin.DataLayer.Storage.Migrations
                     b.Property<TimeSpan?>("TimeSpanValue")
                         .HasColumnType("time(6)");
 
+                    b.Property<string>("ValueType")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(2);
+
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
