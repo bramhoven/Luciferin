@@ -42,7 +42,7 @@ namespace Luciferin.DataLayer.Storage.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<TimeSpan>("TimeSpanValue")
+                    b.Property<TimeSpan?>("TimeSpanValue")
                         .HasColumnType("time(6)");
 
                     b.Property<string>("ValueType")

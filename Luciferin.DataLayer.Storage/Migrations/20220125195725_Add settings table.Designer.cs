@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luciferin.DataLayer.Storage.Migrations
 {
     [DbContext(typeof(StorageContext))]
-    [Migration("20220125072912_Add settings table")]
+    [Migration("20220125195725_Add settings table")]
     partial class Addsettingstable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace Luciferin.DataLayer.Storage.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<TimeSpan>("TimeSpanValue")
+                    b.Property<TimeSpan?>("TimeSpanValue")
                         .HasColumnType("time(6)");
 
                     b.Property<string>("ValueType")

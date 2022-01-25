@@ -20,7 +20,7 @@ namespace Luciferin.DataLayer.Storage.Entities
 
         public string StringValue { get; set; }
 
-        public TimeSpan TimeSpanValue { get; set; }
+        public TimeSpan? TimeSpanValue { get; set; }
 
         [Column(Order = 2)]
         [StringLength(20)]
