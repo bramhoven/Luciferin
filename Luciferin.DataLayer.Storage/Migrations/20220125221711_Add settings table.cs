@@ -23,7 +23,7 @@ namespace Luciferin.DataLayer.Storage.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BooleanValue = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     IntValue = table.Column<int>(type: "int", nullable: true),
-                    StringValue = table.Column<string>(type: "longtext", nullable: false)
+                    StringValue = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TimeSpanValue = table.Column<TimeSpan>(type: "time(6)", nullable: true)
                 },
