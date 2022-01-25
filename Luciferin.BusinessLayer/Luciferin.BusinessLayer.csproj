@@ -9,8 +9,11 @@
 
     <ItemGroup>
       <PackageReference Include="Flurl.Http" Version="3.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+      <PackageReference Include="NLog" Version="5.0.0-rc2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj" />
     </ItemGroup>
 
 </Project>
