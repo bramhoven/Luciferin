@@ -30,7 +30,7 @@ namespace Luciferin.DataLayer.Storage.Migrations
                     b.Property<int?>("IntValue")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)")
@@ -42,12 +42,6 @@ namespace Luciferin.DataLayer.Storage.Migrations
 
                     b.Property<TimeSpan?>("TimeSpanValue")
                         .HasColumnType("time(6)");
-
-                    b.Property<string>("ValueType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnOrder(2);
 
                     b.HasKey("Id");
 

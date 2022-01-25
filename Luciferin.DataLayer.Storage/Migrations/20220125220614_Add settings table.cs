@@ -17,13 +17,11 @@ namespace Luciferin.DataLayer.Storage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ValueType = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    Key = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BooleanValue = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     IntValue = table.Column<int>(type: "int", nullable: true),
-                    StringValue = table.Column<string>(type: "longtext", nullable: true)
+                    StringValue = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TimeSpanValue = table.Column<TimeSpan>(type: "time(6)", nullable: true)
                 },
