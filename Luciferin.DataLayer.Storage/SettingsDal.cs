@@ -11,9 +11,6 @@ namespace Luciferin.DataLayer.Storage
         /// <inheritdoc />
         public SettingsDal(DbContextOptions<StorageContext> options) : base(options) { }
 
-        /// <inheritdoc />
-        public SettingsDal(StorageContext db) : base(db) { }
-
         #endregion
 
         #region Methods

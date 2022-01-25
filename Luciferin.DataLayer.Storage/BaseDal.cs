@@ -15,7 +15,7 @@ namespace Luciferin.DataLayer.Storage
 
         protected BaseDal(DbContextOptions<StorageContext> options) : this(new StorageContext(options)) { }
 
-        protected BaseDal(StorageContext db)
+        private BaseDal(StorageContext db)
         {
             Db = db;
         }

@@ -11,6 +11,8 @@ using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
 using Luciferin.BusinessLayer.ServiceBus;
+using Luciferin.BusinessLayer.Settings.Stores;
+using Luciferin.DataLayer.Storage;
 using Luciferin.DataLayer.Storage.Context;
 using Luciferin.Website.Classes.Logger;
 using Luciferin.Website.Classes.Queue;
@@ -98,6 +100,7 @@ namespace Luciferin.Website
             ConfigureStorage(services);
 
             ConfigureConfiguration(services);
+            ConfigureDataLayers(services);
             ConfigureStores(services);
             ConfigureManagers(services);
         }
@@ -132,9 +135,15 @@ namespace Luciferin.Website
         {
             services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
             services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, s.GetRequiredService<ILogger<FireflyStore>>(), s.GetRequiredService<IServiceBus>()));
+            services.AddScoped<ISettingsStore, StorageSettingStore>();
         }
 
         #region Static Methods
+
+        private static void ConfigureDataLayers(IServiceCollection services)
+        {
+            services.AddScoped<SettingsDal>();
+        }
 
         private static void ConfigureManagers(IServiceCollection services)
         {
