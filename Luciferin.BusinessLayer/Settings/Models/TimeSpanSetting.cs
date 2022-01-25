@@ -3,7 +3,7 @@ using ValueType = Luciferin.BusinessLayer.Settings.Enums.ValueType;
 
 namespace Luciferin.BusinessLayer.Settings.Models
 {
-    public class SettingTimeSpan : SettingBase<TimeSpan>
+    public class TimeSpanSetting : SettingBase<TimeSpan>
     {
         #region Properties
 
@@ -18,7 +18,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         #region Constructors
 
         /// <inheritdoc />
-        public SettingTimeSpan(int id, string name, TimeSpan value) : base(id, name, value) { }
+        public TimeSpanSetting(int id, string name, TimeSpan value) : base(id, name, value) { }
 
         #endregion
     }

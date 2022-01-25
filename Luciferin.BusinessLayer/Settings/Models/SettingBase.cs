@@ -13,7 +13,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public int Id { get; }
 
         /// <inheritdoc />
-        public string Name { get; }
+        public string Key { get; }
 
         /// <inheritdoc />
         public TDataType Value { get; set; }
@@ -28,7 +28,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         protected SettingBase(int id, string name, TDataType value)
         {
             Id = id;
-            Name = name;
+            Key = name;
             Value = value;
         }
 

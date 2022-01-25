@@ -10,7 +10,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         int Id { get; }
 
-        string Name { get; }
+        string Key { get; }
 
         ValueType ValueType { get; }
 

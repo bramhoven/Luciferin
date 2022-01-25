@@ -47,20 +47,20 @@ namespace Luciferin.BusinessLayer.Settings.Stores
             if (setting.HasValue)
                 throw new InvalidOperationException(nameof(setting));
             
-            var entity = _settingsDal.GetSetting(setting.Name);
+            var entity = _settingsDal.GetSetting(setting.Key);
 
             switch (setting.ValueType)
             {
-                case ValueType.Boolean when setting is SettingBoolean settingBoolean:
+                case ValueType.Boolean when setting is BooleanSetting settingBoolean:
                     entity.BooleanValue = settingBoolean.Value;
                     break;
-                case ValueType.Integer when setting is SettingInteger settingInteger:
+                case ValueType.Integer when setting is IntegerSetting settingInteger:
                     entity.IntValue = settingInteger.Value;
                     break;
-                case ValueType.String when setting is SettingString settingString:
+                case ValueType.String when setting is StringSetting settingString:
                     entity.StringValue = settingString.Value;
                     break;
-                case ValueType.TimeSpan when setting is SettingTimeSpan settingTimeSpan:
+                case ValueType.TimeSpan when setting is TimeSpanSetting settingTimeSpan:
                     entity.TimeSpanValue = settingTimeSpan.Value;
                     break;
                 default:
@@ -75,15 +75,15 @@ namespace Luciferin.BusinessLayer.Settings.Stores
         private static ISetting MapSetting(Setting entity)
         {
             if (entity.BooleanValue.HasValue)
-                return new SettingBoolean(entity.Id, entity.Name, entity.BooleanValue.Value);
+                return new BooleanSetting(entity.Id, entity.Key, entity.BooleanValue.Value);
 
             if (entity.IntValue.HasValue)
-                return new SettingInteger(entity.Id, entity.Name, entity.IntValue.Value);
+                return new IntegerSetting(entity.Id, entity.Key, entity.IntValue.Value);
 
             if (entity.TimeSpanValue.HasValue)
-                return new SettingTimeSpan(entity.Id, entity.Name, entity.TimeSpanValue.Value);
+                return new TimeSpanSetting(entity.Id, entity.Key, entity.TimeSpanValue.Value);
 
-            return new SettingString(entity.Id, entity.Name, entity.StringValue);
+            return new StringSetting(entity.Id, entity.Key, entity.StringValue);
         }
 
         #endregion

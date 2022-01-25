@@ -16,15 +16,11 @@ namespace Luciferin.DataLayer.Storage.Entities
 
         [Column(Order = 1)]
         [StringLength(250)]
-        public string Name { get; set; }
+        public string Key { get; set; }
 
         public string StringValue { get; set; }
 
         public TimeSpan? TimeSpanValue { get; set; }
-
-        [Column(Order = 2)]
-        [StringLength(20)]
-        public string ValueType { get; set; }
 
         #endregion
     }

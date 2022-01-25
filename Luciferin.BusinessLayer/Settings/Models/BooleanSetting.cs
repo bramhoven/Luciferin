@@ -2,7 +2,7 @@
 
 namespace Luciferin.BusinessLayer.Settings.Models
 {
-    public class SettingInteger : SettingBase<int>
+    public class BooleanSetting : SettingBase<bool>
     {
         #region Properties
 
@@ -10,14 +10,14 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public override bool HasValue => true;
 
         /// <inheritdoc />
-        public override ValueType ValueType => ValueType.Integer;
+        public override ValueType ValueType => ValueType.Boolean;
 
         #endregion
 
         #region Constructors
 
         /// <inheritdoc />
-        public SettingInteger(int id, string name, int value) : base(id, name, value) { }
+        public BooleanSetting(int id, string name, bool value) : base(id, name, value) { }
 
         #endregion
     }

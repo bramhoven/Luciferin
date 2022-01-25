@@ -2,7 +2,7 @@
 
 namespace Luciferin.BusinessLayer.Settings.Models
 {
-    public class SettingString : SettingBase<string>
+    public class StringSetting : SettingBase<string>
     {
         #region Properties
 
@@ -17,7 +17,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         #region Constructors
 
         /// <inheritdoc />
-        public SettingString(int id, string name, string value) : base(id, name, value) { }
+        public StringSetting(int id, string name, string value) : base(id, name, value) { }
 
         #endregion
     }
