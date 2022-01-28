@@ -9,7 +9,7 @@
   <h5>A Firefly III importer</h5>
 
   <p align="center">
-    Luciferin is an importer for the populair free and open source personal finance manager.
+    Luciferin is an importer for the popular free and open source personal finance manager.
     <br />
     <a href="https://github.com/bramhoven/Luciferin/wiki"><strong>Explore the docs »</strong></a>
     <br />
