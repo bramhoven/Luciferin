@@ -119,8 +119,7 @@ This will launch the web UI which is accessible at [http://localhost:8080](http:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [[IN PROGRESS]](https://github.com/bramhoven/Luciferin/issues/2) Importing status updates via websockets to web UI
-- [[TODO]](https://github.com/bramhoven/Luciferin/issues/3) Configuring importer via web UI
+- [[IN PROGRESS]](https://github.com/bramhoven/Luciferin/issues/3) Configuring importer via web UI
 - [[TODO]](https://github.com/bramhoven/Luciferin/issues/5) Automatically import new transactions
 
 See the [open issues](https://github.com/bramhoven/Luciferin/issues) for a full list of proposed features (and known issues).
