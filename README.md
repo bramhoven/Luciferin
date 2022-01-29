@@ -158,7 +158,7 @@ Distributed under GNU General Public License v3.0. See `LICENSE` for more inform
 <!-- CONTACT -->
 ## Contact
 
-Bram Hoven [info@bramhoven.nl](mailto:info@bramhoven.nl)
+Bram Hoven [dev@bramhoven.nl](mailto:dev@bramhoven.nl)
 
 Project Link: [https://github.com/bramhoven/Luciferin](https://github.com/bramhoven/Luciferin)
 
