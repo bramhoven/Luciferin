@@ -1,4 +1,7 @@
-﻿using Luciferin.DataLayer.Storage.Context;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Luciferin.DataLayer.Storage.Context;
 using Luciferin.DataLayer.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,9 +38,9 @@ namespace Luciferin.DataLayer.Storage
         }
 
         /// <summary>
-        /// Seeds the database with all the default settings.
+        /// Ensure default settings exist in database.
         /// </summary>
-        public void SeedSettings()
+        public void EnsureSettingsExist()
         {
             var settings = new List<Setting>
             {
