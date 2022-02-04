@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Luciferin.BusinessLayer.Settings.Mappers;
 using Luciferin.BusinessLayer.Settings.Models;
 using Luciferin.BusinessLayer.Settings.Stores;
 using NLog;
 
 namespace Luciferin.BusinessLayer.Settings
 {
-    public class SettingsManager
+    public class SettingsManager : ISettingsManager
     {
         #region Fields
 
@@ -27,11 +28,14 @@ namespace Luciferin.BusinessLayer.Settings
 
         #region Methods
 
-        /// <summary>
-        /// Gets a setting by it's name.
-        /// </summary>
-        /// <param name="name">The name of the setting.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
+        public PlatformSettings GetPlatformSettings()
+        {
+            var settings = GetSettings();
+            return PlatformSettingsMapper.MapSettingsCollectionToPlatformSettings(settings);
+        }
+
+        /// <inheritdoc />
         public ISetting GetSetting(string name)
         {
             try
@@ -46,10 +50,7 @@ namespace Luciferin.BusinessLayer.Settings
             return null;
         }
 
-        /// <summary>
-        /// Gets a list of all the available settings.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ICollection<ISetting> GetSettings()
         {
             try
@@ -64,11 +65,7 @@ namespace Luciferin.BusinessLayer.Settings
             return new List<ISetting>();
         }
 
-        /// <summary>
-        /// Sets a specific setting.
-        /// </summary>
-        /// <param name="setting">The setting to update.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool UpdateSetting(ISetting setting)
         {
             try
