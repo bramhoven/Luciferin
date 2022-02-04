@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Luciferin.DataLayer.Storage.Entities
@@ -18,7 +19,7 @@ namespace Luciferin.DataLayer.Storage.Entities
         [StringLength(250)]
         public string Key { get; set; }
 
-        public string StringValue { get; set; }
+        public string StringValue { get; set; } = "";
 
         public TimeSpan? TimeSpanValue { get; set; }
 
