@@ -11,6 +11,7 @@ using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
 using Luciferin.BusinessLayer.ServiceBus;
+using Luciferin.BusinessLayer.Settings;
 using Luciferin.BusinessLayer.Settings.Stores;
 using Luciferin.DataLayer.Storage;
 using Luciferin.DataLayer.Storage.Context;
@@ -148,7 +149,7 @@ namespace Luciferin.Website
                 storageContext.Database.Migrate();
 
                 var settingsDal = serviceScope.ServiceProvider.GetRequiredService<SettingsDal>();
-                settingsDal.SeedSettings();
+                settingsDal.EnsureSettingsExist();
             }
         }
 
@@ -161,6 +162,7 @@ namespace Luciferin.Website
 
         private static void ConfigureManagers(IServiceCollection services)
         {
+            services.AddScoped<ISettingsManager, SettingsManager>();
             services.AddScoped<INordigenManager, NordigenManager>();
             services.AddScoped<IFireflyManager, FireflyManager>();
             services.AddScoped<IImportManager, ImportManager>();
