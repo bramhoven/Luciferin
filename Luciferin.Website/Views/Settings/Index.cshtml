@@ -35,10 +35,32 @@
 
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <span class="input-group-text" id="input-nordigen-url">Nordigen Secret Key</span>
+            <span class="input-group-text" id="input-nordigen-secret-key">Nordigen Secret Key</span>
         </div>
         @Html.EditorFor(m => m.Settings.NordigenSecretKey.Value, new { htmlAttributes = new { @class = "form-control", placeholder = "Nordigen Secret Key", aria_label = "Nordigen Secret Key", aria_described_by = "input-nordigen-secret-key" } })
     </div>
+    
+    <h4 class="mb-3">Import Settings</h4>
+    <div class="input-group boolean-input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="input-automatic-import">Automatic Import</span>
+        </div>
+        @Html.EditorFor(m => m.Settings.AutomaticImport, new { htmlAttributes = new { @class = "form-control", aria_label = "Automatic import", aria_described_by = "input-automatic-import" } })
+    </div>
+    
+    <div class="input-group boolean-input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="input-extended-note">Extended notes</span>
+        </div>
+        @Html.EditorFor(m => m.Settings.ExtendedNotes, new { htmlAttributes = new { @class = "form-control", aria_label = "Extended notes", aria_described_by = "input-extended-notes" } })
+    </div>
+    
+    <div class="input-group mb-5">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="input-import-days">Import days</span>
+        </div>
+        @Html.EditorFor(m => m.Settings.ImportDays.Value, new { htmlAttributes = new { @class = "form-control", aria_label = "Import days", aria_described_by = "input-import-days" } })
+    </div>
 
-    <button type="submit" class="btn btn-primary btn-block">Save</button>
+    <button type="submit" class="btn btn-primary btn-block mb-5">Save</button>
 </div>

@@ -16,10 +16,12 @@
     }
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
 </head>
 <body>
     <header>
@@ -30,18 +32,13 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <!--
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" href="/settings">Settings</a>
                         </li>
                     </ul>
                 </div>
-                -->
             </div>
         </nav>
     </header>
@@ -63,7 +60,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Luciferin - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2022 - Luciferin - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
