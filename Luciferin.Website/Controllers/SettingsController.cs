@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Settings;
 using Luciferin.Website.Models.Settings;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Luciferin.Website.Controllers
 {
-    public class SettingsController : Controller
+    public partial class SettingsController : Controller
     {
         #region Fields
 
@@ -25,14 +25,28 @@ namespace Luciferin.Website.Controllers
 
         #region Methods
 
-        public async Task<ActionResult> Index()
+        public virtual ActionResult Index()
         {
-            var model = new SettingsIndexPageModel
-            {
-                Settings = _settingsManager.GetPlatformSettings()
-            };
-
+            var model = SetDefaultModel();
             return View(model);
+        }
+
+        [HttpPost]
+        public async virtual Task<ActionResult> Index(SettingsPageModel model)
+        {
+            model.SuccessfullySaved = _settingsManager.UpdateSettings(model.Settings.Settings);
+
+            model = SetDefaultModel(model);
+            return View(model);
+        }
+
+        private SettingsPageModel SetDefaultModel(SettingsPageModel model = null)
+        {
+            if (model == null)
+                model = new SettingsPageModel();
+
+            model.Settings = _settingsManager.GetPlatformSettings();
+            return model;
         }
 
         #endregion

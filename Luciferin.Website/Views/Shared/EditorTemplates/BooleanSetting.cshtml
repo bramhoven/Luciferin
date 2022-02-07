@@ -1,3 +1,5 @@
 ﻿@model Luciferin.BusinessLayer.Settings.Models.BooleanSetting
 
-<input id="chkSwitch" type="checkbox" data-toggle="switchbutton" @( Model.Value ? "checked" : "" ) />
+@Html.HiddenFor(m => m.Key)
+<input id="@Html.IdFor(m => m.Value)" name="@Html.NameFor(m => m.Value)" type="checkbox" data-toggle="switchbutton" @(Model.Value ? "checked" : "") value="true" />
+<input type="hidden" name="@Html.NameFor(m => m.Value)" value="false" />

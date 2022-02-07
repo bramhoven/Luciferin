@@ -10,7 +10,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public abstract bool HasValue { get; }
 
         /// <inheritdoc />
-        public string Key { get; }
+        public string Key { get; set; }
 
         /// <inheritdoc />
         public TDataType Value { get; set; }

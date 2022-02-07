@@ -43,9 +43,7 @@ namespace Luciferin.Website.Classes.Queue
         public async ValueTask QueueBackgroundWorkItemAsync(Func<CancellationToken, ValueTask> workItem)
         {
             if (workItem == null)
-            {
                 throw new ArgumentNullException(nameof(workItem));
-            }
 
             await _queue.Writer.WriteAsync(workItem);
         }

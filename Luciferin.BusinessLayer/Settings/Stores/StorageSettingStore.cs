@@ -44,9 +44,6 @@ namespace Luciferin.BusinessLayer.Settings.Stores
         /// <inheritdoc />
         public void UpdateSetting(ISetting setting)
         {
-            if (setting.HasValue)
-                throw new InvalidOperationException(nameof(setting));
-
             var entity = _settingsDal.GetSetting(setting.Key);
 
             switch (setting.ValueType)
@@ -58,7 +55,7 @@ namespace Luciferin.BusinessLayer.Settings.Stores
                     entity.IntValue = settingInteger.Value;
                     break;
                 case ValueType.String when setting is StringSetting settingString:
-                    entity.StringValue = settingString.Value;
+                    entity.StringValue = settingString.Value ?? string.Empty;
                     break;
                 case ValueType.TimeSpan when setting is TimeSpanSetting settingTimeSpan:
                     entity.TimeSpanValue = settingTimeSpan.Value;

@@ -50,7 +50,7 @@ namespace Luciferin.Website.Controllers
         [HttpGet]
         public virtual ActionResult Status()
         {
-            var model = new PageModelBase { FullWidth = true };
+            var model = new PageModelBase {FullWidth = true};
             return View(model);
         }
 
