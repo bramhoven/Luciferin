@@ -1,10 +1,11 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace Luciferin.DataLayer.Storage.Migrations
 {
-    public partial class Addsettingstable : Migration
+    public partial class add_settings_table : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +16,6 @@ namespace Luciferin.DataLayer.Storage.Migrations
                 name: "Settings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Key = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ValueType = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
@@ -29,7 +28,7 @@ namespace Luciferin.DataLayer.Storage.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Settings", x => x.Id);
+                    table.PrimaryKey("PK_Settings", x => x.Key);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }

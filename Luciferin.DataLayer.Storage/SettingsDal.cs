@@ -25,7 +25,7 @@ namespace Luciferin.DataLayer.Storage
         /// <returns></returns>
         public Setting GetSetting(string key)
         {
-            return Db.Settings.FirstOrDefault(s => string.Equals(s.Key, key));
+            return Db.Settings.Find(key);
         }
 
         /// <summary>

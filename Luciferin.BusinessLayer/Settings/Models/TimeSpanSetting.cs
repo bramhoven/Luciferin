@@ -17,8 +17,10 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         #region Constructors
 
+        public TimeSpanSetting() { }
+
         /// <inheritdoc />
-        public TimeSpanSetting(int id, string name, TimeSpan value) : base(id, name, value) { }
+        public TimeSpanSetting(string name, TimeSpan value) : base(name, value) { }
 
         #endregion
     }

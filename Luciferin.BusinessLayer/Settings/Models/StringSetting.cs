@@ -16,8 +16,10 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         #region Constructors
 
+        public StringSetting() { }
+
         /// <inheritdoc />
-        public StringSetting(int id, string name, string value) : base(id, name, value) { }
+        public StringSetting(string name, string value) : base(name, value) { }
 
         #endregion
     }

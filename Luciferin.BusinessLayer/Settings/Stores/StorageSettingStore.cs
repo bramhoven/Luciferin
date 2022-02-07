@@ -77,13 +77,13 @@ namespace Luciferin.BusinessLayer.Settings.Stores
             switch (entity.ValueType)
             {
                 case "bool":
-                    return new BooleanSetting(entity.Id, entity.Key, entity.BooleanValue.Value);
+                    return new BooleanSetting(entity.Key, entity.BooleanValue.Value);
                 case "int":
-                    return new IntegerSetting(entity.Id, entity.Key, entity.IntValue.Value);
+                    return new IntegerSetting(entity.Key, entity.IntValue.Value);
                 case "timespan":
-                    return new TimeSpanSetting(entity.Id, entity.Key, entity.TimeSpanValue.Value);
+                    return new TimeSpanSetting(entity.Key, entity.TimeSpanValue.Value);
                 case "string":
-                    return new StringSetting(entity.Id, entity.Key, entity.StringValue);
+                    return new StringSetting(entity.Key, entity.StringValue);
                 default:
                     throw new InvalidOperationException();
             }

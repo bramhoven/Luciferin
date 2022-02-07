@@ -10,12 +10,10 @@ namespace Luciferin.DataLayer.Storage.Entities
 
         public bool? BooleanValue { get; set; }
 
-        [Column(Order = 0)]
-        public int Id { get; set; }
-
         public int? IntValue { get; set; }
 
-        [Column(Order = 1)]
+        [Column(Order = 0)]
+        [Key]
         [StringLength(250)]
         public string Key { get; set; }
 
@@ -23,7 +21,7 @@ namespace Luciferin.DataLayer.Storage.Entities
 
         public TimeSpan? TimeSpanValue { get; set; }
 
-        [Column(Order = 2)]
+        [Column(Order = 1)]
         [StringLength(10)]
         public string ValueType { get; set; }
 

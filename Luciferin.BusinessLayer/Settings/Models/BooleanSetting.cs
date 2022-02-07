@@ -11,13 +11,15 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         /// <inheritdoc />
         public override ValueType ValueType => ValueType.Boolean;
-
+        
         #endregion
 
         #region Constructors
+        
+        public BooleanSetting() {}
 
         /// <inheritdoc />
-        public BooleanSetting(int id, string name, bool value) : base(id, name, value) { }
+        public BooleanSetting(string name, bool value) : base(name, value) { }
 
         #endregion
     }

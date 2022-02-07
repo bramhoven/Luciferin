@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luciferin.DataLayer.Storage.Migrations
 {
     [DbContext(typeof(StorageContext))]
-    [Migration("20220125221711_Add settings table")]
-    partial class Addsettingstable
+    [Migration("20220206104219_add_settings_table")]
+    partial class add_settings_table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,9 +23,9 @@ namespace Luciferin.DataLayer.Storage.Migrations
 
             modelBuilder.Entity("Luciferin.DataLayer.Storage.Entities.Setting", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                    b.Property<string>("Key")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)")
                         .HasColumnOrder(0);
 
                     b.Property<bool?>("BooleanValue")
@@ -33,12 +33,6 @@ namespace Luciferin.DataLayer.Storage.Migrations
 
                     b.Property<int?>("IntValue")
                         .HasColumnType("int");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)")
-                        .HasColumnOrder(1);
 
                     b.Property<string>("StringValue")
                         .IsRequired()
@@ -51,9 +45,9 @@ namespace Luciferin.DataLayer.Storage.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(1);
 
-                    b.HasKey("Id");
+                    b.HasKey("Key");
 
                     b.ToTable("Settings");
                 });

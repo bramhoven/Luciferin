@@ -8,8 +8,6 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         bool HasValue { get; }
 
-        int Id { get; }
-
         string Key { get; }
 
         ValueType ValueType { get; }

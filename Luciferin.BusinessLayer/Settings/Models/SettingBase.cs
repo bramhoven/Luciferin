@@ -10,9 +10,6 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public abstract bool HasValue { get; }
 
         /// <inheritdoc />
-        public int Id { get; }
-
-        /// <inheritdoc />
         public string Key { get; }
 
         /// <inheritdoc />
@@ -25,9 +22,10 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         #region Constructors
 
-        protected SettingBase(int id, string name, TDataType value)
+        protected SettingBase() { }
+
+        protected SettingBase(string name, TDataType value)
         {
-            Id = id;
             Key = name;
             Value = value;
         }
