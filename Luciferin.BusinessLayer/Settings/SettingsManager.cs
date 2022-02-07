@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Luciferin.BusinessLayer.Settings.Mappers;
 using Luciferin.BusinessLayer.Settings.Models;
 using Luciferin.BusinessLayer.Settings.Stores;
@@ -79,6 +80,12 @@ namespace Luciferin.BusinessLayer.Settings
             }
 
             return false;
+        }
+
+        /// <inheritdoc />
+        public bool UpdateSettings(ICollection<ISetting> settings)
+        {
+            return settings.All(UpdateSetting);
         }
 
         #endregion

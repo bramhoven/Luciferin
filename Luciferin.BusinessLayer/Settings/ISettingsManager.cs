@@ -33,6 +33,13 @@ namespace Luciferin.BusinessLayer.Settings
         /// <returns></returns>
         bool UpdateSetting(ISetting setting);
 
+        /// <summary>
+        /// Sets a list of settings.
+        /// </summary>
+        /// <param name="settings">The settings to update.</param>
+        /// <returns></returns>
+        bool UpdateSettings(ICollection<ISetting> settings);
+
         #endregion
     }
 }

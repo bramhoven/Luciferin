@@ -1,4 +1,5 @@
-﻿using Luciferin.BusinessLayer.Settings.Models;
+﻿using System.Collections.Generic;
+using Luciferin.BusinessLayer.Settings.Models;
 
 namespace Luciferin.BusinessLayer.Settings
 {
@@ -16,11 +17,13 @@ namespace Luciferin.BusinessLayer.Settings
 
         public IntegerSetting ImportDays { get; set; }
 
+        public StringSetting NordigenBaseUrl { get; set; }
+
         public StringSetting NordigenSecretId { get; set; }
 
         public StringSetting NordigenSecretKey { get; set; }
 
-        public StringSetting NordigenBaseUrl { get; set; }
+        public ICollection<ISetting> Settings => new List<ISetting> { AutomaticImport, ExtendedNotes, FireflyAccessToken, FireflyUrl, ImportDays, NordigenBaseUrl, NordigenSecretId, NordigenSecretKey };
 
         #endregion
     }
