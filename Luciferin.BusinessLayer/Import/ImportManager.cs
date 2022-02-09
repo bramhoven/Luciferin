@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
-using Microsoft.Extensions.Logging;
+using Luciferin.BusinessLayer.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.BusinessLayer.Import
 {
@@ -18,20 +18,20 @@ namespace Luciferin.BusinessLayer.Import
 
         public ImportManager(INordigenManager nordigenManager,
                              IFireflyManager fireflyManager,
-                             IImportConfiguration importConfiguration,
+                             ISettingsManager settingsManager,
                              TransactionMapper transactionMapper,
-                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, transactionMapper, logger) { }
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, transactionMapper, logger) { }
 
         #endregion
 
         #region Methods
 
         /// <inheritdoc />
-        public override async ValueTask StartImport(CancellationToken cancellationToken)
+        protected override async ValueTask RunImport(CancellationToken cancellationToken)
         {
             await Task.Delay(1000, cancellationToken);
             await Logger.LogInformation("Starting import");
-            
+
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
 
@@ -64,8 +64,12 @@ namespace Luciferin.BusinessLayer.Import
             if (!newFireflyTransactions.Any())
             {
                 await Logger.LogInformation("No new transactions to import");
+                await Logger.LogInformation("Dropped import tag");
                 return;
             }
+            
+            await FireflyManager.AddNewTag(tag);
+            await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
             newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
             await ImportTransactions(newFireflyTransactions);

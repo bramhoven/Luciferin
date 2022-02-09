@@ -24,7 +24,7 @@ namespace Luciferin.BusinessLayer.Settings.Mappers
                 FireflyAccessToken = settings.GetSetting<StringSetting>(SettingKeyConstants.FireflyAccessTokenKey),
                 NordigenBaseUrl = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenBaseUrlKey),
                 NordigenSecretId = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretIdKey),
-                NordigenSecretKey = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKey),
+                NordigenSecretKey = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKeyKey),
                 ImportDays = settings.GetSetting<IntegerSetting>(SettingKeyConstants.ImportDaysKey),
                 ExtendedNotes = settings.GetSetting<BooleanSetting>(SettingKeyConstants.ExtendedNotesKey),
                 AutomaticImport = settings.GetSetting<BooleanSetting>(SettingKeyConstants.AutomaticImportKey)

@@ -28,7 +28,7 @@ namespace Luciferin.DataLayer.Storage
         /// <inheritdoc />
         public void Dispose()
         {
-            Db?.Dispose();
+            Db.Dispose();
         }
 
         public void Save()

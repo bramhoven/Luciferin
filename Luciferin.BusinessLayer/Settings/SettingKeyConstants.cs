@@ -18,7 +18,7 @@
 
         internal const string NordigenSecretIdKey = "nordigen_secret_id";
 
-        internal const string NordigenSecretKey = "nordigen_secret_key";
+        internal const string NordigenSecretKeyKey = "nordigen_secret_key";
 
         #endregion
     }

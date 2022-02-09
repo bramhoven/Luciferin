@@ -1,6 +1,6 @@
-﻿using Luciferin.BusinessLayer.Configuration.Interfaces;
-using Luciferin.BusinessLayer.Firefly.Models;
+﻿using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Converters
 {
@@ -9,7 +9,7 @@ namespace Luciferin.BusinessLayer.Converters
         #region Constructors
 
         /// <inheritdoc />
-        public N26Converter(ICompositeConfiguration configuration) : base(configuration) { }
+        public N26Converter(ISettingsManager settingsManager) : base(settingsManager) { }
 
         #endregion
 

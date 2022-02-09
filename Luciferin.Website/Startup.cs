@@ -111,8 +111,6 @@ namespace Luciferin.Website
         private void ConfigureConfiguration(IServiceCollection services)
         {
             services.AddScoped<ICompositeConfiguration>(s => new Configuration(Configuration));
-            services.AddScoped<INordigenConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
-            services.AddScoped<IFireflyConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
             services.AddScoped<IImportConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
         }
 
@@ -136,9 +134,9 @@ namespace Luciferin.Website
 
         private void ConfigureStores(IServiceCollection services)
         {
-            services.AddScoped<INordigenStore>(s => new NordigenStore(CompositeConfiguration.NordigenBaseUrl, CompositeConfiguration.NordigenSecretId, CompositeConfiguration.NordigenSecretKey));
-            services.AddScoped<IFireflyStore>(s => new FireflyStore(CompositeConfiguration.FireflyBaseUrl, CompositeConfiguration.FireflyAccessToken, s.GetRequiredService<ILogger<FireflyStore>>(), s.GetRequiredService<IServiceBus>()));
             services.AddScoped<ISettingsStore, StorageSettingStore>();
+            services.AddScoped<INordigenStore, NordigenStore>();
+            services.AddScoped<IFireflyStore, FireflyStore>();
         }
 
         private void MigrateAndSeedDatabases(IApplicationBuilder app)

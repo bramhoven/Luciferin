@@ -21,6 +21,13 @@ namespace Luciferin.BusinessLayer.Settings
         ISetting GetSetting(string name);
 
         /// <summary>
+        /// Gets a setting by it's name.
+        /// </summary>
+        /// <param name="name">The name of the setting.</param>
+        /// <returns></returns>
+        TSettingType GetSetting<TSettingType>(string name) where TSettingType : class, ISetting;
+
+        /// <summary>
         /// Gets a list of all the available settings.
         /// </summary>
         /// <returns></returns>

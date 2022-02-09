@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Converters
 {
@@ -11,7 +11,7 @@ namespace Luciferin.BusinessLayer.Converters
         #region Constructors
 
         /// <inheritdoc />
-        public SnsConverter(ICompositeConfiguration configuration) : base(configuration) { }
+        public SnsConverter(ISettingsManager settingsManager) : base(settingsManager) { }
 
         #endregion
 

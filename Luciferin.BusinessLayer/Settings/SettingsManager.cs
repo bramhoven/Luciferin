@@ -52,6 +52,13 @@ namespace Luciferin.BusinessLayer.Settings
         }
 
         /// <inheritdoc />
+        public TSettingType GetSetting<TSettingType>(string name)
+            where TSettingType : class, ISetting
+        {
+            return GetSetting(name) as TSettingType;
+        }
+
+        /// <inheritdoc />
         public ICollection<ISetting> GetSettings()
         {
             try

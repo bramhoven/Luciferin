@@ -7,6 +7,8 @@ using Luciferin.BusinessLayer.Nordigen.Helpers;
 using Luciferin.BusinessLayer.Nordigen.Models;
 using Luciferin.BusinessLayer.Nordigen.Models.Requests;
 using Luciferin.BusinessLayer.Nordigen.Models.Responses;
+using Luciferin.BusinessLayer.Settings;
+using Luciferin.BusinessLayer.Settings.Models;
 
 namespace Luciferin.BusinessLayer.Nordigen.Stores
 {
@@ -22,11 +24,11 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
 
         #region Constructors
 
-        public NordigenStore(string nordigenBaseUrl, string nordigenSecretId, string nordigenSecretKey)
+        public NordigenStore(ISettingsManager settingsManager)
         {
-            _nordigenBaseUrl = nordigenBaseUrl;
-            _nordigenSecretId = nordigenSecretId;
-            _nordigenSecretKey = nordigenSecretKey;
+            _nordigenBaseUrl = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenBaseUrlKey).Value;
+            _nordigenSecretId = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretIdKey).Value;
+            _nordigenSecretKey = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKeyKey).Value;
         }
 
         #endregion

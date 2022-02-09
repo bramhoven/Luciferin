@@ -4,10 +4,6 @@
     {
         #region Properties
 
-        int DaysToSync { get; }
-
-        bool ExpendedNotes { get; }
-
         string StorageConnectionString { get; }
 
         string StorageProvider { get; }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Converters
 {
@@ -10,15 +10,21 @@ namespace Luciferin.BusinessLayer.Converters
     {
         #region Fields
 
-        private readonly ICompositeConfiguration _configuration;
+        private readonly ISettingsManager _settingsManager;
+
+        #endregion
+
+        #region Properties
+
+        private PlatformSettings PlatformSettings => _settingsManager.GetPlatformSettings();
 
         #endregion
 
         #region Constructors
 
-        protected ConverterBase(ICompositeConfiguration configuration)
+        protected ConverterBase(ISettingsManager settingsManager)
         {
-            _configuration = configuration;
+            _settingsManager = settingsManager;
         }
 
         #endregion
@@ -60,7 +66,7 @@ namespace Luciferin.BusinessLayer.Converters
         /// <returns></returns>
         protected string GetNotes(Transaction transaction, string otherNotes)
         {
-            if (!_configuration.ExpendedNotes)
+            if (!PlatformSettings.ExtendedNotes.Value)
                 return otherNotes;
 
             var mdNewLine = $"{Environment.NewLine}{Environment.NewLine}";
