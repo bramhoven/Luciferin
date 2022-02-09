@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Import
 {
@@ -17,16 +17,16 @@ namespace Luciferin.BusinessLayer.Import
 
         public TestImportManager(INordigenManager nordigenManager,
                                  IFireflyManager fireflyManager,
-                                 IImportConfiguration importConfiguration,
+                                 ISettingsManager settingsManager,
                                  TransactionMapper transactionMapper,
-                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, importConfiguration, transactionMapper, logger) { }
+                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, transactionMapper, logger) { }
 
         #endregion
 
         #region Methods
 
         /// <inheritdoc />
-        public override async ValueTask StartImport(CancellationToken cancellationToken)
+        protected override async ValueTask RunImport(CancellationToken cancellationToken)
         {
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();

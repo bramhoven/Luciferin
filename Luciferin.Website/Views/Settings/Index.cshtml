@@ -1,0 +1,69 @@
+﻿@model Luciferin.Website.Models.Settings.SettingsPageModel
+
+<div class="text-center">
+    <h1 class="display-4 mb-5">Settings</h1>
+    
+    @using (Html.BeginForm(MVC.Settings.ActionNames.Index, MVC.Settings.Name))
+    {
+        <h4 class="mb-3">Firefly III Settings</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-firefly-url">Firefly III Url</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.FireflyUrl)
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-firefly-access-token">Firefly III Access Token</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.FireflyAccessToken)
+        </div>
+
+        <h4 class="mb-3 mt-5">Nordigen Settings</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-nordigen-url">Nordigen Url</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.NordigenBaseUrl)
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-nordigen-secret-id">Nordigen Secret ID</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.NordigenSecretId)
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-nordigen-secret-key">Nordigen Secret Key</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.NordigenSecretKey)
+        </div>
+
+        <h4 class="mb-3 mt-5">Import Settings</h4>
+        <div class="input-group boolean-input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-automatic-import">Automatic Import</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.AutomaticImport)
+        </div>
+
+        <div class="input-group boolean-input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-extended-note">Extended notes</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.ExtendedNotes)
+        </div>
+
+        <div class="input-group mb-5">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-import-days">Import days</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.ImportDays)
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mb-5">Save</button>
+    }
+</div>

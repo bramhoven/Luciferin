@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Flurl.Http;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ using Luciferin.BusinessLayer.Firefly.Models.Responses.Accounts;
 using Luciferin.BusinessLayer.Firefly.Models.Responses.Transactions;
 using Luciferin.BusinessLayer.Firefly.Models.Shared;
 using Luciferin.BusinessLayer.ServiceBus;
+using Luciferin.BusinessLayer.Settings;
+using Luciferin.BusinessLayer.Settings.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Luciferin.BusinessLayer.Firefly.Stores
@@ -30,10 +33,10 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
 
         #region Constructors
 
-        public FireflyStore(string fireflyBaseUrl, string fireflyAccessToken, ILogger<FireflyStore> logger, IServiceBus serviceBus)
+        public FireflyStore(ISettingsManager settingsManager, ILogger<FireflyStore> logger, IServiceBus serviceBus)
         {
-            _fireflyBaseUrl = fireflyBaseUrl;
-            _fireflyAccessToken = fireflyAccessToken;
+            _fireflyBaseUrl = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.FireflyUrlKey).Value;
+            _fireflyAccessToken = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.FireflyAccessTokenKey).Value;
             _logger = logger;
             _serviceBus = serviceBus;
         }

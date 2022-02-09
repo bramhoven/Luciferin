@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.BusinessLayer.Import
 {
@@ -15,7 +16,7 @@ namespace Luciferin.BusinessLayer.Import
 
         Task<ICollection<Requisition>> GetRequisitions();
 
-        ValueTask StartImport(CancellationToken cancellationToken);
+        ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken);
 
         #endregion
     }

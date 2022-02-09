@@ -9,18 +9,6 @@ namespace Luciferin.BusinessLayer.Helpers
 
         #region Static Methods
 
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            var seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
-            {
-                if (seenKeys.Add(keySelector(element)))
-                {
-                    yield return element;
-                }
-            }
-        }
-
         /// <summary>
         /// Gets a consistent hash from a two valued ValueTuple.
         /// </summary>

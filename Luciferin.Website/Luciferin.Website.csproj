@@ -1,15 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>81005d1a-cb69-4ae6-bee8-453a41ae3de2</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <NoWarn>Undefined</NoWarn>
-    <LangVersion>8</LangVersion>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <PackageReference Include="NLog" Version="5.0.0-rc2" />
     <PackageReference Include="R4Mvc" Version="1.0.0-alpha2-00395" />
   </ItemGroup>
 
@@ -31,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj" />
+    <ProjectReference Include="..\Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj" />
   </ItemGroup>
 
   <ItemGroup>

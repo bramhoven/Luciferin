@@ -1,5 +1,7 @@
 ﻿using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Converters.Enums;
+using Luciferin.BusinessLayer.Settings;
+using Luciferin.BusinessLayer.Settings.Models;
 
 namespace Luciferin.BusinessLayer.Converters.Helper
 {
@@ -7,15 +9,15 @@ namespace Luciferin.BusinessLayer.Converters.Helper
     {
         #region Fields
 
-        private readonly ICompositeConfiguration _configuration;
+        private readonly ISettingsManager _settingsManager;
 
         #endregion
 
         #region Constructors
 
-        public ConverterHelper(ICompositeConfiguration configuration)
+        public ConverterHelper(ISettingsManager settingsManager)
         {
-            _configuration = configuration;
+            _settingsManager = settingsManager;
         }
 
         #endregion
@@ -32,13 +34,13 @@ namespace Luciferin.BusinessLayer.Converters.Helper
             switch (bankType)
             {
                 case BankType.ING:
-                    return new IngConverter(_configuration);
+                    return new IngConverter(_settingsManager);
                 case BankType.SNS:
-                    return new SnsConverter(_configuration);
+                    return new SnsConverter(_settingsManager);
                 case BankType.N26:
-                    return new N26Converter(_configuration);
+                    return new N26Converter(_settingsManager);
                 default:
-                    return new DefaultConverter(_configuration);
+                    return new DefaultConverter(_settingsManager);
             }
         }
 

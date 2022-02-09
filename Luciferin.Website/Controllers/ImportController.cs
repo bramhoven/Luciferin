@@ -5,6 +5,7 @@ using Luciferin.Website.Classes.Queue;
 using Luciferin.Website.Models;
 using Luciferin.Website.Models.Import;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.Website.Controllers
 {
@@ -16,14 +17,17 @@ namespace Luciferin.Website.Controllers
 
         private readonly IImportManager _importManager;
 
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
         #endregion
 
         #region Constructors
 
-        public ImportController(IImportManager importManager, IBackgroundTaskQueue backgroundTaskQueue)
+        public ImportController(IImportManager importManager, IBackgroundTaskQueue backgroundTaskQueue, IServiceScopeFactory serviceScopeFactory)
         {
             _importManager = importManager;
             _backgroundTaskQueue = backgroundTaskQueue;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         #endregion
@@ -43,14 +47,17 @@ namespace Luciferin.Website.Controllers
         [HttpPost]
         public virtual async Task<ActionResult> Start()
         {
-            await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(_importManager.StartImport);
+            var scope = _serviceScopeFactory.CreateScope();
+            var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
+            await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
+            
             return MVC.Import.RedirectToAction(MVC.Import.ActionNames.Status);
         }
 
         [HttpGet]
         public virtual ActionResult Status()
         {
-            var model = new PageModelBase { FullWidth = true };
+            var model = new PageModelBase {FullWidth = true};
             return View(model);
         }
 

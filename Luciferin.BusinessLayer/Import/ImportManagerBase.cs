@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Enums;
@@ -14,6 +13,8 @@ using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Luciferin.BusinessLayer.Import
@@ -22,9 +23,7 @@ namespace Luciferin.BusinessLayer.Import
     {
         #region Fields
 
-        private readonly IImportConfiguration _importConfiguration;
-
-        protected readonly TransactionMapper TransactionMapper;
+        private readonly ISettingsManager _settingsManager;
 
         protected readonly IFireflyManager FireflyManager;
 
@@ -32,15 +31,23 @@ namespace Luciferin.BusinessLayer.Import
 
         protected readonly INordigenManager NordigenManager;
 
+        protected readonly TransactionMapper TransactionMapper;
+
+        #endregion
+
+        #region Properties
+
+        protected PlatformSettings PlatformSettings => _settingsManager.GetPlatformSettings();
+
         #endregion
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, IImportConfiguration importConfiguration, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ISettingsManager settingsManager, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
         {
             NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
-            _importConfiguration = importConfiguration;
+            _settingsManager = settingsManager;
             TransactionMapper = transactionMapper;
             Logger = logger;
         }
@@ -99,7 +106,19 @@ namespace Luciferin.BusinessLayer.Import
         }
 
         /// <inheritdoc />
-        public abstract ValueTask StartImport(CancellationToken cancellationToken);
+        public async ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken)
+        {
+            await RunImport(cancellationToken);
+            
+            scope.Dispose();
+        }
+
+        /// <summary>
+        /// Runs the import.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        protected abstract ValueTask RunImport(CancellationToken cancellationToken);
 
         /// <summary>
         /// Checks for duplicate transfers.
@@ -162,10 +181,6 @@ namespace Luciferin.BusinessLayer.Import
                 Description = tagDescription
             };
 
-            await FireflyManager.AddNewTag(tag);
-
-            await Logger.LogInformation($"Created the import tag: {tag.Tag}");
-
             return tag;
         }
 
@@ -197,8 +212,9 @@ namespace Luciferin.BusinessLayer.Import
             await Logger.LogInformation($"Getting all transactions for {details.Iban}");
 
             ICollection<Transaction> transactions;
-            if (_importConfiguration.DaysToSync > 0)
-                transactions = await NordigenManager.GetAccountTransactions(accountId, DateTime.Today.AddDays(-_importConfiguration.DaysToSync));
+            var daysToImport = PlatformSettings.ImportDays.Value;
+            if (daysToImport > 0)
+                transactions = await NordigenManager.GetAccountTransactions(accountId, DateTime.Today.AddDays(-daysToImport));
             else
                 transactions = await NordigenManager.GetAccountTransactions(accountId);
 

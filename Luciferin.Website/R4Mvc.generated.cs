@@ -21,6 +21,7 @@ public static partial class MVC
     public static readonly Luciferin.Website.Controllers.ConfigurationController Configuration = new Luciferin.Website.Controllers.R4MVC_ConfigurationController();
     public static readonly Luciferin.Website.Controllers.HomeController Home = new Luciferin.Website.Controllers.R4MVC_HomeController();
     public static readonly Luciferin.Website.Controllers.ImportController Import = new Luciferin.Website.Controllers.R4MVC_ImportController();
+    public static readonly Luciferin.Website.Controllers.SettingsController Settings = new Luciferin.Website.Controllers.R4MVC_SettingsController();
     public static readonly R4Mvc.SharedController Shared = new R4Mvc.SharedController();
 }
 
@@ -59,6 +60,16 @@ namespace R4Mvc
             public partial class _DisplayTemplatesClass
             {
                 public readonly string RequisitionList = "RequisitionList";
+            }
+
+            static readonly _EditorTemplatesClass s_EditorTemplates = new _EditorTemplatesClass();
+            public _EditorTemplatesClass EditorTemplates => s_EditorTemplates;
+            public partial class _EditorTemplatesClass
+            {
+                public readonly string BooleanSetting = "BooleanSetting";
+                public readonly string IntegerSetting = "IntegerSetting";
+                public readonly string StringSetting = "StringSetting";
+                public readonly string TimeSpanSetting = "TimeSpanSetting";
             }
         }
 

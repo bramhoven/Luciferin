@@ -1,0 +1,4 @@
+﻿@model Luciferin.BusinessLayer.Settings.Models.StringSetting
+
+@Html.HiddenFor(m => m.Key)
+@Html.EditorFor(m => m.Value, new { htmlAttributes = new { @class = "form-control" } })

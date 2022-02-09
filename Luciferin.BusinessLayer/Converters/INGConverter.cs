@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Converters
 {
@@ -19,7 +19,7 @@ namespace Luciferin.BusinessLayer.Converters
         #region Constructors
 
         /// <inheritdoc />
-        public IngConverter(ICompositeConfiguration configuration) : base(configuration) { }
+        public IngConverter(ISettingsManager settingsManager) : base(settingsManager) { }
 
         #endregion
 
