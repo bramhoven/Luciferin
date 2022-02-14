@@ -14,6 +14,8 @@
     <a href="https://github.com/bramhoven/Luciferin/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
+    <a href="https://docs.luciferin.bramhoven.nl/">Docs</a>
+    ·
     <a href="https://github.com/bramhoven/Luciferin/">Report Bug</a>
     ·
     <a href="https://github.com/bramhoven/Luciferin/">Request Feature</a>
@@ -88,26 +90,18 @@ We have created a Docker image for ease of use. This way you can run it without 
 We can run the Firefly III Importer by running the following command:
 #### Windows
 ```console
-foo@bar:~$ docker run `
-  --rm `
-  -e FIREFLY_III_ACCESS_TOKEN={Firefly III access token} `
-  -e FIREFLY_III_URL={Firefly III instance url} `
-  -e NORDIGEN_SECRET_KEY={Nordigen secret key} `
-  -e NORDIGEN_SECRET_ID={Nordigen base url} `
-  -p 8080:80 `
-  bramhoven/luciferin:latest
+foo@bar:~$ docker run --rm `
+    -e STORAGE_PROVIDER="mysql" `
+    -e STORAGE_CONNECTION_STRING="server=localhost;database=Luciferin;user=luciferin;password=password;" `
+    -p 8080:80 bramhoven/luciferin:latest
 ```
 
 Other:
 ```console
-foo@bar:~$ docker run \
-  --rm \
-  -e FIREFLY_III_ACCESS_TOKEN={Firefly III access token} \
-  -e FIREFLY_III_URL={Firefly III instance url} \
-  -e NORDIGEN_SECRET_KEY={Nordigen secret key} \
-  -e NORDIGEN_SECRET_ID={Nordigen base url} \
-  -p 8080:80 \
-  bramhoven/luciferin:latest
+foo@bar:~$ docker run --rm \
+    -e STORAGE_PROVIDER="mysql" \
+    -e STORAGE_CONNECTION_STRING="server=localhost;database=Luciferin;user=luciferin;password=password;" \
+    -p 8080:80 bramhoven/luciferin:latest
 ```
 
 This will launch the web UI which is accessible at [http://localhost:8080](http://localhost:8080).
