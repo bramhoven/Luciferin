@@ -11,11 +11,9 @@
   <p align="center">
     Luciferin is an importer for the popular free and open source personal finance manager.
     <br />
-    <a href="https://github.com/bramhoven/Luciferin/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.luciferin.bramhoven.nl/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://docs.luciferin.bramhoven.nl/">Docs</a>
-    ·
     <a href="https://github.com/bramhoven/Luciferin/">Report Bug</a>
     ·
     <a href="https://github.com/bramhoven/Luciferin/">Request Feature</a>
