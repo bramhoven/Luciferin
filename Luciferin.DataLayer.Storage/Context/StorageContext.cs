@@ -7,6 +7,8 @@ namespace Luciferin.DataLayer.Storage.Context
     {
         #region Properties
 
+        public DbSet<ImportStatistic> ImportStatistics { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         #endregion
