@@ -10,6 +10,8 @@ using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Helpers;
 using Luciferin.BusinessLayer.Import.Mappers;
+using Luciferin.BusinessLayer.Import.Models;
+using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
@@ -22,6 +24,8 @@ namespace Luciferin.BusinessLayer.Import
     public abstract class ImportManagerBase : IImportManager
     {
         #region Fields
+
+        private readonly IImportStatisticsStore _importStatisticsStore;
 
         private readonly ISettingsManager _settingsManager;
 
@@ -39,15 +43,18 @@ namespace Luciferin.BusinessLayer.Import
 
         protected PlatformSettings PlatformSettings => _settingsManager.GetPlatformSettings();
 
+        protected static Statistic Statistic { get; set; }
+
         #endregion
 
         #region Constructors
 
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ISettingsManager settingsManager, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ISettingsManager settingsManager, IImportStatisticsStore importStatisticsStore, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
         {
             NordigenManager = nordigenManager;
             FireflyManager = fireflyManager;
             _settingsManager = settingsManager;
+            _importStatisticsStore = importStatisticsStore;
             TransactionMapper = transactionMapper;
             Logger = logger;
         }
@@ -108,17 +115,18 @@ namespace Luciferin.BusinessLayer.Import
         /// <inheritdoc />
         public async ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken)
         {
-            await RunImport(cancellationToken);
-            
+            try
+            {
+                await RunImport(cancellationToken);
+            }
+            finally
+            {
+                if (Statistic != null)
+                    LogAndResetImportStatistic();
+            }
+
             scope.Dispose();
         }
-
-        /// <summary>
-        /// Runs the import.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        protected abstract ValueTask RunImport(CancellationToken cancellationToken);
 
         /// <summary>
         /// Checks for duplicate transfers.
@@ -156,6 +164,9 @@ namespace Luciferin.BusinessLayer.Import
             nonDuplicateTransactions = nonDuplicateTransactions.Where(t => transactions.Contains(t) && !fireflyTransactions.Contains(t)).ToList();
 
             await Logger.LogInformation($"{nonDuplicateTransactions.Count} transactions left after duplicate check");
+
+            if (Statistic != null)
+                Statistic.TransfersFiltered = transactions.Count() - nonDuplicateTransactions.Count;
 
             return nonDuplicateTransactions;
         }
@@ -196,6 +207,9 @@ namespace Luciferin.BusinessLayer.Import
 
             await Logger.LogInformation($"Retrieved {transactions.Count} existing Firefly transactions");
 
+            if (Statistic != null)
+                Statistic.TotalFireflyTransactions = transactions.Count;
+
             return transactions;
         }
 
@@ -222,6 +236,9 @@ namespace Luciferin.BusinessLayer.Import
                 ExtendData(transaction, requisition, details);
 
             await Logger.LogInformation($"Retrieved {transactions.Count} transactions for {details.Iban}");
+
+            if (Statistic != null)
+                Statistic.TotalRetrievedTransactions += transactions.Count;
 
             return transactions;
         }
@@ -260,8 +277,18 @@ namespace Luciferin.BusinessLayer.Import
 
             await Logger.LogInformation($"{transactions.Count} transactions left after existing check");
 
+            if (Statistic != null)
+                Statistic.ExistingTransactionsFiltered = newTransactions.Count() - transactions.Count;
+
             return transactions;
         }
+
+        /// <summary>
+        /// Runs the import.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        protected abstract ValueTask RunImport(CancellationToken cancellationToken);
 
         /// <summary>
         /// Sets the correct starting balances.
@@ -296,6 +323,23 @@ namespace Luciferin.BusinessLayer.Import
             }
 
             await Logger.LogInformation("Finished setting starting balances");
+        }
+
+        /// <summary>
+        /// Logs and resets the import statistic property.
+        /// </summary>
+        /// <returns></returns>
+        private void LogAndResetImportStatistic()
+        {
+            try
+            {
+                _importStatisticsStore.InsertImportStatistic(Statistic);
+                Statistic = null;
+            }
+            catch (Exception e)
+            {
+                Logger.Log(LogLevel.Error, e.Message);
+            }
         }
 
         #region Static Methods

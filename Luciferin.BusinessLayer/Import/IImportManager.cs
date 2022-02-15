@@ -17,7 +17,7 @@ namespace Luciferin.BusinessLayer.Import
         Task<ICollection<Requisition>> GetRequisitions();
 
         ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken);
-
+        
         #endregion
     }
 }

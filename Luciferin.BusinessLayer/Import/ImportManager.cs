@@ -4,11 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Import.Mappers;
+using Luciferin.BusinessLayer.Import.Models;
+using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
 using Luciferin.BusinessLayer.Settings;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.BusinessLayer.Import
 {
@@ -19,8 +20,9 @@ namespace Luciferin.BusinessLayer.Import
         public ImportManager(INordigenManager nordigenManager,
                              IFireflyManager fireflyManager,
                              ISettingsManager settingsManager,
+                             IImportStatisticsStore importStatisticsStore,
                              TransactionMapper transactionMapper,
-                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, transactionMapper, logger) { }
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, logger) { }
 
         #endregion
 
@@ -29,6 +31,8 @@ namespace Luciferin.BusinessLayer.Import
         /// <inheritdoc />
         protected override async ValueTask RunImport(CancellationToken cancellationToken)
         {
+            Statistic = new Statistic();
+
             await Task.Delay(1000, cancellationToken);
             await Logger.LogInformation("Starting import");
 
@@ -55,6 +59,8 @@ namespace Luciferin.BusinessLayer.Import
             await Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
+            Statistic.TotalAccounts = accounts.Count;
+
             var tag = await CreateImportTag();
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, tag.Tag).ToList();
 
@@ -67,18 +73,23 @@ namespace Luciferin.BusinessLayer.Import
                 await Logger.LogInformation("Dropped import tag");
                 return;
             }
-            
+
             await FireflyManager.AddNewTag(tag);
+            Statistic.ImportDate = tag.Created;
+
             await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
             newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
             await ImportTransactions(newFireflyTransactions);
+            Statistic.NewTransactions = newFireflyTransactions.Count;
 
             if (!firstImport)
                 return;
 
             accounts = await FireflyManager.GetAccounts();
             await SetStartingBalances(balances, accounts);
+
+            Statistic.StartingBalanceSet = true;
         }
 
         #endregion
