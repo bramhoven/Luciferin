@@ -5,8 +5,10 @@ using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Stores;
+using Luciferin.BusinessLayer.Helpers;
 using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Import.Mappers;
+using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
@@ -99,6 +101,8 @@ namespace Luciferin.Website
 
             services.AddScoped<ConverterHelper>();
             services.AddScoped<TransactionMapper>();
+            
+            services.AddMappers();
 
             ConfigureStorage(services);
 
@@ -135,6 +139,8 @@ namespace Luciferin.Website
         private void ConfigureStores(IServiceCollection services)
         {
             services.AddScoped<ISettingsStore, StorageSettingStore>();
+            services.AddScoped<IImportStatisticsStore, StorageImportStatisticsStore>();
+            
             services.AddScoped<INordigenStore, NordigenStore>();
             services.AddScoped<IFireflyStore, FireflyStore>();
         }
@@ -156,6 +162,7 @@ namespace Luciferin.Website
         private static void ConfigureDataLayers(IServiceCollection services)
         {
             services.AddScoped<SettingsDal>();
+            services.AddScoped<ImportStatisticsDal>();
         }
 
         private static void ConfigureManagers(IServiceCollection services)
