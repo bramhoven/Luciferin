@@ -55,15 +55,15 @@ namespace Luciferin.BusinessLayer.Import
                     balances.Add(details.Iban, balance.FirstOrDefault()?.BalanceAmount.Amount);
                 }
             }
+            Statistic.TotalAccounts = requisitions.Sum(r => r.Accounts.Count);
 
             await Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
             var accounts = await FireflyManager.GetAccounts();
-            Statistic.TotalAccounts = accounts.Count;
-
             var tag = await CreateImportTag();
+            Statistic.ImportDate = tag.Date;
+            
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, tag.Tag).ToList();
-
             newFireflyTransactions = (await RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions)).ToList();
             newFireflyTransactions = (await CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys)).ToList();
 
@@ -75,7 +75,6 @@ namespace Luciferin.BusinessLayer.Import
             }
 
             await FireflyManager.AddNewTag(tag);
-            Statistic.ImportDate = tag.Created;
 
             await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
