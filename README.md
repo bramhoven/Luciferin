@@ -72,37 +72,7 @@ The idea came after I tried too manually import CSV's or any of the other data i
 <!-- GETTING STARTED -->
 ## Getting Started
 
-We have created a Docker image for ease of use. This way you can run it without installing any other dependencies.
-
-### Prerequisites
-
-1. Make sure Docker is installed
-2. Have a running Firefly III instance
-3. Get the access token for the Firefly III instance
-4. Create a free account on Nordigen
-5. Make sure Docker is installed
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-We can run the Firefly III Importer by running the following command:
-#### Windows
-```console
-foo@bar:~$ docker run --rm `
-    -e STORAGE_PROVIDER="mysql" `
-    -e STORAGE_CONNECTION_STRING="server=localhost;database=Luciferin;user=luciferin;password=password;" `
-    -p 8080:80 bramhoven/luciferin:latest
-```
-
-Other:
-```console
-foo@bar:~$ docker run --rm \
-    -e STORAGE_PROVIDER="mysql" \
-    -e STORAGE_CONNECTION_STRING="server=localhost;database=Luciferin;user=luciferin;password=password;" \
-    -p 8080:80 bramhoven/luciferin:latest
-```
-
-This will launch the web UI which is accessible at [http://localhost:8080](http://localhost:8080).
+<a href="https://docs.luciferin.bramhoven.nl/"><strong>Explore the docs »</strong></a>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -110,9 +80,6 @@ This will launch the web UI which is accessible at [http://localhost:8080](http:
 
 <!-- ROADMAP -->
 ## Roadmap
-
-- [[IN PROGRESS]](https://github.com/bramhoven/Luciferin/issues/3) Configuring importer via web UI
-- [[TODO]](https://github.com/bramhoven/Luciferin/issues/5) Automatically import new transactions
 
 See the [open issues](https://github.com/bramhoven/Luciferin/issues) for a full list of proposed features (and known issues).
 
