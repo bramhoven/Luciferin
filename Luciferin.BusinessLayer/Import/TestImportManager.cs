@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -70,6 +71,14 @@ namespace Luciferin.BusinessLayer.Import
                 return;
 
             await Logger.LogInformation("Would set asset account opening balances");
+        }
+
+        /// <inheritdoc />
+        protected override ValueTask RunImport(DateTime fromDate, CancellationToken cancellationToken)
+        {
+            _ = fromDate;
+            
+            return RunImport(cancellationToken);
         }
 
         #endregion

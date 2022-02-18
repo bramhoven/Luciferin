@@ -23,7 +23,7 @@ namespace Luciferin.DataLayer.Storage
         /// <returns></returns>
         public DateTime GetLastImportDateTime()
         {
-            return Db.ImportStatistics.OrderBy(i => i.ImportDate).FirstOrDefault()?.ImportDate ?? DateTime.MinValue;
+            return Db.ImportStatistics.OrderByDescending(i => i.ImportDate).FirstOrDefault()?.ImportDate ?? DateTime.MinValue;
         }
 
         /// <summary>

@@ -72,6 +72,30 @@ namespace Luciferin.BusinessLayer.Import
         }
 
         /// <inheritdoc />
+        public async Task<bool> CheckAndExecuteAutomaticImport(CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (await CheckAutomaticImport())
+                    return true;
+
+                await Logger.LogInformation("Started import job");
+
+                if (!await ExecuteAutomaticImport(cancellationToken))
+                    return true;
+
+                await Logger.LogInformation("Finished import job successfully");
+
+                return true;
+            }
+            catch (Exception)
+            {
+                await Logger.LogError("Import job failed");
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task<bool> DeleteBank(string requisitionId)
         {
             try
@@ -244,6 +268,31 @@ namespace Luciferin.BusinessLayer.Import
         }
 
         /// <summary>
+        /// Gets all the transactions for a requisition from a date.
+        /// </summary>
+        /// <param name="accountId">The account id for which to get the transactions.</param>
+        /// <param name="requisition">The requisition to extend data.</param>
+        /// <param name="fromDate">The from date for the export.</param>
+        /// <returns></returns>
+        protected async Task<ICollection<Transaction>> GetTransactionForRequisitionAccountFromDate(string accountId, Requisition requisition, DateTime fromDate)
+        {
+            var details = await NordigenManager.GetAccountDetails(accountId);
+
+            await Logger.LogInformation($"Getting all transactions for {details.Iban} from {fromDate:dd/MM/yyyy HH:mm:ss}");
+
+            var transactions = await NordigenManager.GetAccountTransactions(accountId, fromDate);
+            foreach (var transaction in transactions)
+                ExtendData(transaction, requisition, details);
+
+            await Logger.LogInformation($"Retrieved {transactions.Count} transactions for {details.Iban}");
+
+            if (Statistic != null)
+                Statistic.TotalRetrievedTransactions += transactions.Count;
+
+            return transactions;
+        }
+
+        /// <summary>
         /// Imports a list of firefly transactions.
         /// </summary>
         /// <param name="fireflyTransactions">The list of transactions to import.</param>
@@ -291,6 +340,14 @@ namespace Luciferin.BusinessLayer.Import
         protected abstract ValueTask RunImport(CancellationToken cancellationToken);
 
         /// <summary>
+        /// Runs the import from a date.
+        /// </summary>
+        /// <param name="fromDate">The from date.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        protected abstract ValueTask RunImport(DateTime fromDate, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Sets the correct starting balances.
         /// </summary>
         /// <param name="currentBalances">The dictionary with iban and current balance.</param>
@@ -323,6 +380,37 @@ namespace Luciferin.BusinessLayer.Import
             }
 
             await Logger.LogInformation("Finished setting starting balances");
+        }
+
+        /// <summary>
+        /// Checks whether automatic import can run.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> CheckAutomaticImport()
+        {
+            if (!PlatformSettings.AutomaticImport.Value)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Executes the automatic import.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        private async Task<bool> ExecuteAutomaticImport(CancellationToken cancellationToken)
+        {
+            var lastImport = _importStatisticsStore.GetLastImportDateTime();
+            if (lastImport == DateTime.MinValue)
+            {
+                await Logger.LogWarning("Please manually import first before automatic import can run");
+                return false;
+            }
+
+            var importFromDate = lastImport.Date.AddDays(-3);
+            await RunImport(importFromDate, cancellationToken);
+            return true;
         }
 
         /// <summary>

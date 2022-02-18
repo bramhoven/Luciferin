@@ -9,6 +9,7 @@ using Luciferin.BusinessLayer.Helpers;
 using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Import.Stores;
+using Luciferin.BusinessLayer.Jobs;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Stores;
@@ -29,6 +30,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Quartz;
 
 namespace Luciferin.Website
 {
@@ -101,7 +103,7 @@ namespace Luciferin.Website
 
             services.AddScoped<ConverterHelper>();
             services.AddScoped<TransactionMapper>();
-            
+
             services.AddMappers();
 
             ConfigureStorage(services);
@@ -110,12 +112,30 @@ namespace Luciferin.Website
             ConfigureDataLayers(services);
             ConfigureStores(services);
             ConfigureManagers(services);
+
+            ConfigureQuartz(services);
         }
 
         private void ConfigureConfiguration(IServiceCollection services)
         {
             services.AddScoped<ICompositeConfiguration>(s => new Configuration(Configuration));
             services.AddScoped<IImportConfiguration>(s => s.GetRequiredService<ICompositeConfiguration>());
+        }
+
+        private void ConfigureQuartz(IServiceCollection services)
+        {
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                var importJobKey = new JobKey("ImportJob");
+                q.AddJob<ImportJob>(opts => opts.WithIdentity(importJobKey));
+                q.AddTrigger(opts => opts
+                                     .ForJob(importJobKey)
+                                     .WithIdentity("ImportJob-Trigger")
+                                     .WithCronSchedule("0 0 */1 * * ?"));
+            });
+            services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
         }
 
         private void ConfigureStorage(IServiceCollection services)
@@ -140,7 +160,7 @@ namespace Luciferin.Website
         {
             services.AddScoped<ISettingsStore, StorageSettingStore>();
             services.AddScoped<IImportStatisticsStore, StorageImportStatisticsStore>();
-            
+
             services.AddScoped<INordigenStore, NordigenStore>();
             services.AddScoped<IFireflyStore, FireflyStore>();
         }
