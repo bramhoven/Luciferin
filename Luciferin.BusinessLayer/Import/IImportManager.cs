@@ -14,6 +14,8 @@ namespace Luciferin.BusinessLayer.Import
 
         Task<bool> DeleteBank(string requisitionId);
 
+        Task<bool> CheckAndExecuteAutomaticImport(CancellationToken cancellationToken);
+
         Task<ICollection<Requisition>> GetRequisitions();
 
         ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken);

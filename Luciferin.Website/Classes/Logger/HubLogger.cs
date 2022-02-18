@@ -42,9 +42,22 @@ namespace Luciferin.Website.Classes.Logger
             await _importerHub.Clients.All.ImportMessageEvent(DateTime.Now, message);
         }
 
-        public async Task LogInformation(string message)
+        /// <inheritdoc />
+        public Task LogError(string message)
         {
-            await Log(LogLevel.Information, message);
+            return Log(LogLevel.Error, message);
+        }
+
+        /// <inheritdoc />
+        public Task LogInformation(string message)
+        {
+            return Log(LogLevel.Information, message);
+        }
+
+        /// <inheritdoc />
+        public Task LogWarning(string message)
+        {
+            return Log(LogLevel.Warning, message);
         }
 
         #endregion

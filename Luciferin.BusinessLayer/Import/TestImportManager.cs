@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Import.Mappers;
+using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.BusinessLayer.Nordigen.Models;
@@ -18,8 +20,9 @@ namespace Luciferin.BusinessLayer.Import
         public TestImportManager(INordigenManager nordigenManager,
                                  IFireflyManager fireflyManager,
                                  ISettingsManager settingsManager,
+                                 IImportStatisticsStore importStatisticsStore,
                                  TransactionMapper transactionMapper,
-                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, transactionMapper, logger) { }
+                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, logger) { }
 
         #endregion
 
@@ -68,6 +71,14 @@ namespace Luciferin.BusinessLayer.Import
                 return;
 
             await Logger.LogInformation("Would set asset account opening balances");
+        }
+
+        /// <inheritdoc />
+        protected override ValueTask RunImport(DateTime fromDate, CancellationToken cancellationToken)
+        {
+            _ = fromDate;
+            
+            return RunImport(cancellationToken);
         }
 
         #endregion
