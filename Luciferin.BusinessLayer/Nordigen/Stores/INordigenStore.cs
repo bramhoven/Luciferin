@@ -25,7 +25,7 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
         Task<AccountDetails> GetAccountDetails(string accountId, OpenIdToken openIdToken);
 
         Task<ICollection<Transaction>> GetAccountTransactions(string accountId, OpenIdToken openIdToken);
-        
+
         Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate, OpenIdToken openIdToken);
 
         Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId, OpenIdToken openIdToken);
@@ -39,6 +39,8 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
         Task<ICollection<Requisition>> GetRequisitions(OpenIdToken openIdToken);
 
         Task<OpenIdToken> GetToken();
+
+        bool IsConfigured();
 
         Task<OpenIdToken> RefreshToken(OpenIdToken token);
 
