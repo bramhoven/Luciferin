@@ -19,7 +19,7 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
         private readonly string _nordigenBaseUrl;
         private readonly string _nordigenSecretId;
         private readonly string _nordigenSecretKey;
-
+        
         #endregion
 
         #region Constructors
@@ -215,6 +215,14 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
                                       })
                                       .ReceiveJson<NordigenTokenResponse>();
             return tokenResponse.MapToOpenIdToken();
+        }
+
+        /// <inheritdoc />
+        public bool IsConfigured()
+        {
+            return !string.IsNullOrWhiteSpace(_nordigenBaseUrl)
+                   && !string.IsNullOrWhiteSpace(_nordigenSecretId)
+                   && !string.IsNullOrWhiteSpace(_nordigenSecretKey);
         }
 
         /// <inheritdoc />

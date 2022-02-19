@@ -31,6 +31,9 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<EndUserAgreement> CreateEndUserAgreement(Institution institution)
         {
+            if (!_store.IsConfigured())
+                return null;
+            
             await ValidateToken();
 
             return await _store.CreateEndUserAgreement(new NordigenEndUserAgreementRequest
@@ -45,8 +48,11 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<Requisition> CreateRequisition(Institution institution, string reference, EndUserAgreement agreement, string redirectUrl)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
-            
+
             return await _store.CreateRequisition(new NordigenRequisitionRequest
             {
                 Reference = reference,
@@ -59,6 +65,9 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<bool> DeleteEndUserAgreement(string endUserAgreementId)
         {
+            if (!_store.IsConfigured())
+                return false;
+
             await ValidateToken();
 
             return await _store.DeleteEndUserAgreement(endUserAgreementId, _openIdToken);
@@ -67,54 +76,75 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<bool> DeleteRequisition(string requisitionId)
         {
+            if (!_store.IsConfigured())
+                return false;
+
             await ValidateToken();
-            
+
             return await _store.DeleteRequisition(requisitionId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<Account> GetAccount(string accountId)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
-            
+
             return await _store.GetAccount(accountId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<ICollection<Balance>> GetAccountBalance(string accountId)
         {
+            if (!_store.IsConfigured())
+                return new List<Balance>();
+
             await ValidateToken();
-            
+
             return await _store.GetAccountBalance(accountId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<AccountDetails> GetAccountDetails(string accountId)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
-            
+
             return await _store.GetAccountDetails(accountId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId)
         {
+            if (!_store.IsConfigured())
+                return new List<Transaction>();
+
             await ValidateToken();
-            
+
             return await _store.GetAccountTransactions(accountId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate)
         {
+            if (!_store.IsConfigured())
+                return new List<Transaction>();
+
             await ValidateToken();
-            
+
             return await _store.GetAccountTransactions(accountId, fromDate, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
 
             return await _store.GetEndUserAgreement(endUserAgreementId, _openIdToken);
@@ -123,22 +153,31 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<Institution> GetInstitution(string institutionId)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
-            
+
             return await _store.GetInstitution(institutionId, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<ICollection<Institution>> GetInstitutions(string countryCode)
         {
+            if (!_store.IsConfigured())
+                return new List<Institution>();
+
             await ValidateToken();
-            
+
             return await _store.GetInstitutions(countryCode, _openIdToken);
         }
 
         /// <inheritdoc />
         public async Task<Requisition> GetRequisition(string requisitionId)
         {
+            if (!_store.IsConfigured())
+                return null;
+
             await ValidateToken();
 
             return await _store.GetRequisition(requisitionId, _openIdToken);
@@ -147,23 +186,35 @@ namespace Luciferin.BusinessLayer.Nordigen
         /// <inheritdoc />
         public async Task<ICollection<Requisition>> GetRequisitions()
         {
+            if (!_store.IsConfigured())
+                return new List<Requisition>();
+
             await ValidateToken();
-            
+
             return await _store.GetRequisitions(_openIdToken);
         }
 
         private async Task<OpenIdToken> GetToken()
         {
+            if (!_store.IsConfigured())
+                return null;
+
             return await _store.GetToken();
         }
 
         private async Task<OpenIdToken> RefreshToken()
         {
+            if (!_store.IsConfigured())
+                return null;
+
             return await _store.RefreshToken(_openIdToken);
         }
 
         private async Task ValidateToken()
         {
+            if (!_store.IsConfigured())
+                return;
+
             if (_openIdToken == null)
             {
                 _openIdToken = await GetToken();
