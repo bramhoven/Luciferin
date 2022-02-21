@@ -17,6 +17,8 @@ namespace Luciferin.Website.Controllers
 
         private readonly INordigenManager _nordigenManager;
 
+        private const string ForwardedPortHeader = "X-Forwarded-Port";
+
         #endregion
 
         #region Constructors
@@ -38,11 +40,12 @@ namespace Luciferin.Website.Controllers
             if (string.IsNullOrWhiteSpace(formModel.InstitutionId))
                 return RedirectToAction(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name);
 
+            var forwardHeaderPort = Request.Headers.ContainsKey(ForwardedPortHeader) ? (int?)int.Parse(Request.Headers[ForwardedPortHeader]) : null;
             var redirectUrl = new UriBuilder(Request.Host.Host)
             {
                 Scheme = Uri.UriSchemeHttps,
                 Path = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
-                Port = Request.Host.Port ?? 80
+                Port = forwardHeaderPort ?? Request.Host.Port ?? 80
             }.ToString();
             var requisition = await _importManager.AddNewBank(formModel.InstitutionId, formModel.BankName, redirectUrl);
 

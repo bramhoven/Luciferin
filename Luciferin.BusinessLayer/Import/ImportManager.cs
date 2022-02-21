@@ -75,7 +75,7 @@ namespace Luciferin.BusinessLayer.Import
 
             await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
-            newFireflyTransactions = newFireflyTransactions.OrderBy(t => t.Date).ToList();
+            newFireflyTransactions = newFireflyTransactions.Where(t => !string.Equals(t.Amount, "0")).OrderBy(t => t.Date).ToList();
             await ImportTransactions(newFireflyTransactions);
             Statistic.NewTransactions = newFireflyTransactions.Count;
 
