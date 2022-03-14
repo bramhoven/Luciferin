@@ -106,15 +106,15 @@ namespace Luciferin.BusinessLayer.Import.Mappers
                 fireflyTransaction.Type = CheckAllAssetAccounts(source, destination) ? TransactionType.Transfer : TransactionType.Deposit;
             }
 
-            if (CheckTransferOriginatesFromDestination(fireflyTransaction, transaction))
-                return null;
-
             fireflyTransaction.SourceId = source?.Id ?? 0;
             fireflyTransaction.SourceIban = source.Iban;
             fireflyTransaction.SourceName = source.Name;
             fireflyTransaction.DestinationId = destination?.Id ?? 0;
             fireflyTransaction.DestinationIban = destination.Iban;
             fireflyTransaction.DestinationName = destination.Name;
+            
+            if (CheckTransferOriginatesFromDestination(fireflyTransaction, transaction))
+                return null;
 
             return fireflyTransaction;
         }
