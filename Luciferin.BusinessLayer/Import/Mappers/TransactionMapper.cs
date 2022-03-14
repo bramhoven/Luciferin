@@ -40,7 +40,17 @@ namespace Luciferin.BusinessLayer.Import.Mappers
         /// <returns></returns>
         private bool CheckAllAssetAccounts(FireflyAccount a0, FireflyAccount a1)
         {
-            return a0.Type == AccountType.Asset && a1.Type == AccountType.Asset;
+            return CheckAssetAccount(a0) && CheckAssetAccount(a1);
+        }
+
+        /// <summary>
+        /// Checks whether the account is an asset account.
+        /// </summary>
+        /// <param name="a">Firefly account.</param>
+        /// <returns></returns>
+        private bool CheckAssetAccount(FireflyAccount a)
+        {
+            return a.Type == AccountType.Asset;
         }
 
         /// <summary>
@@ -112,7 +122,7 @@ namespace Luciferin.BusinessLayer.Import.Mappers
             fireflyTransaction.DestinationId = destination?.Id ?? 0;
             fireflyTransaction.DestinationIban = destination.Iban;
             fireflyTransaction.DestinationName = destination.Name;
-            
+
             if (CheckTransferOriginatesFromDestination(fireflyTransaction, transaction))
                 return null;
 
