@@ -51,7 +51,8 @@ namespace Luciferin.DataLayer.Storage
                 CreateStringSetting("nordigen_secret_key", ""),
                 CreateIntegerSetting("import_days", 10),
                 CreateBooleanSetting("extended_notes", false),
-                CreateBooleanSetting("automatic_import", false)
+                CreateBooleanSetting("automatic_import", false),
+                CreateBooleanSetting("filter_authorisations", true)
             };
 
             var existingSettingsKeys = Db.Settings.Select(s => s.Key).ToList();

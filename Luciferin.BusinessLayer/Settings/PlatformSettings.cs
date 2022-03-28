@@ -11,6 +11,8 @@ namespace Luciferin.BusinessLayer.Settings
 
         public BooleanSetting ExtendedNotes { get; set; }
 
+        public BooleanSetting FilterAuthorisations { get; set; }
+
         public StringSetting FireflyAccessToken { get; set; }
 
         public StringSetting FireflyUrl { get; set; }
@@ -23,7 +25,7 @@ namespace Luciferin.BusinessLayer.Settings
 
         public StringSetting NordigenSecretKey { get; set; }
 
-        public ICollection<ISetting> Settings => new List<ISetting> { AutomaticImport, ExtendedNotes, FireflyAccessToken, FireflyUrl, ImportDays, NordigenBaseUrl, NordigenSecretId, NordigenSecretKey };
+        public ICollection<ISetting> Settings => new List<ISetting> { AutomaticImport, ExtendedNotes, FireflyAccessToken, FireflyUrl, ImportDays, NordigenBaseUrl, NordigenSecretId, NordigenSecretKey, FilterAuthorisations };
 
         #endregion
     }

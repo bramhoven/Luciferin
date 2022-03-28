@@ -27,7 +27,8 @@ namespace Luciferin.BusinessLayer.Settings.Mappers
                 NordigenSecretKey = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKeyKey),
                 ImportDays = settings.GetSetting<IntegerSetting>(SettingKeyConstants.ImportDaysKey),
                 ExtendedNotes = settings.GetSetting<BooleanSetting>(SettingKeyConstants.ExtendedNotesKey),
-                AutomaticImport = settings.GetSetting<BooleanSetting>(SettingKeyConstants.AutomaticImportKey)
+                AutomaticImport = settings.GetSetting<BooleanSetting>(SettingKeyConstants.AutomaticImportKey),
+                FilterAuthorisations = settings.GetSetting<BooleanSetting>(SettingKeyConstants.FilterAuthorisations)
             };
         }
 
