@@ -57,11 +57,19 @@
             @Html.EditorFor(m => m.Settings.ExtendedNotes)
         </div>
 
-        <div class="input-group mb-5">
+        <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-import-days">Import days</span>
             </div>
             @Html.EditorFor(m => m.Settings.ImportDays)
+        </div>
+        
+
+        <div class="input-group boolean-input-group mb-5">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-filter-authorisations">Filter authorisations</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.FilterAuthorisations)
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-5">Save</button>

@@ -5,6 +5,7 @@ using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Nordigen.Models;
+using Luciferin.BusinessLayer.Settings;
 
 namespace Luciferin.BusinessLayer.Import.Mappers
 {
@@ -14,13 +15,16 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
         private readonly ConverterHelper _converterHelper;
 
+        private readonly PlatformSettings _settings;
+
         #endregion
 
         #region Constructors
 
-        public TransactionMapper(ConverterHelper converterHelper)
+        public TransactionMapper(ConverterHelper converterHelper, ISettingsManager settingsManager)
         {
             _converterHelper = converterHelper;
+            _settings = settingsManager.GetPlatformSettings();
         }
 
         #endregion
@@ -85,6 +89,9 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
         private FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
         {
+            if (_settings.FilterAuthorisations.Value && string.Equals(transaction.BankTransactionCode, BankTransactionCodes.Authorisation, StringComparison.InvariantCultureIgnoreCase))
+                return null;
+        
             var converter = _converterHelper.GetTransactionConverter(transaction.RequisitorBank);
             var fireflyTransaction = converter.ConvertTransaction(transaction, tag);
 

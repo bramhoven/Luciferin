@@ -8,6 +8,8 @@
 
         internal const string ExtendedNotesKey = "extended_notes";
 
+        internal const string FilterAuthorisations = "filter_authorisations";
+
         internal const string FireflyAccessTokenKey = "firefly_access_token";
 
         internal const string FireflyUrlKey = "firefly_url";
