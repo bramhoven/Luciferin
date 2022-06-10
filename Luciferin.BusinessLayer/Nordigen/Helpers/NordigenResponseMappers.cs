@@ -134,12 +134,12 @@ namespace Luciferin.BusinessLayer.Nordigen.Helpers
                 BookingDate = b.BookingDate,
                 CreditorAccount = b.CreditorAccount == null ? null : new CreditorAccount
                 {
-                    Iban = b.CreditorAccount?.Iban
+                    Iban = b.CreditorAccount?.Iban ?? b.CreditorAccount?.Bban
                 },
                 CreditorName = b.CreditorName,
                 DebtorAccount = b.DebtorAccount == null ? null : new CreditorAccount
                 {
-                    Iban = b.DebtorAccount?.Iban
+                    Iban = b.DebtorAccount?.Iban ?? b.CreditorAccount.Bban
                 },
                 DebtorName = b.DebtorName,
                 TransactionAmount = b.TransactionAmount,

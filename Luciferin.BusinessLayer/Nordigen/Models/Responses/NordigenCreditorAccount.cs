@@ -9,6 +9,9 @@ namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
         [JsonProperty("iban")]
         public string Iban { get; set; }
 
+        [JsonProperty("bban")]
+        public string Bban { get; set; }
+
         #endregion
     }
 }
