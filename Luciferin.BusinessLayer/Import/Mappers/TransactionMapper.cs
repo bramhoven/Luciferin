@@ -11,14 +11,6 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 {
     public class TransactionMapper
     {
-        #region Fields
-
-        private readonly ConverterHelper _converterHelper;
-
-        private readonly PlatformSettings _settings;
-
-        #endregion
-
         #region Constructors
 
         public TransactionMapper(ConverterHelper converterHelper, ISettingsManager settingsManager)
@@ -29,9 +21,18 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
         #endregion
 
+        #region Fields
+
+        private readonly ConverterHelper _converterHelper;
+
+        private readonly PlatformSettings _settings;
+
+        #endregion
+
         #region Methods
 
-        public IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts, string tag)
+        public IEnumerable<FireflyTransaction> MapTransactionsToFireflyTransactions(IEnumerable<Transaction> transactions, ICollection<FireflyAccount> fireflyAccounts,
+                                                                                    string tag)
         {
             return transactions.Select(t => MapTransactionToFireflyTransaction(t, fireflyAccounts, tag)).Where(t => t != null).ToList();
         }
@@ -78,20 +79,26 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
         private FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string name, string iban, AccountType[] accountTypes)
         {
-            var account = accounts.FirstOrDefault(a => (!string.IsNullOrWhiteSpace(iban) && string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) || string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type)) ?? new FireflyAccount
+            var fireflyAccounts = accounts
+                                  .Where(a => (!string.IsNullOrWhiteSpace(iban) && string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) ||
+                                               string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase)) && accountTypes.Contains(a.Type))
+                                  .ToList();
+
+            var account = fireflyAccounts.FirstOrDefault(a => a.Type == AccountType.Asset) ?? fireflyAccounts.FirstOrDefault();
+
+            return account ?? new FireflyAccount
             {
                 Iban = iban,
                 Name = name
             };
-
-            return account;
         }
 
         private FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
         {
-            if (_settings.FilterAuthorisations.Value && string.Equals(transaction.BankTransactionCode, BankTransactionCodes.Authorisation, StringComparison.InvariantCultureIgnoreCase))
+            if (_settings.FilterAuthorisations.Value &&
+                string.Equals(transaction.BankTransactionCode, BankTransactionCodes.Authorisation, StringComparison.InvariantCultureIgnoreCase))
                 return null;
-        
+
             var converter = _converterHelper.GetTransactionConverter(transaction.RequisitorBank);
             var fireflyTransaction = converter.ConvertTransaction(transaction, tag);
 
@@ -101,7 +108,8 @@ namespace Luciferin.BusinessLayer.Import.Mappers
             if (!string.IsNullOrWhiteSpace(transaction.CreditorName))
             {
                 source = GetAccount(fireflyAccounts, transaction.RequisitorIban, new[] { AccountType.Asset });
-                destination = GetAccount(fireflyAccounts, transaction.CreditorName, transaction.CreditorAccount?.Iban, new[] { AccountType.Asset, AccountType.Expense });
+                destination = GetAccount(fireflyAccounts, transaction.CreditorName, transaction.CreditorAccount?.Iban,
+                                         new[] { AccountType.Asset, AccountType.Expense });
                 fireflyTransaction.Type = CheckAllAssetAccounts(source, destination) ? TransactionType.Transfer : TransactionType.Withdrawal;
             }
             else if (!string.IsNullOrWhiteSpace(transaction.DebtorName))
