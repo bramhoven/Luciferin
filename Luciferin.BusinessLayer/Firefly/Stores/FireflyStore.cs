@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Flurl.Http;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,30 +9,18 @@ using Luciferin.BusinessLayer.Firefly.Models.Requests;
 using Luciferin.BusinessLayer.Firefly.Models.Responses.Accounts;
 using Luciferin.BusinessLayer.Firefly.Models.Responses.Transactions;
 using Luciferin.BusinessLayer.Firefly.Models.Shared;
+using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.ServiceBus;
 using Luciferin.BusinessLayer.Settings;
 using Luciferin.BusinessLayer.Settings.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Luciferin.BusinessLayer.Firefly.Stores
 {
     public class FireflyStore : IFireflyStore
     {
-        #region Fields
-
-        private readonly string _fireflyAccessToken;
-
-        private readonly string _fireflyBaseUrl;
-
-        private readonly ILogger<FireflyStore> _logger;
-
-        private readonly IServiceBus _serviceBus;
-
-        #endregion
-
         #region Constructors
 
-        public FireflyStore(ISettingsManager settingsManager, ILogger<FireflyStore> logger, IServiceBus serviceBus)
+        public FireflyStore(ISettingsManager settingsManager, ICompositeLogger<FireflyStore> logger, IServiceBus serviceBus)
         {
             _fireflyBaseUrl = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.FireflyUrlKey).Value;
             _fireflyAccessToken = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.FireflyAccessTokenKey).Value;
@@ -43,7 +30,43 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
 
         #endregion
 
+        #region Fields
+
+        private readonly string _fireflyAccessToken;
+
+        private readonly string _fireflyBaseUrl;
+
+        private readonly ICompositeLogger<FireflyStore> _logger;
+
+        private readonly IServiceBus _serviceBus;
+
+        #endregion
+
         #region Methods
+
+        /// <inheritdoc />
+        public async Task AddNewAccounts(ICollection<FireflyAccount> accounts)
+        {
+            FireflyTransactionResponse response = null;
+            foreach (var account in accounts)
+            {
+                try
+                {
+                    response = await FireflyRoutes
+                                     .Accounts(_fireflyBaseUrl)
+                                     .WithOAuthBearerToken(_fireflyAccessToken)
+                                     .WithHeader("Accept", "application/json")
+                                     .PostJsonAsync(MapToFireflyAccount(account))
+                                     .ReceiveJson<FireflyTransactionResponse>()
+                                     .ConfigureAwait(false);
+                }
+                catch (FlurlHttpException e)
+                {
+                    if (e.StatusCode == 422)
+                        _logger.LogError(await e.Call.Response.GetStringAsync());
+                }
+            }
+        }
 
         /// <inheritdoc />
         public async Task AddNewTag(FireflyTag tag)
@@ -78,14 +101,15 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
                 try
                 {
                     response = await FireflyRoutes
-                                         .Transactions(_fireflyBaseUrl)
-                                         .WithOAuthBearerToken(_fireflyAccessToken)
-                                         .WithHeader("Accept", "application/json")
-                                         .PostJsonAsync(request)
-                                         .ReceiveJson<FireflyTransactionResponse>()
-                                         .ConfigureAwait(false);
+                                     .Transactions(_fireflyBaseUrl)
+                                     .WithOAuthBearerToken(_fireflyAccessToken)
+                                     .WithHeader("Accept", "application/json")
+                                     .PostJsonAsync(request)
+                                     .ReceiveJson<FireflyTransactionResponse>()
+                                     .ConfigureAwait(false);
 
-                    _logger.LogInformation($"Imported transaction [{++index}/{totalTransactions}] [{response.Data.Id}] [{transaction.Type.ToString()}] {transaction.Description}");
+                    _logger.LogInformation(
+                        $"Imported transaction [{++index}/{totalTransactions}] [{response.Data.Id}] [{transaction.Type.ToString()}] {transaction.Description}");
                 }
                 catch (FlurlHttpException e)
                 {
@@ -175,10 +199,10 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
             do
             {
                 transactionCollectionResponse = await FireflyRoutes
-                                 .Transactions(_fireflyBaseUrl)
-                                 .WithOAuthBearerToken(_fireflyAccessToken)
-                                 .SetQueryParam("page", ++page)
-                                 .GetJsonAsync<FireflyTransactionCollectionResponse>();
+                                                      .Transactions(_fireflyBaseUrl)
+                                                      .WithOAuthBearerToken(_fireflyAccessToken)
+                                                      .SetQueryParam("page", ++page)
+                                                      .GetJsonAsync<FireflyTransactionCollectionResponse>();
                 transactions.AddRange(transactionCollectionResponse.Data.MapToFireflyTransactionCollection());
             } while (transactionCollectionResponse.Meta.Pagination.CurrentPage < transactionCollectionResponse.Meta.Pagination.TotalPages);
 
@@ -244,6 +268,7 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
                 Notes = fireflyAccount.Notes,
                 OpeningBalance = fireflyAccount.OpeningBalance,
                 OpeningBalanceDate = fireflyAccount.OpeningBalanceDate,
+                Type = fireflyAccount.Type.ToString().ToLower(),
                 ZoomLevel = fireflyAccount.ZoomLevel
             };
         }

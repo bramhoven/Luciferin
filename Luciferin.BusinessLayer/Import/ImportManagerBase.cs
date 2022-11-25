@@ -124,6 +124,13 @@ namespace Luciferin.BusinessLayer.Import
                 var removableAccounts = new List<string>();
                 foreach (var currentAccount in requisition.Accounts)
                 {
+                    var accountInfo = await NordigenManager.GetAccount(currentAccount);
+                    if (accountInfo.Status == NordigenConstants.AccountSuspended)
+                    {
+                        requisition.IsSuspended = true;
+                        removableAccounts.Add(currentAccount);
+                    }
+
                     var details = await NordigenManager.GetAccountDetails(currentAccount);
                     if (string.IsNullOrWhiteSpace(details.Iban))
                         removableAccounts.Add(currentAccount);
@@ -169,7 +176,7 @@ namespace Luciferin.BusinessLayer.Import
             combinedTransactions = combinedTransactions.DistinctBy(t => t.ExternalId);
             var groups = combinedTransactions
                          .Where(t => t.Type == TransactionType.Transfer)
-                         .GroupBy(t => (t.SourceIban, t.DestinationIban, t.Amount).GetConsistentHash());
+                         .GroupBy(t => t.GetConsistentHash());
             foreach (var group in groups)
             {
                 var possibleDuplicates = group.ToList();
@@ -290,6 +297,26 @@ namespace Luciferin.BusinessLayer.Import
                 Statistic.TotalRetrievedTransactions += transactions.Count;
 
             return transactions;
+        }
+        
+        /// <summary>
+        /// Imports a list of firefly accounts.
+        /// </summary>
+        /// <param name="accounts">The list of accounts to import.</param>
+        /// <returns></returns>
+        protected async Task ImportAccounts(ICollection<FireflyAccount> accounts)
+        {
+            await Logger.LogInformation($"Start importing {accounts.Count} accounts");
+
+            try
+            {
+                await FireflyManager.AddNewAccounts(accounts);
+                await Logger.LogInformation($"Imported {accounts.Count} accounts");
+            }
+            catch (Exception e)
+            {
+                await Logger.Log(LogLevel.Error, e, e.Message);
+            }
         }
 
         /// <summary>

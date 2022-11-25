@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Luciferin.Website.Controllers
 {
+    [Route("/")]
     public partial class HomeController : Controller
     {
         #region Fields
@@ -26,6 +27,7 @@ namespace Luciferin.Website.Controllers
 
         #region Methods
 
+        [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
             var model = new HomeIndexPageModel

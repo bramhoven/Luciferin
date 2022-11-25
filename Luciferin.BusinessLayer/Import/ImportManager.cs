@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Firefly;
+using Luciferin.BusinessLayer.Firefly.Models;
 using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Import.Models;
+using Luciferin.BusinessLayer.Import.Processors;
 using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Logger;
 using Luciferin.BusinessLayer.Nordigen;
@@ -16,6 +18,10 @@ namespace Luciferin.BusinessLayer.Import
 {
     public class ImportManager : ImportManagerBase
     {
+        private readonly FilterDuplicateTransactionProcessor _filterDuplicateTransactionProcessor;
+
+        private readonly FilterExistingTransactionProcessor _filterExistingTransactionProcessor;
+
         #region Constructors
 
         public ImportManager(INordigenManager nordigenManager,
@@ -23,7 +29,14 @@ namespace Luciferin.BusinessLayer.Import
                              ISettingsManager settingsManager,
                              IImportStatisticsStore importStatisticsStore,
                              TransactionMapper transactionMapper,
-                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, logger) { }
+                             FilterExistingTransactionProcessor filterExistingTransactionProcessor,
+                             FilterDuplicateTransactionProcessor filterDuplicateTransactionProcessor,
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper,
+                                                                            logger)
+        {
+            _filterExistingTransactionProcessor = filterExistingTransactionProcessor;
+            _filterDuplicateTransactionProcessor = filterDuplicateTransactionProcessor;
+        }
 
         #endregion
 
@@ -33,6 +46,32 @@ namespace Luciferin.BusinessLayer.Import
         protected override ValueTask RunImport(CancellationToken cancellationToken)
         {
             return RunImport(DateTime.MinValue, cancellationToken);
+        }
+
+        private async Task<ICollection<FireflyTransaction>> FilterTransactionsWithMethods(ICollection<FireflyTransaction> newTransactions,
+                                                                                          ICollection<FireflyTransaction> existingTransactions,
+                                                                                          ICollection<string> requisitionIbans)
+        {
+            newTransactions = (await RemoveExistingTransactions(newTransactions, existingTransactions)).ToList();
+            newTransactions = (await CheckForDuplicateTransfers(newTransactions, existingTransactions, requisitionIbans)).ToList();
+            return newTransactions;
+        }
+
+        private async Task<ICollection<FireflyTransaction>> FilterTransactionsWithProcessDirector(ICollection<FireflyTransaction> newTransactions,
+                                                                                                  ICollection<FireflyTransaction> existingTransactions)
+        {
+            _filterExistingTransactionProcessor.SetExistingTransactions(existingTransactions);
+            _filterDuplicateTransactionProcessor.SetExistingTransactions(existingTransactions);
+
+            var director = new ProcessorDirector();
+            director.AddProcessor(_filterExistingTransactionProcessor);
+            director.AddProcessor(_filterDuplicateTransactionProcessor);
+
+            var results = await director.ProcessTransactions(newTransactions);
+            return results.Where(r => r.Status == ProcessedStatus.Success || r.ProcessedTransaction != null)
+                          .Select(r => r.ProcessedTransaction)
+                          .Cast<FireflyTransaction>()
+                          .ToList();
         }
 
         /// <inheritdoc />
@@ -61,8 +100,7 @@ namespace Luciferin.BusinessLayer.Import
             Statistic.ImportDate = tag.Date;
 
             var newFireflyTransactions = TransactionMapper.MapTransactionsToFireflyTransactions(newTransactions, accounts, tag.Tag).ToList();
-            newFireflyTransactions = (await RemoveExistingTransactions(newFireflyTransactions, existingFireflyTransactions)).ToList();
-            newFireflyTransactions = (await CheckForDuplicateTransfers(newFireflyTransactions, existingFireflyTransactions, balances.Keys)).ToList();
+            newFireflyTransactions = (await FilterTransactions(newFireflyTransactions, existingFireflyTransactions, balances.Keys)).ToList();
 
             if (!newFireflyTransactions.Any())
             {
@@ -76,6 +114,11 @@ namespace Luciferin.BusinessLayer.Import
             await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
             newFireflyTransactions = newFireflyTransactions.Where(t => !string.Equals(t.Amount, "0")).OrderBy(t => t.Date).ToList();
+            var possibleNewAccounts = newFireflyTransactions.SelectMany(TransactionMapper.GetAccountsForTransaction).DistinctBy(t => new {t.Name, t.Iban, t.Type}).ToList();
+            var newAccounts = possibleNewAccounts.Where(a => !accounts.Contains(a)).ToList();
+
+            await ImportAccounts(newAccounts);
+
             await ImportTransactions(newFireflyTransactions);
             Statistic.NewTransactions = newFireflyTransactions.Count;
 
@@ -86,6 +129,21 @@ namespace Luciferin.BusinessLayer.Import
             await SetStartingBalances(balances, accounts);
 
             Statistic.StartingBalanceSet = true;
+        }
+
+
+        /// <summary>
+        /// Filters the transaction list.
+        /// </summary>
+        /// <param name="newTransactions">The new transactions to filter.</param>
+        /// <param name="existingTransactions">The existing transactions.</param>
+        /// <param name="requisitionIbans">The requisition Ibans.</param>
+        /// <returns></returns>
+        private async Task<ICollection<FireflyTransaction>> FilterTransactions(ICollection<FireflyTransaction> newTransactions,
+                                                                               ICollection<FireflyTransaction> existingTransactions,
+                                                                               ICollection<string> requisitionIbans)
+        {
+            return await FilterTransactionsWithProcessDirector(newTransactions, existingTransactions);
         }
 
         /// <summary>

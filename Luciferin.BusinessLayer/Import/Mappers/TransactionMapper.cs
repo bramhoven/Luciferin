@@ -74,7 +74,13 @@ namespace Luciferin.BusinessLayer.Import.Mappers
 
         private FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string iban, AccountType[] accountTypes)
         {
-            return accounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) && accountTypes.Contains(a.Type));
+            var account = accounts.FirstOrDefault(a => string.Equals(a.Iban, iban, StringComparison.CurrentCultureIgnoreCase) && accountTypes.Contains(a.Type));
+            return account ?? new FireflyAccount
+            {
+                Iban = iban,
+                Name = iban,
+                Type = accountTypes.FirstOrDefault()
+            };
         }
 
         private FireflyAccount GetAccount(IEnumerable<FireflyAccount> accounts, string name, string iban, AccountType[] accountTypes)
@@ -89,7 +95,29 @@ namespace Luciferin.BusinessLayer.Import.Mappers
             return account ?? new FireflyAccount
             {
                 Iban = iban,
-                Name = name
+                Name = name,
+                Type = accountTypes.LastOrDefault()
+            };
+        }
+
+        public IEnumerable<FireflyAccount> GetAccountsForTransaction(FireflyTransaction transaction)
+        {
+            yield return new FireflyAccount
+            {
+                Active = true,
+                IncludeNetWorth = true,
+                Iban = transaction.SourceIban,
+                Name = transaction.SourceName,
+                Type = Enum.TryParse(transaction.SourceType, out AccountType sourceResult) ? sourceResult : AccountType.Asset
+            };
+
+            yield return new FireflyAccount
+            {
+                Active = true,
+                IncludeNetWorth = true,
+                Iban = transaction.DestinationIban,
+                Name = transaction.DestinationName,
+                Type = Enum.TryParse(transaction.DestinationType, out AccountType destinationResult) ? destinationResult : AccountType.Asset
             };
         }
 
@@ -134,9 +162,11 @@ namespace Luciferin.BusinessLayer.Import.Mappers
             fireflyTransaction.SourceId = source?.Id ?? 0;
             fireflyTransaction.SourceIban = source.Iban;
             fireflyTransaction.SourceName = source.Name;
+            fireflyTransaction.SourceType = source.Type.ToString();
             fireflyTransaction.DestinationId = destination?.Id ?? 0;
             fireflyTransaction.DestinationIban = destination.Iban;
             fireflyTransaction.DestinationName = destination.Name;
+            fireflyTransaction.DestinationType = destination.Type.ToString();
 
             if (CheckTransferOriginatesFromDestination(fireflyTransaction, transaction))
                 return null;

@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace Luciferin.BusinessLayer.Firefly.Models.Responses.Accounts
 {

@@ -1,4 +1,9 @@
-﻿namespace Luciferin.BusinessLayer.Helpers
+﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Luciferin.BusinessLayer.Helpers
 {
     public static class HashHelper
     {
@@ -21,6 +26,19 @@
             }
 
             return hashedValue;
+        }
+
+        /// <summary>
+        /// Calculates the SHA-512 hash for an input string.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns></returns>
+        public static string CalculateSha512(string input)
+        {
+            using var sha = SHA512.Create();
+            var inputBytes = Encoding.UTF8.GetBytes(input);
+            var hashBytes = sha.ComputeHash(inputBytes);
+            return Convert.ToHexString(hashBytes);
         }
 
         #endregion

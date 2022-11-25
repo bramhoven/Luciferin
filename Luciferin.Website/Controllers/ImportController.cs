@@ -9,8 +9,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.Website.Controllers
 {
+    [Route("import")]
     public partial class ImportController : Controller
     {
+        #region Constructors
+
+        public ImportController(IImportManager importManager, IBackgroundTaskQueue backgroundTaskQueue,
+                                IServiceScopeFactory serviceScopeFactory)
+        {
+            _importManager = importManager;
+            _backgroundTaskQueue = backgroundTaskQueue;
+            _serviceScopeFactory = serviceScopeFactory;
+        }
+
+        #endregion
+
         #region Fields
 
         private readonly IBackgroundTaskQueue _backgroundTaskQueue;
@@ -21,25 +34,16 @@ namespace Luciferin.Website.Controllers
 
         #endregion
 
-        #region Constructors
-
-        public ImportController(IImportManager importManager, IBackgroundTaskQueue backgroundTaskQueue, IServiceScopeFactory serviceScopeFactory)
-        {
-            _importManager = importManager;
-            _backgroundTaskQueue = backgroundTaskQueue;
-            _serviceScopeFactory = serviceScopeFactory;
-        }
-
-        #endregion
-
         #region Methods
 
+        [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
+            var requisitions = await _importManager.GetRequisitions();
             var model = new ImportIndexPageModel
             {
                 ConfigurationStartUrl = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
-                RequisitionList = new RequisitionList(await _importManager.GetRequisitions())
+                RequisitionList = new RequisitionList(requisitions)
             };
             return View(model);
         }
@@ -50,14 +54,14 @@ namespace Luciferin.Website.Controllers
             var scope = _serviceScopeFactory.CreateScope();
             var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
             await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
-            
+
             return MVC.Import.RedirectToAction(MVC.Import.ActionNames.Status);
         }
 
-        [HttpGet]
+        [HttpGet("status")]
         public virtual ActionResult Status()
         {
-            var model = new PageModelBase {FullWidth = true};
+            var model = new PageModelBase { FullWidth = true };
             return View(model);
         }
 

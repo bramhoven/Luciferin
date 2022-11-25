@@ -19,7 +19,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "STORAGE_CONNECTION_STRING": "Server=localhost;Port=3306;Database=Luciferin;Uid=luciferin;Pwd=test;",
+        "STORAGE_PROVIDER": "mysql"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },

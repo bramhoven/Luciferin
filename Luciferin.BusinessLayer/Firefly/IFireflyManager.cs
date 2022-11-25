@@ -9,6 +9,8 @@ namespace Luciferin.BusinessLayer.Firefly
     {
         #region Methods
 
+        Task AddNewAccounts(ICollection<FireflyAccount> accounts);
+
         Task AddNewTag(FireflyTag tag);
 
         Task AddNewTransactions(IEnumerable<FireflyTransaction> transactions);

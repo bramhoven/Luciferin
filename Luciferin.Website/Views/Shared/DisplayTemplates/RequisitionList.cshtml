@@ -10,7 +10,7 @@
         @foreach (var requisition in Model.Requisitions)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="badge badge-primary badge-pill" style="min-width: 65px;">@requisition.Status</span>
+                <span class="badge badge-primary badge-pill" style="min-width: 65px;">@requisition.Status | @(requisition.IsSuspended ? "Suspended" : "Connected")</span>
                 <span class="pl-3 flex-grow-1 text-left">@requisition.Reference (@requisition.Id)</span>
 
                 @using (Html.BeginForm(MVC.Configuration.ActionNames.DeleteBank, MVC.Configuration.Name))

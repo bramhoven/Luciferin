@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Luciferin.BusinessLayer.Firefly.Enums;
+using Luciferin.BusinessLayer.Helpers;
 using Newtonsoft.Json;
 
 namespace Luciferin.BusinessLayer.Firefly.Models
@@ -139,6 +140,33 @@ namespace Luciferin.BusinessLayer.Firefly.Models
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
+        }
+
+        /// <summary>
+        /// Gets the hash of this object to use in comparisons.
+        /// </summary>
+        /// <returns></returns>
+        public string GetHashString()
+        {
+            return HashHelper.CalculateSha512(GetCompareString());
+        }
+
+        /// <summary>
+        /// Gets the hash code of this object to use in comparisons.
+        /// </summary>
+        /// <returns></returns>
+        public ulong GetConsistentHash()
+        {
+            return (SourceIban, DestinationIban, Amount).GetConsistentHash();
+        }
+
+        /// <summary>
+        /// Gets the comparable string. This string contains the most important information in this transaction that can be used in duplication checking.
+        /// </summary>
+        /// <returns></returns>
+        public string GetCompareString()
+        {
+            return $"{SourceIban}-{DestinationIban}-{Amount}";
         }
 
         #endregion

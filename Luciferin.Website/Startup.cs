@@ -8,6 +8,7 @@ using Luciferin.BusinessLayer.Firefly.Stores;
 using Luciferin.BusinessLayer.Helpers;
 using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Import.Mappers;
+using Luciferin.BusinessLayer.Import.Processors;
 using Luciferin.BusinessLayer.Import.Stores;
 using Luciferin.BusinessLayer.Jobs;
 using Luciferin.BusinessLayer.Logger;
@@ -36,14 +37,6 @@ namespace Luciferin.Website
 {
     public class Startup
     {
-        #region Properties
-
-        private ICompositeConfiguration CompositeConfiguration { get; }
-
-        private IConfiguration Configuration { get; }
-
-        #endregion
-
         #region Constructors
 
         public Startup(IConfiguration configuration)
@@ -51,6 +44,14 @@ namespace Luciferin.Website
             Configuration = configuration;
             CompositeConfiguration = new Configuration(Configuration);
         }
+
+        #endregion
+
+        #region Properties
+
+        private ICompositeConfiguration CompositeConfiguration { get; }
+
+        private IConfiguration Configuration { get; }
 
         #endregion
 
@@ -79,8 +80,9 @@ namespace Luciferin.Website
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("Home", "{controller=Home}/{action=Index}");
-                endpoints.MapControllerRoute("Configuration", "{controller=Configuration}/{action=Index}");
+                // endpoints.MapControllerRoute("Home", "{controller=Home}/{action=Index}");
+                // endpoints.MapControllerRoute("Configuration", "{controller=Configuration}/{action=Index}");
+                endpoints.MapControllers();
                 endpoints.MapHub<ImporterHub>("hubs/importer");
             });
 
@@ -111,6 +113,7 @@ namespace Luciferin.Website
             ConfigureConfiguration(services);
             ConfigureDataLayers(services);
             ConfigureStores(services);
+            ConfigureProcessors(services);
             ConfigureManagers(services);
 
             ConfigureQuartz(services);
@@ -183,6 +186,12 @@ namespace Luciferin.Website
         {
             services.AddScoped<SettingsDal>();
             services.AddScoped<ImportStatisticsDal>();
+        }
+
+        private static void ConfigureProcessors(IServiceCollection services)
+        {
+            services.AddScoped<FilterExistingTransactionProcessor>();
+            services.AddScoped<FilterDuplicateTransactionProcessor>();
         }
 
         private static void ConfigureManagers(IServiceCollection services)

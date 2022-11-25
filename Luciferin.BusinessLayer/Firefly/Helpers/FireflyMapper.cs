@@ -20,7 +20,7 @@ namespace Luciferin.BusinessLayer.Firefly.Helpers
         {
             return fireflyDataContainers.Select(dc => dc.MapToFireflyAccount()).ToList();
         }
-
+        
         internal static FireflyApiTag MapToFireflyApiTag(this FireflyTag fireflyTag)
         {
             return new FireflyApiTag

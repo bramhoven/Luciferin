@@ -43,6 +43,12 @@ namespace Luciferin.Website.Classes.Logger
         }
 
         /// <inheritdoc />
+        public Task LogDebug(string message)
+        {
+            return Log(LogLevel.Debug, message);
+        }
+
+        /// <inheritdoc />
         public Task LogError(string message)
         {
             return Log(LogLevel.Error, message);

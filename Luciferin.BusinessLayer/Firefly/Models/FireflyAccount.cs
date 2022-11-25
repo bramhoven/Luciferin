@@ -5,6 +5,38 @@ namespace Luciferin.BusinessLayer.Firefly.Models
 {
     public class FireflyAccount
     {
+        public FireflyAccount()
+        {
+            AccountNumber = string.Empty;
+            AccountRole = "defaultAsset";
+            Bic = string.Empty;
+            CreditCardType = string.Empty;
+            CurrencyCode = "EUR";
+            CurrencyId = "1";
+            CurrencySymbol = string.Empty;
+            CurrentBalance = "0";
+            CurrentDebt = "0";
+            Iban = string.Empty;
+            Interest = "0";
+            InterestPeriod = string.Empty;
+            LiabilityDirection = string.Empty;
+            LiabilityType = string.Empty;
+            Name = string.Empty;
+            Notes = string.Empty;
+            OpeningBalance = string.Empty;
+            Type = AccountType.Asset;
+            VirtualBalance = string.Empty;
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object? obj)
+        {
+            if (!(obj is FireflyAccount fireflyAccount))
+                return false;
+
+            return Name.Equals(fireflyAccount.Name) && Iban.Equals(fireflyAccount.Iban) && Type == fireflyAccount.Type;
+        }
+
         #region Properties
 
         public string AccountNumber { get; set; }

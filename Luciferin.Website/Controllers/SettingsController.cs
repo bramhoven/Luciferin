@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Luciferin.Website.Controllers
 {
+    [Route("settings")]
     public partial class SettingsController : Controller
     {
         #region Fields
@@ -25,6 +26,7 @@ namespace Luciferin.Website.Controllers
 
         #region Methods
 
+        [HttpGet]
         public virtual ActionResult Index()
         {
             var model = SetDefaultModel();

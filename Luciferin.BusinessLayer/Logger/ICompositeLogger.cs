@@ -12,6 +12,8 @@ namespace Luciferin.BusinessLayer.Logger
 
         Task Log(LogLevel logLevel, Exception e, string message);
 
+        Task LogDebug(string message);
+
         Task LogError(string message);
 
         Task LogInformation(string message);

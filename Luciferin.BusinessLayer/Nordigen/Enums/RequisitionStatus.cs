@@ -3,6 +3,7 @@
     public enum RequisitionStatus
     {
        Created,
+       UndergoingAuthentication,
        Linked,
        Rejected,
        Suspended

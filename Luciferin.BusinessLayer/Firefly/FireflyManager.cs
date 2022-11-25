@@ -26,6 +26,12 @@ namespace Luciferin.BusinessLayer.Firefly
         #region Methods
 
         /// <inheritdoc />
+        public Task AddNewAccounts(ICollection<FireflyAccount> accounts)
+        {
+            return _store.AddNewAccounts(accounts);
+        }
+
+        /// <inheritdoc />
         public Task AddNewTag(FireflyTag tag)
         {
             return _store.AddNewTag(tag);

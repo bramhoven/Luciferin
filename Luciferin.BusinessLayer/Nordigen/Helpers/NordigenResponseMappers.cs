@@ -160,6 +160,8 @@ namespace Luciferin.BusinessLayer.Nordigen.Helpers
             {
                 case "CR":
                     return RequisitionStatus.Created;
+                case "UA":
+                    return RequisitionStatus.UndergoingAuthentication;
                 case "LN":
                     return RequisitionStatus.Linked;
                 case "RJ":

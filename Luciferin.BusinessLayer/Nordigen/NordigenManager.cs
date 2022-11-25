@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Flurl.Http;
+using Luciferin.BusinessLayer.Exceptions;
 using Luciferin.BusinessLayer.Nordigen.Models;
 using Luciferin.BusinessLayer.Nordigen.Models.Requests;
 using Luciferin.BusinessLayer.Nordigen.Stores;
@@ -114,7 +116,17 @@ namespace Luciferin.BusinessLayer.Nordigen
 
             await ValidateToken();
 
-            return await _store.GetAccountDetails(accountId, _openIdToken);
+            try
+            {
+                return await _store.GetAccountDetails(accountId, _openIdToken);
+            }
+            catch (FlurlHttpException e)
+            {
+                if (e.StatusCode == 409)
+                    throw new AccountSuspendedException(accountId);
+                
+                throw new AccountFailureException(accountId);
+            }
         }
 
         /// <inheritdoc />

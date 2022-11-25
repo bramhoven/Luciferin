@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Luciferin.Website.Controllers
 {
+    [Route("configuration")]
     public partial class ConfigurationController : Controller
     {
         #region Fields
@@ -63,7 +64,8 @@ namespace Luciferin.Website.Controllers
 
             return RedirectToAction(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name);
         }
-
+        
+        [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
             var model = new ConfigurationIndexPageModel
