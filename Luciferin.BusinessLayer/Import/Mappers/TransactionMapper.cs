@@ -108,7 +108,7 @@ namespace Luciferin.BusinessLayer.Import.Mappers
                 IncludeNetWorth = true,
                 Iban = transaction.SourceIban,
                 Name = transaction.SourceName,
-                Type = Enum.TryParse(transaction.SourceType, out AccountType sourceResult) ? sourceResult : AccountType.Asset
+                Type = GetAccountType(transaction.SourceIban, transaction.RequisitionIban, transaction.SourceType)
             };
 
             yield return new FireflyAccount
@@ -117,8 +117,16 @@ namespace Luciferin.BusinessLayer.Import.Mappers
                 IncludeNetWorth = true,
                 Iban = transaction.DestinationIban,
                 Name = transaction.DestinationName,
-                Type = Enum.TryParse(transaction.DestinationType, out AccountType destinationResult) ? destinationResult : AccountType.Asset
+                Type = GetAccountType(transaction.DestinationIban, transaction.RequisitionIban, transaction.DestinationType)
             };
+        }
+
+        private AccountType GetAccountType(string destinationIban, string requisitionIban, string typeName)
+        {
+            if (destinationIban.Equals(requisitionIban))
+                return AccountType.Asset;
+
+            return Enum.TryParse(typeName, out AccountType result) ? result : AccountType.Asset;
         }
 
         private FireflyTransaction MapTransactionToFireflyTransaction(Transaction transaction, ICollection<FireflyAccount> fireflyAccounts, string tag)
