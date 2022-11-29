@@ -106,6 +106,7 @@ namespace Luciferin.BusinessLayer.Import
 
             await Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
+            accounts = await FireflyManager.GetAccounts();
             var tag = await CreateImportTag();
             Statistic.ImportDate = tag.Date;
 
