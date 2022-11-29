@@ -104,6 +104,7 @@ namespace Luciferin.Website
             services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
 
             services.AddScoped<ConverterHelper>();
+            services.AddScoped<AccountMapper>();
             services.AddScoped<TransactionMapper>();
 
             services.AddMappers();

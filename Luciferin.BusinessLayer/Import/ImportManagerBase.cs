@@ -8,7 +8,6 @@ using Luciferin.BusinessLayer.Converters.Helper;
 using Luciferin.BusinessLayer.Firefly;
 using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
-using Luciferin.BusinessLayer.Helpers;
 using Luciferin.BusinessLayer.Import.Mappers;
 using Luciferin.BusinessLayer.Import.Models;
 using Luciferin.BusinessLayer.Import.Stores;
@@ -23,6 +22,23 @@ namespace Luciferin.BusinessLayer.Import
 {
     public abstract class ImportManagerBase : IImportManager
     {
+        #region Constructors
+
+        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ISettingsManager settingsManager,
+                                    IImportStatisticsStore importStatisticsStore, TransactionMapper transactionMapper, AccountMapper accountMapper,
+                                    ICompositeLogger<IImportManager> logger)
+        {
+            NordigenManager = nordigenManager;
+            FireflyManager = fireflyManager;
+            _settingsManager = settingsManager;
+            _importStatisticsStore = importStatisticsStore;
+            TransactionMapper = transactionMapper;
+            AccountMapper = accountMapper;
+            Logger = logger;
+        }
+
+        #endregion
+
         #region Fields
 
         private readonly IImportStatisticsStore _importStatisticsStore;
@@ -37,6 +53,8 @@ namespace Luciferin.BusinessLayer.Import
 
         protected readonly TransactionMapper TransactionMapper;
 
+        protected readonly AccountMapper AccountMapper;
+
         #endregion
 
         #region Properties
@@ -44,20 +62,6 @@ namespace Luciferin.BusinessLayer.Import
         protected PlatformSettings PlatformSettings => _settingsManager.GetPlatformSettings();
 
         protected static Statistic Statistic { get; set; }
-
-        #endregion
-
-        #region Constructors
-
-        protected ImportManagerBase(INordigenManager nordigenManager, IFireflyManager fireflyManager, ISettingsManager settingsManager, IImportStatisticsStore importStatisticsStore, TransactionMapper transactionMapper, ICompositeLogger<IImportManager> logger)
-        {
-            NordigenManager = nordigenManager;
-            FireflyManager = fireflyManager;
-            _settingsManager = settingsManager;
-            _importStatisticsStore = importStatisticsStore;
-            TransactionMapper = transactionMapper;
-            Logger = logger;
-        }
 
         #endregion
 
@@ -166,7 +170,9 @@ namespace Luciferin.BusinessLayer.Import
         /// <param name="fireflyTransactions">The existing firefly transactions.</param>
         /// <param name="requisitionIbans">The list of requisition ibans.</param>
         /// <returns></returns>
-        protected async Task<IEnumerable<FireflyTransaction>> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions, ICollection<FireflyTransaction> fireflyTransactions, ICollection<string> requisitionIbans)
+        protected async Task<IEnumerable<FireflyTransaction>> CheckForDuplicateTransfers(IEnumerable<FireflyTransaction> transactions,
+                                                                                         ICollection<FireflyTransaction> fireflyTransactions,
+                                                                                         ICollection<string> requisitionIbans)
         {
             await Logger.LogInformation("Checking transactions for duplicates transfers");
 
@@ -186,8 +192,12 @@ namespace Luciferin.BusinessLayer.Import
                     continue;
                 }
 
-                var nonDuplicates = group.Where(t => requisitionIbans.Contains(t.SourceIban) && t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)
-                                                     || !requisitionIbans.Contains(t.SourceIban) && t.DestinationIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                var nonDuplicates = group.Where(
+                                             t => requisitionIbans.Contains(t.SourceIban) &&
+                                                  t.SourceIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase)
+                                                  || !requisitionIbans.Contains(t.SourceIban) &&
+                                                  t.DestinationIban.Equals(t.RequisitionIban, StringComparison.InvariantCultureIgnoreCase))
+                                         .ToList();
                 if (nonDuplicates.Any())
                     nonDuplicateTransactions.AddRange(nonDuplicates);
             }
@@ -298,7 +308,7 @@ namespace Luciferin.BusinessLayer.Import
 
             return transactions;
         }
-        
+
         /// <summary>
         /// Imports a list of firefly accounts.
         /// </summary>
@@ -345,11 +355,14 @@ namespace Luciferin.BusinessLayer.Import
         /// <param name="newTransactions">The new transactions.</param>
         /// <param name="existingTransactions">The existing transactions.</param>
         /// <returns></returns>
-        protected async Task<IEnumerable<FireflyTransaction>> RemoveExistingTransactions(IEnumerable<FireflyTransaction> newTransactions, ICollection<FireflyTransaction> existingTransactions)
+        protected async Task<IEnumerable<FireflyTransaction>> RemoveExistingTransactions(IEnumerable<FireflyTransaction> newTransactions,
+                                                                                         ICollection<FireflyTransaction> existingTransactions)
         {
             await Logger.LogInformation("Checking existing Firefly transactions");
 
-            var transactions = newTransactions.Where(t => existingTransactions.All(ft => !string.Equals(ft.ExternalId, t.ExternalId, StringComparison.InvariantCultureIgnoreCase))).ToList();
+            var transactions = newTransactions
+                               .Where(t => existingTransactions.All(ft => !string.Equals(ft.ExternalId, t.ExternalId, StringComparison.InvariantCultureIgnoreCase)))
+                               .ToList();
 
             await Logger.LogInformation($"{transactions.Count} transactions left after existing check");
 

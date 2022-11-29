@@ -29,9 +29,10 @@ namespace Luciferin.BusinessLayer.Import
                              ISettingsManager settingsManager,
                              IImportStatisticsStore importStatisticsStore,
                              TransactionMapper transactionMapper,
+                             AccountMapper accountMapper,
                              FilterExistingTransactionProcessor filterExistingTransactionProcessor,
                              FilterDuplicateTransactionProcessor filterDuplicateTransactionProcessor,
-                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper,
+                             ICompositeLogger<ImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, accountMapper,
                                                                             logger)
         {
             _filterExistingTransactionProcessor = filterExistingTransactionProcessor;
@@ -84,9 +85,19 @@ namespace Luciferin.BusinessLayer.Import
 
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
             var requisitions = await GetRequisitions();
+            var requisitionAccounts = requisitions.SelectMany(r => r.Accounts.Select(a => NordigenManager.GetAccountDetails(a).Result)).ToList();
+            var requisitionIbans = requisitionAccounts.Select(a => a.Iban).Distinct().ToList();
+            
+            await Logger.LogInformation("Add accounts for requisitions");
 
+            var accounts = await FireflyManager.GetAccounts();
+            var requisitionFireflyAccounts = requisitionAccounts.Select(AccountMapper.GetAccount).DistinctBy(t => new {t.Name, t.Iban, t.Type}).ToList();
+            var newRequisitionFireflyAccounts = requisitionFireflyAccounts.Where(a => !accounts.Contains(a)).ToList();
+            await FireflyManager.AddNewAccounts(newRequisitionFireflyAccounts);
+            
+            await Logger.LogInformation($"Added {newRequisitionFireflyAccounts.Count} new accounts for requisitions");
             await Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
-
+            
             var firstImport = !existingFireflyTransactions.Any();
             var balances = await GetBalances(requisitions);
             var newTransactions = fromDate != DateTime.MinValue ? await GetTransactionsFromDate(requisitions, fromDate) : await GetTransactions(requisitions);
@@ -95,7 +106,6 @@ namespace Luciferin.BusinessLayer.Import
 
             await Logger.LogInformation($"Retrieved a total of {newTransactions.Count} transactions");
 
-            var accounts = await FireflyManager.GetAccounts();
             var tag = await CreateImportTag();
             Statistic.ImportDate = tag.Date;
 
@@ -114,7 +124,7 @@ namespace Luciferin.BusinessLayer.Import
             await Logger.LogInformation($"Created the import tag: {tag.Tag}");
 
             newFireflyTransactions = newFireflyTransactions.Where(t => !string.Equals(t.Amount, "0")).OrderBy(t => t.Date).ToList();
-            var possibleNewAccounts = newFireflyTransactions.SelectMany(TransactionMapper.GetAccountsForTransaction).DistinctBy(t => new {t.Name, t.Iban, t.Type}).ToList();
+            var possibleNewAccounts = newFireflyTransactions.SelectMany(t => AccountMapper.GetAccountsForTransaction(t, requisitionIbans)).DistinctBy(t => new {t.Name, t.Iban, t.Type}).ToList();
             var newAccounts = possibleNewAccounts.Where(a => !accounts.Contains(a)).ToList();
 
             await ImportAccounts(newAccounts);

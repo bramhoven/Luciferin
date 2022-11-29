@@ -22,7 +22,8 @@ namespace Luciferin.BusinessLayer.Import
                                  ISettingsManager settingsManager,
                                  IImportStatisticsStore importStatisticsStore,
                                  TransactionMapper transactionMapper,
-                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, logger) { }
+                                 AccountMapper accountMapper,
+                                 ICompositeLogger<TestImportManager> logger) : base(nordigenManager, fireflyManager, settingsManager, importStatisticsStore, transactionMapper, accountMapper, logger) { }
 
         #endregion
 
