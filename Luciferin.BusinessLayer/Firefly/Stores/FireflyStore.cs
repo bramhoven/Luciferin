@@ -268,7 +268,7 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
                 Notes = fireflyAccount.Notes,
                 OpeningBalance = fireflyAccount.OpeningBalance,
                 OpeningBalanceDate = fireflyAccount.OpeningBalanceDate,
-                Type = fireflyAccount.Type.ToString().ToLower(),
+                Type = MapToType(fireflyAccount.Type),
                 ZoomLevel = fireflyAccount.ZoomLevel
             };
         }

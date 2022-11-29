@@ -59,7 +59,6 @@ namespace Luciferin.BusinessLayer.Import.Mappers
         {
             yield return new FireflyAccount
             {
-                Active = true,
                 IncludeNetWorth = true,
                 Iban = transaction.SourceIban,
                 Name = transaction.SourceName,

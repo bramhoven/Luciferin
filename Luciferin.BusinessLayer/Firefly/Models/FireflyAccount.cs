@@ -9,6 +9,7 @@ namespace Luciferin.BusinessLayer.Firefly.Models
         {
             AccountNumber = string.Empty;
             AccountRole = "defaultAsset";
+            Active = true;
             Bic = string.Empty;
             CreditCardType = string.Empty;
             CurrencyCode = "EUR";
