@@ -32,6 +32,9 @@ namespace Luciferin.BusinessLayer.Firefly.Models
         /// <inheritdoc />
         public override bool Equals(object? obj)
         {
+            if (obj == null)
+                return false;
+            
             if (!(obj is FireflyAccount fireflyAccount))
                 return false;
 
