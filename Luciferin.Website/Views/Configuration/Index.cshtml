@@ -9,7 +9,7 @@
         <h4>Connect a new bank account:</h4>
     </div>
 
-    @using (Html.BeginForm(MVC.Configuration.ActionNames.AddBank, MVC.Configuration.Name, FormMethod.Post))
+    @using (Html.BeginForm("AddBank", "Configuration", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Luciferin.Website.Controllers
 {
     [Route("configuration")]
-    public partial class ConfigurationController : Controller
+    public class ConfigurationController : Controller
     {
         #region Fields
 
@@ -36,16 +36,16 @@ namespace Luciferin.Website.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<ActionResult> AddBank(ConfigurationAddBankFormModel formModel)
+        public async Task<ActionResult> AddBank(ConfigurationAddBankFormModel formModel)
         {
             if (string.IsNullOrWhiteSpace(formModel.InstitutionId))
-                return RedirectToAction(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name);
+                return RedirectToAction("Index", "Configuration");
 
             var forwardHeaderPort = Request.Headers.ContainsKey(ForwardedPortHeader) ? (int?)int.Parse(Request.Headers[ForwardedPortHeader]) : null;
             var redirectUrl = new UriBuilder(Request.Host.Host)
             {
                 Scheme = Uri.UriSchemeHttps,
-                Path = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
+                Path = "/configuration",
                 Port = forwardHeaderPort ?? Request.Host.Port ?? 80
             }.ToString();
             var requisition = await _importManager.AddNewBank(formModel.InstitutionId, formModel.BankName, redirectUrl);
@@ -55,18 +55,18 @@ namespace Luciferin.Website.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual async Task<ActionResult> DeleteBank(string requisitionId)
+        public async Task<ActionResult> DeleteBank(string requisitionId)
         {
             if (string.IsNullOrWhiteSpace(requisitionId))
-                return RedirectToAction(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name);
+                return RedirectToAction("Index", "Configuration");
 
             await _importManager.DeleteBank(requisitionId);
 
-            return RedirectToAction(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name);
+            return RedirectToAction("Index", "Configuration");
         }
         
         [HttpGet]
-        public virtual async Task<ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var model = new ConfigurationIndexPageModel
             {

@@ -13,10 +13,10 @@
                 <span class="badge badge-primary badge-pill" style="min-width: 65px;">@requisition.Status | @(requisition.IsSuspended ? "Suspended" : "Connected")</span>
                 <span class="pl-3 flex-grow-1 text-left">@requisition.Reference (@requisition.Id)</span>
 
-                @using (Html.BeginForm(MVC.Configuration.ActionNames.DeleteBank, MVC.Configuration.Name))
+                @using (Html.BeginForm("DeleteBank", "Configuration"))
                 {
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="@MVC.Configuration.DeleteBankParams.requisitionId" value="@requisition.Id" />
+                    @Html.Hidden("requisitionId", requisition.Id)
 
                     @if(Model.Deletable)
                     {

@@ -32,8 +32,8 @@ namespace Luciferin.Website.Controllers
         {
             var model = new HomeIndexPageModel
             {
-                ConfigurationStartUrl = Url.Action(MVC.Configuration.Index()),
-                ImportStartUrl = Url.Action(MVC.Import.Index()),
+                ConfigurationStartUrl = "/configuration",
+                ImportStartUrl = "/import",
                 RequisitionList = new RequisitionList(await _nordigenManager.GetRequisitions())
             };
             return View(model);

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Luciferin.Website.Controllers
 {
     [Route("import")]
-    public partial class ImportController : Controller
+    public class ImportController : Controller
     {
         #region Constructors
 
@@ -37,29 +37,29 @@ namespace Luciferin.Website.Controllers
         #region Methods
 
         [HttpGet]
-        public virtual async Task<ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var requisitions = await _importManager.GetRequisitions();
             var model = new ImportIndexPageModel
             {
-                ConfigurationStartUrl = Url.Action(MVC.Configuration.ActionNames.Index, MVC.Configuration.Name),
+                ConfigurationStartUrl = "/configuration",
                 RequisitionList = new RequisitionList(requisitions)
             };
             return View(model);
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult> Start()
+        public async Task<ActionResult> Start()
         {
             var scope = _serviceScopeFactory.CreateScope();
             var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
             await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
 
-            return MVC.Import.RedirectToAction(MVC.Import.ActionNames.Status);
+            return RedirectToAction("Status");
         }
 
         [HttpGet("status")]
-        public virtual ActionResult Status()
+        public ActionResult Status()
         {
             var model = new PageModelBase { FullWidth = true };
             return View(model);

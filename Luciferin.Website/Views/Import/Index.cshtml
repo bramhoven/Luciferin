@@ -14,7 +14,7 @@
     {
         <h4 class="mt-5 mb-3">Are you ready to import all possible transactions for the accounts above?</h4>
         
-        @using (Html.BeginForm(MVC.Import.ActionNames.Start, MVC.Import.Name))
+        @using (Html.BeginForm("Start", "Import"))
         {
             <button type="submit" class="btn btn-success">I am ready to import!</button>
         }
