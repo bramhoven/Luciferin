@@ -35,7 +35,9 @@ namespace Luciferin.BusinessLayer.Firefly.Models
             if (obj is not FireflyAccount fireflyAccount)
                 return false;
 
-            return Name.Equals(fireflyAccount.Name) && Iban.Equals(fireflyAccount.Iban) && Type == fireflyAccount.Type;
+            return string.Equals(Name, fireflyAccount.Name)
+                   && string.Equals(Iban, fireflyAccount.Iban)
+                   && Type == fireflyAccount.Type;
         }
 
         #region Properties
