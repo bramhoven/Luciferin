@@ -16,7 +16,7 @@ namespace Luciferin.BusinessLayer.Import
 
         Task<bool> CheckAndExecuteAutomaticImport(CancellationToken cancellationToken);
 
-        Task<ICollection<Requisition>> GetRequisitions();
+        Task<ICollection<Requisition>> GetImportableRequisitions();
 
         ValueTask StartImport(IServiceScope scope, CancellationToken cancellationToken);
 

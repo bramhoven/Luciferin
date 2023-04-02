@@ -33,7 +33,7 @@ namespace Luciferin.BusinessLayer.Import
         protected override async ValueTask RunImport(CancellationToken cancellationToken)
         {
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
-            var requisitions = await GetRequisitions();
+            var requisitions = await GetImportableRequisitions();
 
             await Logger.LogInformation($"Start import for {requisitions.Count} connected banks");
 

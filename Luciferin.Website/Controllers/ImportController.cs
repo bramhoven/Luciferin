@@ -39,7 +39,7 @@ namespace Luciferin.Website.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            var requisitions = await _importManager.GetRequisitions();
+            var requisitions = await _importManager.GetImportableRequisitions();
             var model = new ImportIndexPageModel
             {
                 ConfigurationStartUrl = "/configuration",

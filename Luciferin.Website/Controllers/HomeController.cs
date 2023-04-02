@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.Website.Models;
 using Luciferin.Website.Models.Home;
@@ -12,15 +13,15 @@ namespace Luciferin.Website.Controllers
     {
         #region Fields
 
-        private readonly INordigenManager _nordigenManager;
+        private readonly IImportManager _importManager;
 
         #endregion
 
         #region Constructors
 
-        public HomeController(INordigenManager nordigenManager)
+        public HomeController(IImportManager importManager)
         {
-            _nordigenManager = nordigenManager;
+            _importManager = importManager;
         }
 
         #endregion
@@ -34,7 +35,7 @@ namespace Luciferin.Website.Controllers
             {
                 ConfigurationStartUrl = "/configuration",
                 ImportStartUrl = "/import",
-                RequisitionList = new RequisitionList(await _nordigenManager.GetRequisitions())
+                RequisitionList = new RequisitionList(await _importManager.GetImportableRequisitions())
             };
             return View(model);
         }

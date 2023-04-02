@@ -84,7 +84,7 @@ namespace Luciferin.BusinessLayer.Import
             await Logger.LogInformation("Starting import");
 
             var existingFireflyTransactions = await GetExistingFireflyTransactions();
-            var requisitions = await GetRequisitions();
+            var requisitions = await GetImportableRequisitions();
             var requisitionAccounts = requisitions.SelectMany(r => r.Accounts.Select(a => NordigenManager.GetAccountDetails(a).Result)).ToList();
             var requisitionIbans = requisitionAccounts.Select(a => a.Iban).Distinct().ToList();
             

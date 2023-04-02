@@ -121,7 +121,7 @@ public abstract class ImportManagerBase : IImportManager
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Requisition>> GetRequisitions()
+    public async Task<ICollection<Requisition>> GetImportableRequisitions()
     {
         var requisitions = await NordigenManager.GetRequisitions();
 
@@ -146,6 +146,11 @@ public abstract class ImportManagerBase : IImportManager
                 catch (AccountSuspendedException)
                 {
                     requisition.IsSuspended = true;
+                    removableAccounts.Add(currentAccount);
+                }
+                catch (AccountFailureException)
+                {
+                    requisition.IsRevoked = true;
                     removableAccounts.Add(currentAccount);
                 }
 
