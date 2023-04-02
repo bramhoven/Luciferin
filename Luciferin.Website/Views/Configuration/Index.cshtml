@@ -1,4 +1,5 @@
-﻿@model Luciferin.Website.Models.Configuration.ConfigurationIndexPageModel
+﻿@using Luciferin.Website.Models.Configuration
+@model Luciferin.Website.Models.Configuration.ConfigurationIndexPageModel
 
 <div class="text-center">
     <h1 class="display-4">Configure the web importer</h1>
@@ -17,19 +18,25 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="institution-select">Choose your bank</label>
             </div>
-            <select class="custom-select" id="institution-select" name="@nameof(Model.AddBankFormModel.InstitutionId)">
+            <select class="custom-select" id="institution-select" name="AddBankFormModel.InstitutionId">
                 @foreach (var institution in Model.AddBankFormModel.Institutions)
                 {
                     <option value="@institution.Id">@institution.Name</option>
                 }
             </select>
         </div>
+        <div class="input-group mt-0">
+            @Html.ValidationMessageFor(m => m.AddBankFormModel.InstitutionId, "", new { @class = "text-danger" })
+        </div>
 
         <div class="input-group mt-2">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="bank-name">Name</span>
             </div>
-            <input type="text" class="form-control" placeholder="Give the bank a name" aria-label="Give the bank a name" aria-describedby="bank-name" name="@nameof(Model.AddBankFormModel.BankName)">
+            @Html.EditorFor(m => m.AddBankFormModel.BankName, new { htmlAttributes = new { @class = "form-control", aria_label = "Give the bank a name", aria_describedby = "bank-name" }})
+        </div>
+        <div class="input-group mt-0">
+            @Html.ValidationMessageFor(m => m.AddBankFormModel.BankName, "", new { @class = "text-danger" })
         </div>
 
         <div class="input-group mt-2">
