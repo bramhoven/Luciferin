@@ -6,6 +6,7 @@
        UndergoingAuthentication,
        Linked,
        Rejected,
-       Suspended
+       Suspended,
+       Expired
     }
 }

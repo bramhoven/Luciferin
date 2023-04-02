@@ -168,6 +168,8 @@ namespace Luciferin.BusinessLayer.Nordigen.Helpers
                     return RequisitionStatus.Rejected;
                 case "SU":
                     return RequisitionStatus.Suspended;
+                case "EX":
+                    return RequisitionStatus.Expired;
             }
 
             return RequisitionStatus.Created;
