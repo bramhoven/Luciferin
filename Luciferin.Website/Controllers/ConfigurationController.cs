@@ -35,6 +35,7 @@ namespace Luciferin.Website.Controllers
         #region Methods
 
         [HttpPost]
+        [Route("/bank")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddBank(ConfigurationAddBankFormModel formModel)
         {
@@ -54,6 +55,7 @@ namespace Luciferin.Website.Controllers
         }
 
         [HttpPost]
+        [Route("/bank/delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteBank(string requisitionId)
         {
