@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataLayer", "DataLayer", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage", "Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj", "{B8D96401-0160-4651-B7B7-D52532A8FA13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Mail", "Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj", "{C9093248-6F10-4AF3-843A-A6EE045F7D19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{B8D96401-0160-4651-B7B7-D52532A8FA13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8D96401-0160-4651-B7B7-D52532A8FA13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8D96401-0160-4651-B7B7-D52532A8FA13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,5 +44,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B8D96401-0160-4651-B7B7-D52532A8FA13} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
 	EndGlobalSection
 EndGlobal

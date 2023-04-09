@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Settings;
 using Luciferin.Website.Models.Settings;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Luciferin.Website.Controllers
 {
@@ -13,13 +15,16 @@ namespace Luciferin.Website.Controllers
 
         private readonly ISettingsManager _settingsManager;
 
+        private readonly LuciferinSettings _luciferinSettings;
+
         #endregion
 
         #region Constructors
 
-        public SettingsController(ISettingsManager settingsManager)
+        public SettingsController(ISettingsManager settingsManager, IOptions<LuciferinSettings> luciferinSettings)
         {
             _settingsManager = settingsManager;
+            _luciferinSettings = luciferinSettings.Value;
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public BooleanSetting() {}
 
         /// <inheritdoc />
-        public BooleanSetting(string name, bool value) : base(name, value) { }
+        public BooleanSetting(string category, string name, bool value) : base(category, name, value) { }
 
         #endregion
     }

@@ -13,6 +13,9 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public string Key { get; set; }
 
         /// <inheritdoc />
+        public string Category { get; }
+
+        /// <inheritdoc />
         public TDataType Value { get; set; }
 
         /// <inheritdoc />
@@ -24,8 +27,9 @@ namespace Luciferin.BusinessLayer.Settings.Models
 
         protected SettingBase() { }
 
-        protected SettingBase(string name, TDataType value)
+        protected SettingBase(string category, string name, TDataType value)
         {
+            Category = category;
             Key = name;
             Value = value;
         }

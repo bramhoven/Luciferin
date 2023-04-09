@@ -1,4 +1,5 @@
 using System.Linq;
+using Luciferin.Website.Classes.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +19,7 @@ namespace Luciferin.Website
                     options
                         .AddUserSecrets<Startup>()
                         .AddEnvironmentVariables()
+                        .AddLuciferinConfiguration()
                         .Build();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

@@ -20,7 +20,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public TimeSpanSetting() { }
 
         /// <inheritdoc />
-        public TimeSpanSetting(string name, TimeSpan value) : base(name, value) { }
+        public TimeSpanSetting(string category, string name, TimeSpan value) : base(category, name, value) { }
 
         #endregion
     }

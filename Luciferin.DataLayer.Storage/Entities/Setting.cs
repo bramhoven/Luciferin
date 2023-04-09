@@ -8,6 +8,8 @@ namespace Luciferin.DataLayer.Storage.Entities
     {
         #region Properties
 
+        public string Category { get; set; }
+        
         public bool? BooleanValue { get; set; }
 
         public int? IntValue { get; set; }

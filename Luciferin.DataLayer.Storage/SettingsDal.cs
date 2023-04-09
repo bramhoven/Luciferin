@@ -44,15 +44,26 @@ namespace Luciferin.DataLayer.Storage
         {
             var settings = new List<Setting>
             {
-                CreateStringSetting("firefly_url", ""),
-                CreateStringSetting("firefly_access_token", ""),
-                CreateStringSetting("nordigen_base_url", "https://ob.nordigen.com"),
-                CreateStringSetting("nordigen_secret_id", ""),
-                CreateStringSetting("nordigen_secret_key", ""),
-                CreateIntegerSetting("import_days", 10),
-                CreateBooleanSetting("extended_notes", false),
-                CreateBooleanSetting("automatic_import", false),
-                CreateBooleanSetting("filter_authorisations", true)
+                CreateStringSetting("Firefly", "firefly_url", ""),
+                CreateStringSetting("Firefly", "firefly_access_token", ""),
+                
+                CreateStringSetting("Nordigen", "nordigen_base_url", "https://ob.nordigen.com"),
+                CreateStringSetting("Nordigen", "nordigen_secret_id", ""),
+                CreateStringSetting("Nordigen", "nordigen_secret_key", ""),
+                
+                CreateIntegerSetting("Luciferin", "ImportDays", 10),
+                CreateBooleanSetting("Luciferin", "ExtendedNotes", false),
+                CreateBooleanSetting("Luciferin", "AutomaticImport", false),
+                CreateBooleanSetting("Luciferin", "FilterAuthorisations", true),
+                CreateIntegerSetting("Luciferin", "NotificationMethod", 0),
+                
+                CreateStringSetting("Mail", "NotificationEmail", ""),
+                CreateStringSetting("Mail", "FromEmail", "no-reply@luciferin.local"),
+                CreateStringSetting("Mail", "Host", ""),
+                CreateIntegerSetting("Mail", "Port", 25),
+                CreateStringSetting("Mail", "Username", ""),
+                CreateStringSetting("Mail", "Password", ""),
+                CreateBooleanSetting("Mail", "EnableSsl", false)
             };
 
             var existingSettingsKeys = Db.Settings.Select(s => s.Key).ToList();
@@ -64,41 +75,45 @@ namespace Luciferin.DataLayer.Storage
 
         #region Static Methods
 
-        private static Setting CreateBooleanSetting(string key, bool defaultValue)
+        private static Setting CreateBooleanSetting(string category, string key, bool defaultValue)
         {
             return new Setting
             {
                 Key = key,
+                Category = category,
                 ValueType = "bool",
                 BooleanValue = defaultValue
             };
         }
 
-        private static Setting CreateIntegerSetting(string key, int defaultValue)
+        private static Setting CreateIntegerSetting(string category, string key, int defaultValue)
         {
             return new Setting
             {
                 Key = key,
+                Category = category,
                 ValueType = "int",
                 IntValue = defaultValue
             };
         }
 
-        private static Setting CreateStringSetting(string key, string defaultValue)
+        private static Setting CreateStringSetting(string category, string key, string defaultValue)
         {
             return new Setting
             {
                 Key = key,
+                Category = category,
                 ValueType = "string",
                 StringValue = defaultValue
             };
         }
 
-        private static Setting CreateTimeSpanSetting(string key, TimeSpan defaultValue)
+        private static Setting CreateTimeSpanSetting(string category, string key, TimeSpan defaultValue)
         {
             return new Setting
             {
                 Key = key,
+                Category = category,
                 ValueType = "timespan",
                 TimeSpanValue = defaultValue
             };

@@ -1,17 +1,18 @@
 ﻿using Luciferin.BusinessLayer.Settings.Enums;
 
-namespace Luciferin.BusinessLayer.Settings.Models
+namespace Luciferin.BusinessLayer.Settings.Models;
+
+public interface ISetting
 {
-    public interface ISetting
-    {
-        #region Properties
+    #region Properties
 
-        bool HasValue { get; }
+    bool HasValue { get; }
 
-        string Key { get; }
+    string Key { get; }
 
-        ValueType ValueType { get; }
+    string Category { get; }
 
-        #endregion
-    }
+    ValueType ValueType { get; }
+
+    #endregion
 }

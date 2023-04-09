@@ -3,40 +3,40 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Nordigen.Models;
 
-namespace Luciferin.BusinessLayer.Nordigen
+namespace Luciferin.BusinessLayer.Nordigen;
+
+public interface INordigenManager
 {
-    public interface INordigenManager
-    {
-        #region Methods
+    #region Methods
 
-        Task<EndUserAgreement> CreateEndUserAgreement(Institution institution);
+    Task<EndUserAgreement> CreateEndUserAgreement(Institution institution);
 
-        Task<Requisition> CreateRequisition(Institution institution, string reference, EndUserAgreement agreement, string redirectUrl);
+    Task<Requisition> CreateRequisition(Institution institution, string reference, EndUserAgreement agreement,
+        string redirectUrl);
 
-        Task<bool> DeleteEndUserAgreement(string endUserAgreementId);
+    Task<bool> DeleteEndUserAgreement(string endUserAgreementId);
 
-        Task<bool> DeleteRequisition(string requisitionId);
+    Task<bool> DeleteRequisition(string requisitionId);
 
-        Task<Account> GetAccount(string accountId);
+    Task<Account> GetAccount(string accountId);
 
-        Task<ICollection<Balance>> GetAccountBalance(string accountId);
+    Task<ICollection<Balance>> GetAccountBalance(string accountId);
 
-        Task<AccountDetails> GetAccountDetails(string accountId);
+    Task<AccountDetails> GetAccountDetails(string accountId);
 
-        Task<ICollection<Transaction>> GetAccountTransactions(string accountId);
-        
-        Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate);
+    Task<ICollection<Transaction>> GetAccountTransactions(string accountId);
 
-        Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId);
+    Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate);
 
-        Task<Institution> GetInstitution(string institutionId);
+    Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId);
 
-        Task<ICollection<Institution>> GetInstitutions(string countryCode);
+    Task<Institution> GetInstitution(string institutionId);
 
-        Task<Requisition> GetRequisition(string requisitionId);
+    Task<ICollection<Institution>> GetInstitutions(string countryCode);
 
-        Task<ICollection<Requisition>> GetRequisitions();
+    Task<Requisition> GetRequisition(string requisitionId);
 
-        #endregion
-    }
+    Task<ICollection<Requisition>> GetRequisitions();
+
+    #endregion
 }

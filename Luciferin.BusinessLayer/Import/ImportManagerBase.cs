@@ -177,6 +177,23 @@ public abstract class ImportManagerBase : IImportManager
         scope.Dispose();
     }
 
+    /// <inheritdoc />
+    public async Task<ICollection<Requisition>> GetExpiredRequisition()
+    {
+        var requisitions = await GetImportableRequisitions();
+        return requisitions.Where(r => r.IsRevoked || r.IsSuspended).ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<ICollection<Requisition>> GetExpiringRequisition()
+    {
+        var requisitions = await GetImportableRequisitions();
+        var now = DateTime.Now;
+        return requisitions.Where(r => !r.IsRevoked && !r.IsSuspended && now.Subtract(r.Created).TotalDays > 60)
+            .ToList();
+    }
+
+
     /// <summary>
     ///     Checks for duplicate transfers.
     /// </summary>
