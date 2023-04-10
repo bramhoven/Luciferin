@@ -162,6 +162,7 @@ public class Startup
                 .WithIdentity("CheckRequisitionExpirationJob-Trigger")
                 .WithCronSchedule("0 0 0 * * ?"));
             
+            #if DEBUG
             var checkRequisitionExpirationImmediateKey = new JobKey("CheckRequisitionExpirationImmediateJob");
             q.AddJob<CheckRequisitionExpirationJob>(opts => opts.WithIdentity(checkRequisitionExpirationImmediateKey).StoreDurably());
             q.AddTrigger(opts => opts
@@ -169,6 +170,7 @@ public class Startup
                 .WithIdentity("CheckRequisitionExpirationImmediateJob-Trigger")
                 .WithSimpleSchedule()
                 .StartNow());
+            #endif
             
             var importJobKey = new JobKey("ImportJob");
             q.AddJob<ImportJob>(opts => opts.WithIdentity(importJobKey));
