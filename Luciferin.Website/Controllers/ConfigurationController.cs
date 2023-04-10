@@ -65,7 +65,7 @@ public class ConfigurationController : Controller
     [HttpPost]
     [Route("/bank/delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> DeleteBank(string requisitionId)
+    public async Task<ActionResult> DeleteBank([Bind(Prefix = "RequisitionList.requisitionId")] string requisitionId)
     {
         if (string.IsNullOrWhiteSpace(requisitionId))
             return RedirectToAction("Index", "Configuration");

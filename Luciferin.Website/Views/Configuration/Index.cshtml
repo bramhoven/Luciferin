@@ -1,5 +1,4 @@
-﻿@using Luciferin.Website.Models.Configuration
-@model Luciferin.Website.Models.Configuration.ConfigurationIndexPageModel
+﻿@model Luciferin.Website.Models.Configuration.ConfigurationIndexPageModel
 
 <div class="text-center">
     <h1 class="display-4">Configure the web importer</h1>
@@ -33,7 +32,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="bank-name">Name</span>
             </div>
-            @Html.EditorFor(m => m.AddBankFormModel.BankName, new { htmlAttributes = new { @class = "form-control", aria_label = "Give the bank a name", aria_describedby = "bank-name" }})
+            @Html.EditorFor(m => m.AddBankFormModel.BankName, new { htmlAttributes = new { @class = "form-control", aria_label = "Give the bank a name", aria_describedby = "bank-name" } })
         </div>
         <div class="input-group mt-0">
             @Html.ValidationMessageFor(m => m.AddBankFormModel.BankName, "", new { @class = "text-danger" })
