@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Converters.Helper;
@@ -32,9 +33,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog;
 using Quartz;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Luciferin.Website;
 
@@ -215,7 +217,12 @@ public class Startup
         using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
         {
             var storageContext = serviceScope.ServiceProvider.GetRequiredService<StorageContext>();
-            storageContext.Database.Migrate();
+            if (storageContext.Database.GetPendingMigrations().Any())
+            {
+                storageContext.Database.Migrate();
+                Console.WriteLine("Application exited after migration have been applied. Please restart app.");
+                Environment.Exit(0);
+            }
 
             var settingsDal = serviceScope.ServiceProvider.GetRequiredService<SettingsDal>();
             settingsDal.EnsureSettingsExist();

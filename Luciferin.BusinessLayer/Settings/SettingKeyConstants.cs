@@ -4,17 +4,17 @@ internal static class SettingKeyConstants
 {
     #region Fields
 
-    internal const string AutomaticImportKey = "automatic_import";
+    internal const string AutomaticImportKey = "AutomaticImport";
 
-    internal const string ExtendedNotesKey = "extended_notes";
+    internal const string ExtendedNotesKey = "ExtendedNotes";
 
-    internal const string FilterAuthorisations = "filter_authorisations";
+    internal const string FilterAuthorisations = "FilterAuthorisations";
 
     internal const string FireflyAccessTokenKey = "firefly_access_token";
 
     internal const string FireflyUrlKey = "firefly_url";
 
-    internal const string ImportDaysKey = "import_days";
+    internal const string ImportDaysKey = "ImportDays";
 
     internal const string NordigenBaseUrlKey = "nordigen_base_url";
 

@@ -22,7 +22,16 @@ public class LuciferinConfigurationProvider : ConfigurationProvider
     public override void Load()
     {
         var dal = new SettingsDal(_options);
-        dal.EnsureSettingsExist();
+
+        try
+        {
+            dal.EnsureSettingsExist();
+        }
+        catch (Exception)
+        {
+            return;
+        }
+
         var manager = new SettingsManager(new StorageSettingStore(dal));
 
         var settings = manager.GetSettings();
