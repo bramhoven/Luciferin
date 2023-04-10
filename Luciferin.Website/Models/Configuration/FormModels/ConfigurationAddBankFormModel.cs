@@ -14,7 +14,7 @@ namespace Luciferin.Website.Models.Configuration.FormModels
         [Required(ErrorMessage = "Institution is required")]
         public string InstitutionId { get; set; }
 
-        public ICollection<Institution> Institutions { get; set; }
+        public ICollection<Institution>? Institutions { get; set; }
 
         #endregion
     }
