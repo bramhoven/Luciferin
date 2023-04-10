@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Luciferin.BusinessLayer.Exceptions;
+using Luciferin.BusinessLayer.Nordigen.Enums;
 using Luciferin.BusinessLayer.Nordigen.Models;
 using Luciferin.BusinessLayer.Nordigen.Models.Requests;
 using Luciferin.BusinessLayer.Nordigen.Stores;

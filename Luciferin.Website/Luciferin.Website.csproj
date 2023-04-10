@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj" />
+    <ProjectReference Include="..\Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj" />
     <ProjectReference Include="..\Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj" />
   </ItemGroup>
 

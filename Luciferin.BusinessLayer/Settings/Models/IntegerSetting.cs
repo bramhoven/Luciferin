@@ -19,7 +19,7 @@ namespace Luciferin.BusinessLayer.Settings.Models
         public IntegerSetting() { }
 
         /// <inheritdoc />
-        public IntegerSetting(string name, int value) : base(name, value) { }
+        public IntegerSetting(string category, string name, int value) : base(category, name, value) { }
 
         #endregion
     }

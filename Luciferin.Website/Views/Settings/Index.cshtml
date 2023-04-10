@@ -65,11 +65,62 @@
         </div>
         
 
-        <div class="input-group boolean-input-group mb-5">
+        <div class="input-group boolean-input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-filter-authorisations">Filter authorisations</span>
             </div>
             @Html.EditorFor(m => m.Settings.FilterAuthorisations)
+        </div>
+        
+        <h4 class="mb-3">Notification Settings</h4>
+                                      
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-notification-email">Notification Email</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.NotificationEmail)
+        </div>
+                                       
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-notification-email">From Email</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.FromEmail)
+        </div>
+              
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-host">Host</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.Host)
+        </div>
+        
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-port">Port</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.Port)
+        </div>
+        
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-username">Username</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.Username)
+        </div>
+        
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-password">Password</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.Password)
+        </div>
+        
+        <div class="input-group boolean-input-group mb-5">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="input-enable-ssl">Enable SSL</span>
+            </div>
+            @Html.EditorFor(m => m.Settings.EnableSsl)
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-5">Save</button>
