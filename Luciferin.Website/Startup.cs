@@ -215,6 +215,7 @@ public class Startup
         using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
         {
             var storageContext = serviceScope.ServiceProvider.GetRequiredService<StorageContext>();
+            storageContext.Database.GetPendingMigrations();
             storageContext.Database.Migrate();
 
             var settingsDal = serviceScope.ServiceProvider.GetRequiredService<SettingsDal>();
