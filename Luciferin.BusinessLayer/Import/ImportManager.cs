@@ -46,7 +46,8 @@ namespace Luciferin.BusinessLayer.Import
         /// <inheritdoc />
         protected override ValueTask RunImport(CancellationToken cancellationToken)
         {
-            return RunImport(DateTime.MinValue, cancellationToken);
+            var fromDate = DateTime.Today.AddDays(-PlatformSettings.ImportDays.Value);
+            return RunImport(fromDate, cancellationToken);
         }
 
         private async Task<ICollection<FireflyTransaction>> FilterTransactionsWithMethods(ICollection<FireflyTransaction> newTransactions,
