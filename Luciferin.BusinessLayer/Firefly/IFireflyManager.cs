@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
@@ -21,7 +22,7 @@ namespace Luciferin.BusinessLayer.Firefly
 
         Task<FireflyTransaction> GetFirstTransactionOfAccount(int accountId);
 
-        Task<ICollection<FireflyTransaction>> GetTransactions();
+        Task<ICollection<FireflyTransaction>> GetTransactions(DateTime fromDate);
 
         Task UpdateAccount(FireflyAccount fireflyAccount);
 

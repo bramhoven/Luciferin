@@ -83,7 +83,7 @@ namespace Luciferin.BusinessLayer.Import
             await Task.Delay(1000, cancellationToken);
             await Logger.LogInformation("Starting import");
 
-            var existingFireflyTransactions = await GetExistingFireflyTransactions();
+            var existingFireflyTransactions = await GetExistingFireflyTransactions(fromDate);
             var requisitions = await GetImportableRequisitions();
             var requisitionAccounts = requisitions.SelectMany(r => r.Accounts.Select(a => NordigenManager.GetAccountDetails(a).Result)).ToList();
             var requisitionIbans = requisitionAccounts.Select(a => a.Iban).Distinct().ToList();

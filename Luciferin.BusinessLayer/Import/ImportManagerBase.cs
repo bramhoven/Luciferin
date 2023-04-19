@@ -273,12 +273,13 @@ public abstract class ImportManagerBase : IImportManager
     /// <summary>
     ///     Gets existing Firefly transactions.
     /// </summary>
+    /// <param name="fromDate">The date from which to retrieve firefly transaction.</param>
     /// <returns></returns>
-    protected async Task<ICollection<FireflyTransaction>> GetExistingFireflyTransactions()
+    protected async Task<ICollection<FireflyTransaction>> GetExistingFireflyTransactions(DateTime fromDate)
     {
         await Logger.LogInformation("Getting existing Firefly transactions");
 
-        var transactions = await FireflyManager.GetTransactions();
+        var transactions = await FireflyManager.GetTransactions(fromDate);
 
         await Logger.LogInformation($"Retrieved {transactions.Count} existing Firefly transactions");
 

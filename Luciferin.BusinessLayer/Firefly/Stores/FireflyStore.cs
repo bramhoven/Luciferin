@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Flurl.Http;
 using System.Linq;
 using System.Threading.Tasks;
@@ -189,8 +190,9 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
             return response.Data.FirstOrDefault()?.MapToFireflyTransaction();
         }
 
+        /// <param name="fromDate"></param>
         /// <inheritdoc />
-        public async Task<ICollection<FireflyTransaction>> GetTransactions()
+        public async Task<ICollection<FireflyTransaction>> GetTransactions(DateTime fromDate)
         {
             var transactions = new List<FireflyTransaction>();
             FireflyTransactionCollectionResponse transactionCollectionResponse;
@@ -202,6 +204,7 @@ namespace Luciferin.BusinessLayer.Firefly.Stores
                                                       .Transactions(_fireflyBaseUrl)
                                                       .WithOAuthBearerToken(_fireflyAccessToken)
                                                       .SetQueryParam("page", ++page)
+                                                      .SetQueryParam("start", fromDate.ToString("yyyy-MM-dd"))
                                                       .GetJsonAsync<FireflyTransactionCollectionResponse>();
                 transactions.AddRange(transactionCollectionResponse.Data.MapToFireflyTransactionCollection());
             } while (transactionCollectionResponse.Meta.Pagination.CurrentPage < transactionCollectionResponse.Meta.Pagination.TotalPages);

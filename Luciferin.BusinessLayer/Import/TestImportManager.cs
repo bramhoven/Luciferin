@@ -32,7 +32,8 @@ namespace Luciferin.BusinessLayer.Import
         /// <inheritdoc />
         protected override async ValueTask RunImport(CancellationToken cancellationToken)
         {
-            var existingFireflyTransactions = await GetExistingFireflyTransactions();
+            var fromDate = DateTime.Today.AddDays(-PlatformSettings.ImportDays.Value);
+            var existingFireflyTransactions = await GetExistingFireflyTransactions(fromDate);
             var requisitions = await GetImportableRequisitions();
 
             await Logger.LogInformation($"Start import for {requisitions.Count} connected banks");

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Luciferin.BusinessLayer.Firefly.Enums;
 using Luciferin.BusinessLayer.Firefly.Models;
@@ -62,9 +63,9 @@ namespace Luciferin.BusinessLayer.Firefly
         }
 
         /// <inheritdoc />
-        public Task<ICollection<FireflyTransaction>> GetTransactions()
+        public Task<ICollection<FireflyTransaction>> GetTransactions(DateTime fromDate)
         {
-            return _store.GetTransactions();
+            return _store.GetTransactions(fromDate);
         }
 
         /// <inheritdoc />
