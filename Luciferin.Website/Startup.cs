@@ -200,6 +200,16 @@ public class Startup
                         .EnableDetailedErrors();
                 });
                 break;
+            case "postgresql":
+                services.AddDbContext<StorageContext>(options =>
+                {
+                    options
+                        .UseNpgsql(connectionString)
+                        .LogTo(Console.WriteLine, LogLevel.Information)
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors();
+                });
+                break;
         }
     }
 
