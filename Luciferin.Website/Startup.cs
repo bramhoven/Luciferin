@@ -22,6 +22,8 @@ using Luciferin.BusinessLayer.Settings.Stores;
 using Luciferin.DataLayer.Mail;
 using Luciferin.DataLayer.Storage;
 using Luciferin.DataLayer.Storage.Context;
+using Luciferin.DataLayer.Storage.Mysql;
+using Luciferin.DataLayer.Storage.Postgres;
 using Luciferin.Website.Classes.Logger;
 using Luciferin.Website.Classes.Queue;
 using Luciferin.Website.Classes.ServiceBus;
@@ -194,17 +196,17 @@ public class Startup
                 services.AddDbContext<StorageContext>(options =>
                 {
                     options
-                        .UseMySql(connectionString, version)
+                        .UseMySql(connectionString, version, ctx => ctx.MigrationsAssembly(typeof(MysqlMigrations).Assembly.FullName))
                         .LogTo(Console.WriteLine, LogLevel.Information)
                         .EnableSensitiveDataLogging()
                         .EnableDetailedErrors();
                 });
                 break;
-            case "postgresql":
+            case "postgres":
                 services.AddDbContext<StorageContext>(options =>
                 {
                     options
-                        .UseNpgsql(connectionString)
+                        .UseNpgsql(connectionString, ctx => ctx.MigrationsAssembly(typeof(PostgresMigrations).Assembly.FullName))
                         .LogTo(Console.WriteLine, LogLevel.Information)
                         .EnableSensitiveDataLogging()
                         .EnableDetailedErrors();

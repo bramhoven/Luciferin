@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Mail", "Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj", "{C9093248-6F10-4AF3-843A-A6EE045F7D19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage.Postgres", "Luciferin.DataLayer.Storage.Postgres\Luciferin.DataLayer.Storage.Postgres.csproj", "{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage.Mysql", "Luciferin.DataLayer.Storage.Mysql\Luciferin.DataLayer.Storage.Mysql.csproj", "{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9093248-6F10-4AF3-843A-A6EE045F7D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,5 +57,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B8D96401-0160-4651-B7B7-D52532A8FA13} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
 		{C9093248-6F10-4AF3-843A-A6EE045F7D19} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
 	EndGlobalSection
 EndGlobal

@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -44,7 +44,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj" />
     <ProjectReference Include="..\Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj" />
-    <ProjectReference Include="..\Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj" />
+    <ProjectReference Include="..\Luciferin.DataLayer.Storage.Mysql\Luciferin.DataLayer.Storage.Mysql.csproj" />
+    <ProjectReference Include="..\Luciferin.DataLayer.Storage.Postgres\Luciferin.DataLayer.Storage.Postgres.csproj" />
   </ItemGroup>
 
   <ItemGroup>
