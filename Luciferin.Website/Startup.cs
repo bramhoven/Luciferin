@@ -211,6 +211,7 @@ public class Startup
                         .EnableSensitiveDataLogging()
                         .EnableDetailedErrors();
                 });
+                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
                 break;
         }
     }
