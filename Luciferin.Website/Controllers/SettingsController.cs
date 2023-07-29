@@ -34,6 +34,8 @@ namespace Luciferin.Website.Controllers
         [HttpGet]
         public virtual ActionResult Index()
         {
+            ViewData["Title"] = "Settings";
+            
             var model = SetDefaultModel();
             return View(model);
         }
@@ -41,6 +43,8 @@ namespace Luciferin.Website.Controllers
         [HttpPost]
         public async virtual Task<ActionResult> Index(SettingsPageModel model)
         {
+            ViewData["Title"] = "Settings";
+            
             model.SuccessfullySaved = _settingsManager.UpdateSettings(model.Settings.Settings);
 
             model = SetDefaultModel(model);

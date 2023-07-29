@@ -31,6 +31,8 @@ namespace Luciferin.Website.Controllers
         [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
+            ViewData["Title"] = "Home";
+            
             var model = new HomeIndexPageModel
             {
                 ConfigurationStartUrl = "/configuration",

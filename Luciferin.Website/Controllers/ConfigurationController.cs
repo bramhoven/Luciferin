@@ -39,6 +39,8 @@ public class ConfigurationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> AddBank(ConfigurationIndexPageModel pageModel)
     {
+        ViewData["Title"] = "Configuration";
+            
         var formModel = pageModel.AddBankFormModel;
         if (!ModelState.IsValid)
         {
@@ -67,6 +69,8 @@ public class ConfigurationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteBank([Bind(Prefix = "RequisitionList.requisitionId")] string requisitionId)
     {
+        ViewData["Title"] = "Configuration";
+            
         if (string.IsNullOrWhiteSpace(requisitionId))
             return RedirectToAction("Index", "Configuration");
 
@@ -78,6 +82,8 @@ public class ConfigurationController : Controller
     [HttpGet]
     public async Task<ActionResult> Index()
     {
+        ViewData["Title"] = "Configuration";
+            
         return View(await GetDefaultModel());
     }
 

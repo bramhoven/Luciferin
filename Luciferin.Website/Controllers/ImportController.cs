@@ -39,6 +39,8 @@ namespace Luciferin.Website.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
+            ViewData["Title"] = "Import";
+            
             var requisitions = await _importManager.GetImportableRequisitions();
             var model = new ImportIndexPageModel
             {
@@ -51,6 +53,8 @@ namespace Luciferin.Website.Controllers
         [HttpPost]
         public async Task<ActionResult> Start()
         {
+            ViewData["Title"] = "Import";
+            
             var scope = _serviceScopeFactory.CreateScope();
             var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
             await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
@@ -61,6 +65,8 @@ namespace Luciferin.Website.Controllers
         [HttpGet("status")]
         public ActionResult Status()
         {
+            ViewData["Title"] = "Import status";
+            
             var model = new PageModelBase { FullWidth = true };
             return View(model);
         }
