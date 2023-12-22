@@ -23,6 +23,8 @@ end_of_line = lf
 # Microsoft .NET properties
 csharp_new_line_before_members_in_object_initializers = false
 csharp_preferred_modifier_order = public, private, protected, internal, file, new, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required:suggestion
+csharp_style_expression_bodied_constructors = false:warning
+csharp_style_expression_bodied_methods = false:warning
 csharp_style_prefer_utf8_string_literals = true:suggestion
 csharp_style_var_elsewhere = true:suggestion
 csharp_style_var_for_built_in_types = true:suggestion
@@ -159,10 +161,10 @@ dotnet_analyzer_diagnostic.severity = warning
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/language-rules#net-style-rules
 [*.{cs,csx,cake,vb,vbx}]
 # "this." and "Me." qualifiers
-dotnet_style_qualification_for_field = true:warning
-dotnet_style_qualification_for_property = true:warning
-dotnet_style_qualification_for_method = true:warning
-dotnet_style_qualification_for_event = true:warning
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
 # Language keywords instead of framework type names for type references
 dotnet_style_predefined_type_for_locals_parameters_members = true:warning
 dotnet_style_predefined_type_for_member_access = true:warning
@@ -212,8 +214,8 @@ csharp_style_var_for_built_in_types = true:warning
 csharp_style_var_when_type_is_apparent = true:warning
 csharp_style_var_elsewhere = true:warning
 # Expression-bodied members
-csharp_style_expression_bodied_methods = true:warning
-csharp_style_expression_bodied_constructors = true:warning
+csharp_style_expression_bodied_methods = false:warning
+csharp_style_expression_bodied_constructors = false:warning
 csharp_style_expression_bodied_operators = true:warning
 csharp_style_expression_bodied_properties = true:warning
 csharp_style_expression_bodied_indexers = true:warning
@@ -339,6 +341,9 @@ csharp_preserve_single_line_blocks = true
 
 # camel_case_style - Define the camelCase style
 dotnet_naming_style.camel_case_style.capitalization = camel_case
+# underscore_camel_case_style - private readonly fields must be camelCase and the first character must be a '_'
+dotnet_naming_style.underscore_camel_case_style.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case_style.required_prefix = _
 # pascal_case_style - Define the PascalCase style
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 # first_upper_style - The first character must start with an upper-case character
@@ -422,6 +427,15 @@ dotnet_naming_symbols.stylecop_fields_must_be_private_group.applicable_kinds = f
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.symbols = stylecop_fields_must_be_private_group
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.style = disallowed_style
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.severity = error
+
+# Private readonly fields must be camelCase
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1306.md
+dotnet_naming_symbols.stylecop_private_readonly_fields_group.applicable_accessibilities = private
+dotnet_naming_symbols.stylecop_private_readonly_fields_group.required_modifiers = readonly
+dotnet_naming_symbols.stylecop_private_readonly_fields_group.applicable_kinds = field
+dotnet_naming_rule.stylecop_private_readonly_fields_must_be_camel_case_rule.symbols = stylecop_private_readonly_fields_group
+dotnet_naming_rule.stylecop_private_readonly_fields_must_be_camel_case_rule.style = underscore_camel_case_style
+dotnet_naming_rule.stylecop_private_readonly_fields_must_be_camel_case_rule.severity = warning
 
 # Private fields must be camelCase
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1306.md

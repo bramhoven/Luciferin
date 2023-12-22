@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Luciferin.Website.Controllers;
 
+using Application.UseCases.Accounts.Delete;
+
 [Route("configuration")]
 public class ConfigurationController : Controller
 {
@@ -54,7 +56,6 @@ public class ConfigurationController : Controller
             Path = "/configuration",
             Port = forwardHeaderPort ?? Request.Host.Port ?? 80
         }.ToString();
-        //var requisition = await _importManager.AddNewBank(formModel.InstitutionId, formModel.BankName, returnUrl);
 
         var requestConnectionAccountCommand = new RequestConnectionAccountCommand(formModel.BankName, formModel.InstitutionId, returnUrl);
         var redirectUrl = await _mediator.Send(requestConnectionAccountCommand);
@@ -72,7 +73,9 @@ public class ConfigurationController : Controller
         if (string.IsNullOrWhiteSpace(requisitionId))
             return RedirectToAction("Index", "Configuration");
 
-        await _importManager.DeleteBank(requisitionId);
+        var deleteAccountCommand = new DeleteAccountCommand(requisitionId);
+        await _mediator.Send(deleteAccountCommand);
+
 
         return RedirectToAction("Index", "Configuration");
     }

@@ -3,30 +3,36 @@ namespace Luciferin.Infrastructure.GoCardless;
 using Abstractions;
 using Application.Abstractions.Providers;
 using Core.Entities;
-using Flurl.Http;
 
 public sealed class GoCardlessAccountProvider : IAccountProvider
 {
     private readonly IGoCardlessService _goCardlessService;
 
-    public GoCardlessAccountProvider(IGoCardlessService goCardlessService) => this._goCardlessService = goCardlessService;
+    public GoCardlessAccountProvider(IGoCardlessService goCardlessService)
+    {
+        _goCardlessService = goCardlessService;
+    }
 
-    public Task<Account> GetByIdAsync(int id) => throw new NotImplementedException();
+    public Task<Account> GetByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 
-    public Task<List<Account>> GetAllAsync() => throw new NotImplementedException();
+    public Task<List<Account>> GetAllAsync()
+    {
+        throw new NotImplementedException();
+    }
 
     public async Task<string> RequestNewAccountConnection(string name, string institutionId, string returnUrl)
     {
-        try
-        {
-            var institution = await this._goCardlessService.GetInstitution(institutionId);
-            var endUserAgreement = await this._goCardlessService.CreateEndUserAgreement(institution);
-            var requisition = await this._goCardlessService.CreateRequisition(institution, name, endUserAgreement, returnUrl);
-            return requisition.Link;
-        }
-        catch (FlurlHttpException e)
-        {
-            return null;
-        }
+        var institution = await _goCardlessService.GetInstitutionAsync(institutionId);
+        var endUserAgreement = await _goCardlessService.CreateEndUserAgreementAsync(institution);
+        var requisition = await _goCardlessService.CreateRequisitionAsync(institution, name, endUserAgreement, returnUrl);
+        return requisition.Link;
+    }
+
+    public async Task<bool> DeleteAccount(string accountId)
+    {
+        return await _goCardlessService.DeleteRequisitionAsync(accountId);
     }
 }

@@ -5,31 +5,31 @@ namespace Luciferin.Infrastructure.GoCardless.Abstractions;
 
 public interface IGoCardlessService
 {
-    Task<EndUserAgreement> CreateEndUserAgreement(Institution institution);
+    Task<EndUserAgreement> CreateEndUserAgreementAsync(Institution institution);
 
-    Task<Requisition> CreateRequisition(Institution institution, string name, EndUserAgreement endUserAgreement, string returnUrl);
+    Task<Requisition> CreateRequisitionAsync(Institution institution, string name, EndUserAgreement endUserAgreement, string returnUrl);
 
-    Task<bool> DeleteEndUserAgreement(string endUserAgreementId);
+    Task<bool> DeleteEndUserAgreementAsync(string endUserAgreementId);
 
-    Task<bool> DeleteRequisition(string requisitionId);
+    Task<bool> DeleteRequisitionAsync(string requisitionId);
 
-    Task<Account> GetAccount(string accountId);
+    Task<Account> GetAccountAsync(string accountId);
 
-    Task<ICollection<Balance>> GetAccountBalance(string accountId);
+    Task<ICollection<Balance>> GetAccountBalanceAsync(string accountId);
 
-    Task<AccountDetails> GetAccountDetails(string accountId);
+    Task<AccountDetails> GetAccountDetailsAsync(string accountId);
 
-    Task<ICollection<Transaction>> GetAccountTransactions(string accountId);
+    Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId);
 
-    Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate);
+    Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate);
 
-    Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId);
+    Task<EndUserAgreement> GetEndUserAgreementAsync(string endUserAgreementId);
 
-    Task<Institution> GetInstitution(string institutionId);
+    Task<Institution> GetInstitutionAsync(string institutionId);
 
-    Task<ICollection<Institution>> GetInstitutions(string countryCode);
+    Task<ICollection<Institution>> GetInstitutionsAsync(string countryCode);
 
-    Task<Requisition> GetRequisition(string requisitionId);
+    Task<Requisition> GetRequisitionAsync(string requisitionId);
 
-    Task<ICollection<Requisition>> GetRequisitions();
+    Task<ICollection<Requisition>> GetRequisitionsAsync();
 }

@@ -19,4 +19,9 @@ public class MockAccountProvider : IAccountProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<bool> DeleteAccount(string accountId)
+    {
+        throw new NotImplementedException();
+    }
 }

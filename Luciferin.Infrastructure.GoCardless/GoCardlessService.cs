@@ -20,7 +20,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<EndUserAgreement> CreateEndUserAgreement(Institution institution)
+    public async Task<EndUserAgreement> CreateEndUserAgreementAsync(Institution institution)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -42,7 +42,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Requisition> CreateRequisition(Institution institution, string name,
+    public async Task<Requisition> CreateRequisitionAsync(Institution institution, string name,
         EndUserAgreement endUserAgreement, string returnUrl)
     {
         CheckConfiguration();
@@ -65,7 +65,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<bool> DeleteEndUserAgreement(string endUserAgreementId)
+    public async Task<bool> DeleteEndUserAgreementAsync(string endUserAgreementId)
     {
         try
         {
@@ -85,7 +85,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<bool> DeleteRequisition(string requisitionId)
+    public async Task<bool> DeleteRequisitionAsync(string requisitionId)
     {
         try
         {
@@ -105,7 +105,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Account> GetAccount(string accountId)
+    public async Task<Account> GetAccountAsync(string accountId)
     {
         try
         {
@@ -128,7 +128,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Balance>> GetAccountBalance(string accountId)
+    public async Task<ICollection<Balance>> GetAccountBalanceAsync(string accountId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -141,7 +141,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<AccountDetails> GetAccountDetails(string accountId)
+    public async Task<AccountDetails> GetAccountDetailsAsync(string accountId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -154,7 +154,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId)
+    public async Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -167,7 +167,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Transaction>> GetAccountTransactions(string accountId, DateTime fromDate)
+    public async Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -181,7 +181,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<EndUserAgreement> GetEndUserAgreement(string endUserAgreementId)
+    public async Task<EndUserAgreement> GetEndUserAgreementAsync(string endUserAgreementId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -194,7 +194,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Institution> GetInstitution(string institutionId)
+    public async Task<Institution> GetInstitutionAsync(string institutionId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -207,7 +207,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Institution>> GetInstitutions(string countryCode)
+    public async Task<ICollection<Institution>> GetInstitutionsAsync(string countryCode)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -221,7 +221,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Requisition> GetRequisition(string requisitionId)
+    public async Task<Requisition> GetRequisitionAsync(string requisitionId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -234,7 +234,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Requisition>> GetRequisitions()
+    public async Task<ICollection<Requisition>> GetRequisitionsAsync()
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
