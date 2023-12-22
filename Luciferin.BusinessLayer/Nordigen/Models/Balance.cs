@@ -1,21 +1,20 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models
+using System;
+using System.Text.Json.Serialization;
+
+public class Balance
 {
-    public class Balance
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("balanceAmount")]
-        public BalanceAmount BalanceAmount { get; set; }
+    [JsonPropertyName("balanceAmount")]
+    public BalanceAmount BalanceAmount { get; set; }
 
-        [JsonProperty("balanceType")]
-        public string BalanceType { get; set; }
+    [JsonPropertyName("balanceType")]
+    public string BalanceType { get; set; }
 
-        [JsonProperty("lastChangeDateTime")]
-        public DateTime LastChangeDateTime { get; set; }
+    [JsonPropertyName("lastChangeDateTime")]
+    public DateTime LastChangeDateTime { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

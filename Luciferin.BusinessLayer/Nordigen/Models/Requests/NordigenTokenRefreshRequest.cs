@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Requests;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Requests
+using System.Text.Json.Serialization;
+
+public class NordigenTokenRefreshRequest
 {
-    public class NordigenTokenRefreshRequest
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("refresh")]
-        public string Refresh { get; set; }
+    [JsonPropertyName("refresh")]
+    public string Refresh { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

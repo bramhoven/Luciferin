@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+public class NordigenAccountBalanceResponse
 {
-    public class NordigenAccountBalanceResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("balances")]
-        public ICollection<NordigenAccountBalance> Balances { get; set; }
+    [JsonPropertyName("balances")]
+    public ICollection<NordigenAccountBalance> Balances { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

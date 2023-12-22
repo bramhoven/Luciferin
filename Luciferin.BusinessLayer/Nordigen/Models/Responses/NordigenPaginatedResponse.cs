@@ -1,24 +1,23 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+public class NordigenPaginatedResponse<TNordigenData>
 {
-    public class NordigenPaginatedResponse<TNordigenData>
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("count")]
-        public int Count { get; set; }
+    [JsonPropertyName("count")]
+    public int Count { get; set; }
 
-        [JsonProperty("next")]
-        public string Next { get; set; }
+    [JsonPropertyName("next")]
+    public string Next { get; set; }
 
-        [JsonProperty("previous")]
-        public string Previous { get; set; }
+    [JsonPropertyName("previous")]
+    public string Previous { get; set; }
 
-        [JsonProperty("results")]
-        public ICollection<TNordigenData> Results { get; set; }
+    [JsonPropertyName("results")]
+    public ICollection<TNordigenData> Results { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

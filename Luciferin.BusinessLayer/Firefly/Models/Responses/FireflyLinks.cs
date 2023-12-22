@@ -1,20 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses
+using System.Text.Json.Serialization;
+
+public class FireflyLinks
 {
-    public class FireflyLinks
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("first")]
-        public string First { get; set; }
+    [JsonPropertyName("first")]
+    public string First { get; set; }
 
-        [JsonProperty("last")]
-        public string Last { get; set; }
+    [JsonPropertyName("last")]
+    public string Last { get; set; }
 
-        [JsonProperty("self")]
-        public string Self { get; set; }
+    [JsonPropertyName("self")]
+    public string Self { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

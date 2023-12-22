@@ -1,34 +1,33 @@
-﻿using System;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
+
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+public class NordigenEndUserAgreementResponse
 {
-    public class NordigenEndUserAgreementResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("accepted")]
-        public DateTime? Accepted { get; set; }
+    [JsonPropertyName("accepted")]
+    public DateTime? Accepted { get; set; }
 
-        [JsonProperty("access_scope")]
-        public List<string> AccessScope { get; set; }
+    [JsonPropertyName("access_scope")]
+    public List<string> AccessScope { get; set; }
 
-        [JsonProperty("access_valid_for_days")]
-        public int AccessValidForDays { get; set; }
+    [JsonPropertyName("access_valid_for_days")]
+    public int AccessValidForDays { get; set; }
 
-        [JsonProperty("created")]
-        public DateTime Created { get; set; }
+    [JsonPropertyName("created")]
+    public DateTime Created { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
-        [JsonProperty("institution_id")]
-        public string InstitutionId { get; set; }
+    [JsonPropertyName("institution_id")]
+    public string InstitutionId { get; set; }
 
-        [JsonProperty("max_historical_days")]
-        public int MaxHistoricalDays { get; set; }
+    [JsonPropertyName("max_historical_days")]
+    public int MaxHistoricalDays { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

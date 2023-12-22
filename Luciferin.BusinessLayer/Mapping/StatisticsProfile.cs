@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Luciferin.BusinessLayer.Import.Models;
-using Luciferin.DataLayer.Storage.Entities;
+using Luciferin.Infrastructure.Storage.Entities;
 
 namespace Luciferin.BusinessLayer.Mapping
 {

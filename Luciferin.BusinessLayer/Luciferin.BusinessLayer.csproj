@@ -8,18 +8,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="11.0.1" />
-      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-      <PackageReference Include="Flurl.Http" Version="3.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.2.23128.3" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-      <PackageReference Include="NLog" Version="5.0.0-rc2" />
-      <PackageReference Include="Quartz" Version="3.3.3" />
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Flurl.Http" Version="4.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.2.23128.3"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0"/>
+        <PackageReference Include="NLog" Version="5.0.0-rc2"/>
+        <PackageReference Include="Quartz" Version="3.3.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj" />
-      <ProjectReference Include="..\Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj" />
+        <ProjectReference Include="..\Luciferin.Infrastructure.Mail\Luciferin.Infrastructure.Mail.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Storage\Luciferin.Infrastructure.Storage.csproj"/>
     </ItemGroup>
 
 </Project>

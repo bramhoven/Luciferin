@@ -1,18 +1,17 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses
+using System;
+using System.Text.Json.Serialization;
+
+public class FireflyAttributesBase
 {
-    public class FireflyAttributesBase
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+    [JsonPropertyName("updated_at")]
+    public DateTime UpdatedAt { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

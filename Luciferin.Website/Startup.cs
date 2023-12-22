@@ -1,5 +1,9 @@
 using System;
 using System.Linq;
+using Luciferin.Application.Abstractions.Providers;
+using Luciferin.Application.Abstractions.Repositories;
+using Luciferin.Application.Abstractions.Stores;
+using Luciferin.Application.Extensions;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Configuration.Interfaces;
 using Luciferin.BusinessLayer.Converters.Helper;
@@ -19,11 +23,19 @@ using Luciferin.BusinessLayer.ServiceBus;
 using Luciferin.BusinessLayer.Settings;
 using Luciferin.BusinessLayer.Settings.Enums;
 using Luciferin.BusinessLayer.Settings.Stores;
-using Luciferin.DataLayer.Mail;
-using Luciferin.DataLayer.Storage;
-using Luciferin.DataLayer.Storage.Context;
-using Luciferin.DataLayer.Storage.Mysql;
-using Luciferin.DataLayer.Storage.Postgres;
+using Luciferin.Core.Abstractions.Services;
+using Luciferin.Core.Services;
+using Luciferin.Infrastructure.Firefly;
+using Luciferin.Infrastructure.Mail;
+using Luciferin.Infrastructure.Mocks;
+using Luciferin.Infrastructure.Mocks.Providers;
+using Luciferin.Infrastructure.Mocks.Services;
+using Luciferin.Infrastructure.GoCardless.Extensions;
+using Luciferin.Infrastructure.Storage;
+using Luciferin.Infrastructure.Storage.Context;
+using Luciferin.Infrastructure.Storage.Mysql;
+using Luciferin.Infrastructure.Storage.Postgres;
+using Luciferin.Website.Classes.Extensions;
 using Luciferin.Website.Classes.Logger;
 using Luciferin.Website.Classes.Queue;
 using Luciferin.Website.Classes.ServiceBus;
@@ -36,7 +48,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using NLog;
 using Quartz;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -108,23 +119,25 @@ public class Startup
         services.AddSignalR();
         services.AddRouting(o => o.LowercaseUrls = true);
 
-        services.Configure<LuciferinSettings>(Configuration.GetSection("Luciferin"));
-        services.Configure<MailSettings>(Configuration.GetSection("Mail"));
-
         services.TryAddSingleton(typeof(ICompositeLogger<>), typeof(HubLogger<>));
+        services.TryAddSingleton(typeof(Core.Abstractions.ICompositeLogger<>), typeof(CoreHubLogger<>));
 
         services.AddScoped<IServiceBus, HubServiceBus>();
+        services.AddScoped<Application.Abstractions.IServiceBus, CoreHubServiceBus>();
 
         services.AddHostedService<QueuedHostedService>();
-        services.AddSingleton<IBackgroundTaskQueue>(ctx => new BackgroundTaskQueue(1));
+        services.AddSingleton<IBackgroundTaskQueue>(new BackgroundTaskQueue(1));
 
         services.AddScoped<ConverterHelper>();
         services.AddScoped<AccountMapper>();
         services.AddScoped<TransactionMapper>();
 
-        services.AddMappers();
+        services.AddTransient<IAccountFilterService, MockAccountFilterService>();
+        services.AddTransient<ITransactionFilterService, DuplicateTransactionFilterService>();
 
-        ConfigureStorage(services);
+        services.AddMappers();
+        
+        services.AddStorage(Configuration, LuciferinSettings);
 
         ConfigureDataLayers(services);
         ConfigureStores(services);
@@ -132,7 +145,11 @@ public class Startup
         ConfigureManagers(services);
         ConfigureNotifications(services);
 
-        ConfigureQuartz(services);
+        services.AddApplicationLayer();
+        services.AddGoCardless();
+        services.AddSettings(Configuration);
+
+        services.AddQuartzJobs();
     }
 
     private void ConfigureNotifications(IServiceCollection services)
@@ -153,69 +170,6 @@ public class Startup
         });
     }
 
-    private void ConfigureQuartz(IServiceCollection services)
-    {
-        services.AddQuartz(q =>
-        {
-            q.UseMicrosoftDependencyInjectionJobFactory();
-            
-            var checkRequisitionExpirationKey = new JobKey("CheckRequisitionExpirationJob");
-            q.AddJob<CheckRequisitionExpirationJob>(opts => opts.WithIdentity(checkRequisitionExpirationKey));
-            q.AddTrigger(opts => opts
-                .ForJob(checkRequisitionExpirationKey)
-                .WithIdentity("CheckRequisitionExpirationJob-Trigger")
-                .WithCronSchedule("0 0 0 * * ?"));
-            
-            #if DEBUG
-            var checkRequisitionExpirationImmediateKey = new JobKey("CheckRequisitionExpirationImmediateJob");
-            q.AddJob<CheckRequisitionExpirationJob>(opts => opts.WithIdentity(checkRequisitionExpirationImmediateKey).StoreDurably());
-            q.AddTrigger(opts => opts
-                .ForJob(checkRequisitionExpirationKey)
-                .WithIdentity("CheckRequisitionExpirationImmediateJob-Trigger")
-                .WithSimpleSchedule()
-                .StartNow());
-            #endif
-            
-            var importJobKey = new JobKey("ImportJob");
-            q.AddJob<ImportJob>(opts => opts.WithIdentity(importJobKey));
-            q.AddTrigger(opts => opts
-                .ForJob(importJobKey)
-                .WithIdentity("ImportJob-Trigger")
-                .WithCronSchedule("0 0 */1 * * ?"));
-        });
-        services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
-    }
-
-    private void ConfigureStorage(IServiceCollection services)
-    {
-        var connectionString = Configuration.GetConnectionString("Luciferin");
-        switch (LuciferinSettings.StorageProvider)
-        {
-            case "mysql":
-                var version = ServerVersion.AutoDetect(connectionString);
-                services.AddDbContext<StorageContext>(options =>
-                {
-                    options
-                        .UseMySql(connectionString, version, ctx => ctx.MigrationsAssembly(typeof(MysqlMigrations).Assembly.FullName))
-                        .LogTo(Console.WriteLine, LogLevel.Information)
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors();
-                });
-                break;
-            case "postgres":
-                services.AddDbContext<StorageContext>(options =>
-                {
-                    options
-                        .UseNpgsql(connectionString, ctx => ctx.MigrationsAssembly(typeof(PostgresMigrations).Assembly.FullName))
-                        .LogTo(Console.WriteLine, LogLevel.Information)
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors();
-                });
-                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-                break;
-        }
-    }
-
     private void ConfigureStores(IServiceCollection services)
     {
         services.AddScoped<ISettingsStore, StorageSettingStore>();
@@ -223,6 +177,9 @@ public class Startup
 
         services.AddScoped<INordigenStore, NordigenStore>();
         services.AddScoped<IFireflyStore, FireflyStore>();
+
+        services.AddScoped<IAccountStore, FireflyAccountStore>();
+        services.AddScoped<IAccountProvider, MockAccountProvider>();
     }
 
     private void MigrateAndSeedDatabases(IApplicationBuilder app)

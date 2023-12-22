@@ -1,23 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Requests;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Requests
+using System.Text.Json.Serialization;
+
+public class NordigenRequisitionRequest
 {
-    public class NordigenRequisitionRequest
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("agreement")]
-        public string AgreementId { get; set; }
+    [JsonPropertyName("agreement")]
+    public string AgreementId { get; set; }
 
-        [JsonProperty("institution_id")]
-        public string InstitutionId { get; set; }
+    [JsonPropertyName("institution_id")]
+    public string InstitutionId { get; set; }
 
-        [JsonProperty("redirect")]
-        public string RedirectUrl { get; set; }
+    [JsonPropertyName("redirect")]
+    public string RedirectUrl { get; set; }
 
-        [JsonProperty("reference")]
-        public string Reference { get; set; }
+    [JsonPropertyName("reference")]
+    public string Reference { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

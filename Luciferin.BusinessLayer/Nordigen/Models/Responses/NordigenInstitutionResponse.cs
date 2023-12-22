@@ -3,26 +3,29 @@ using Newtonsoft.Json;
 
 namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
 {
+    using System.Text.Json.Serialization;
+
     public class NordigenInstitutionResponse
     {
         #region Properties
 
-        [JsonProperty("bic")]
+        [JsonPropertyName("bic")]
         public string Bic { get; set; }
 
-        [JsonProperty("countries")]
+        [JsonPropertyName("countries")]
         public ICollection<string> Countries { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("logo")]
+        [JsonPropertyName("logo")]
         public string Logo { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("transaction_total_days")]
+        [JsonPropertyName("transaction_total_days")]
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public int TransactionTotalDays { get; set; }
 
         #endregion

@@ -26,9 +26,9 @@ namespace Luciferin.BusinessLayer.Nordigen.Stores
 
         public NordigenStore(ISettingsManager settingsManager)
         {
-            _nordigenBaseUrl = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenBaseUrlKey).Value;
-            _nordigenSecretId = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretIdKey).Value;
-            _nordigenSecretKey = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKeyKey).Value;
+            _nordigenBaseUrl = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.GoCardlessBaseUrlKey).Value;
+            _nordigenSecretId = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.GoCardlessSecretIdKey).Value;
+            _nordigenSecretKey = settingsManager.GetSetting<StringSetting>(SettingKeyConstants.GoCardlessSecretKeyKey).Value;
         }
 
         #endregion

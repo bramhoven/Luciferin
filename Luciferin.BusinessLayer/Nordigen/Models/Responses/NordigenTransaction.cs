@@ -1,45 +1,44 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System;
+using System.Text.Json.Serialization;
+
+public class NordigenTransaction
 {
-    public class NordigenTransaction
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("bankTransactionCode")]
-        public string BankTransactionCode { get; set; }
+    [JsonPropertyName("bankTransactionCode")]
+    public string BankTransactionCode { get; set; }
 
-        [JsonProperty("bookingDate")]
-        public DateTime BookingDate { get; set; }
+    [JsonPropertyName("bookingDate")]
+    public DateTime BookingDate { get; set; }
 
-        [JsonProperty("creditorAccount")]
-        public NordigenCreditorAccount CreditorAccount { get; set; }
+    [JsonPropertyName("creditorAccount")]
+    public NordigenCreditorAccount CreditorAccount { get; set; }
 
-        [JsonProperty("creditorName")]
-        public string CreditorName { get; set; }
+    [JsonPropertyName("creditorName")]
+    public string CreditorName { get; set; }
 
-        [JsonProperty("debtorAccount")]
-        public NordigenCreditorAccount DebtorAccount { get; set; }
+    [JsonPropertyName("debtorAccount")]
+    public NordigenCreditorAccount DebtorAccount { get; set; }
 
-        [JsonProperty("DebtorName")]
-        public string DebtorName { get; set; }
+    [JsonPropertyName("DebtorName")]
+    public string DebtorName { get; set; }
 
-        [JsonProperty("entryReference")]
-        public string EntryReference { get; set; }
+    [JsonPropertyName("entryReference")]
+    public string EntryReference { get; set; }
 
-        [JsonProperty("remittanceInformationUnstructured")]
-        public string RemittanceInformationUnstructured { get; set; }
+    [JsonPropertyName("remittanceInformationUnstructured")]
+    public string RemittanceInformationUnstructured { get; set; }
 
-        [JsonProperty("transactionAmount")]
-        public TransactionAmount TransactionAmount { get; set; }
+    [JsonPropertyName("transactionAmount")]
+    public TransactionAmount TransactionAmount { get; set; }
 
-        [JsonProperty("transactionId")]
-        public string TransactionId { get; set; }
+    [JsonPropertyName("transactionId")]
+    public string TransactionId { get; set; }
 
-        [JsonProperty("valueDate")]
-        public DateTime ValueDate { get; set; }
+    [JsonPropertyName("valueDate")]
+    public DateTime ValueDate { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

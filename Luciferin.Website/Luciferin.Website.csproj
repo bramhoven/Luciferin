@@ -1,70 +1,74 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId>81005d1a-cb69-4ae6-bee8-453a41ae3de2</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <NoWarn>Undefined</NoWarn>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <UserSecretsId>81005d1a-cb69-4ae6-bee8-453a41ae3de2</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <NoWarn>Undefined</NoWarn>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-    <PackageReference Include="NLog" Version="5.0.0-rc2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-    <PackageReference Include="Quartz" Version="3.3.3" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
-    <PackageReference Include="R4Mvc" Version="1.0.0-alpha2-00395" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1"/>
+        <PackageReference Include="NLog" Version="5.0.0-rc2"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4"/>
+        <PackageReference Include="Quartz" Version="3.3.3"/>
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3"/>
+        <PackageReference Include="R4Mvc" Version="1.0.0-alpha2-00395"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Configuration\Index.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Error.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Index.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Privacy.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\_ViewImports.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\_ViewStart.cshtml" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
-  </ItemGroup>
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Pages\Configuration\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Pages\Error.cshtml"/>
+        <_ContentIncludedByDefault Remove="Pages\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Pages\Privacy.cshtml"/>
+        <_ContentIncludedByDefault Remove="Pages\_ViewImports.cshtml"/>
+        <_ContentIncludedByDefault Remove="Pages\_ViewStart.cshtml"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj" />
-    <ProjectReference Include="..\Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj" />
-    <ProjectReference Include="..\Luciferin.DataLayer.Storage.Mysql\Luciferin.DataLayer.Storage.Mysql.csproj" />
-    <ProjectReference Include="..\Luciferin.DataLayer.Storage.Postgres\Luciferin.DataLayer.Storage.Postgres.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Firefly\Luciferin.Infrastructure.Firefly.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Mail\Luciferin.Infrastructure.Mail.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Mocks\Luciferin.Infrastructure.Mocks.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.GoCardless\Luciferin.Infrastructure.GoCardless.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Storage.Mysql\Luciferin.Infrastructure.Storage.Mysql.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Storage.Postgres\Luciferin.Infrastructure.Storage.Postgres.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.Development.json">
-      <DependentUpon>appsettings.json</DependentUpon>
-    </Content>
-    <Content Remove="tools\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Update="appsettings.Development.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+        <Content Remove="tools\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="tools\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="tools\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Remove="tools\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Remove="tools\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="tools\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="tools\**"/>
+    </ItemGroup>
 
 </Project>

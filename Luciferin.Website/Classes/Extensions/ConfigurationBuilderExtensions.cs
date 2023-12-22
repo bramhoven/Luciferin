@@ -1,7 +1,7 @@
 ﻿using System;
 using Luciferin.BusinessLayer.Configuration;
 using Luciferin.BusinessLayer.Settings;
-using Luciferin.DataLayer.Storage.Context;
+using Luciferin.Infrastructure.Storage.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

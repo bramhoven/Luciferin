@@ -14,7 +14,7 @@ const handleImportMessageEvent = (time, message) => {
 
 const handleImportTransactionEvent = (transaction, successful, fireflyUrl) => {
     let transactionList = document.getElementById("transaction-list")
-    
+
     let card = document.createElement("div");
     card.className = transactionList.childElementCount === 0 ? "card" : "card mb-4";
 
@@ -35,13 +35,13 @@ const handleImportTransactionEvent = (transaction, successful, fireflyUrl) => {
     let cardText = document.createElement("p");
     cardText.className = "card-text";
     cardText.innerHTML = converter.makeHtml(transaction.notes.replaceAll("#", "####"));
-    
+
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardSubTitle);
     cardBody.appendChild(cardText);
     card.appendChild(cardBody);
-    
-    if(successful) {
+
+    if (successful) {
         let fireflyLink = document.createElement("a");
         fireflyLink.className = "card-link";
         fireflyLink.href = fireflyUrl;

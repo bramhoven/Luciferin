@@ -19,11 +19,11 @@ public class PlatformSettings
 
     public IntegerSetting ImportDays { get; set; }
 
-    public StringSetting NordigenBaseUrl { get; set; }
+    public StringSetting GoCardlessBaseUrl { get; set; }
 
-    public StringSetting NordigenSecretId { get; set; }
+    public StringSetting GoCardlessSecretId { get; set; }
 
-    public StringSetting NordigenSecretKey { get; set; }
+    public StringSetting GoCardlessSecretKey { get; set; }
     
     public StringSetting NotificationEmail { get; set; }
 
@@ -42,8 +42,8 @@ public class PlatformSettings
 
     public ICollection<ISetting> Settings => new List<ISetting>
     {
-        AutomaticImport, ExtendedNotes, FireflyAccessToken, FireflyUrl, ImportDays, NordigenBaseUrl, NordigenSecretId,
-        NordigenSecretKey, FilterAuthorisations, NotificationEmail, FromEmail, Host, Port, Username, Password, EnableSsl
+        AutomaticImport, ExtendedNotes, FireflyAccessToken, FireflyUrl, ImportDays, GoCardlessBaseUrl, GoCardlessSecretId,
+        GoCardlessSecretKey, FilterAuthorisations, NotificationEmail, FromEmail, Host, Port, Username, Password, EnableSsl
     };
 
     #endregion

@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
-using Luciferin.BusinessLayer.Firefly.Models.Shared;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses.Transactions;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses.Transactions
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Shared;
+
+public class FireflyTransactionAttributes : FireflyAttributesBase
 {
-    public class FireflyTransactionAttributes : FireflyAttributesBase
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("group_title")]
-        public string GroupTitle { get; set; }
+    [JsonPropertyName("group_title")]
+    public string GroupTitle { get; set; }
 
-        [JsonProperty("transactions")]
-        public ICollection<FireflyApiTransaction> Transactions { get; set; }
+    [JsonPropertyName("transactions")]
+    public ICollection<FireflyApiTransaction> Transactions { get; set; }
 
-        [JsonProperty("user")]
-        public string User { get; set; }
+    [JsonPropertyName("user")]
+    public string User { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

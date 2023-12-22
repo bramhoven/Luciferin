@@ -1,49 +1,48 @@
-﻿using System;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
+
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+public class NordigenRequisitionResponse
 {
-    public class NordigenRequisitionResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("accounts")]
-        public List<string> Accounts { get; set; }
+    [JsonPropertyName("accounts")]
+    public List<string> Accounts { get; set; }
 
-        [JsonProperty("account_selection")]
-        public bool AccountSelection { get; set; }
+    [JsonPropertyName("account_selection")]
+    public bool AccountSelection { get; set; }
 
-        [JsonProperty("agreement")]
-        public string Agreement { get; set; }
+    [JsonPropertyName("agreement")]
+    public string Agreement { get; set; }
 
-        [JsonProperty("created")]
-        public DateTime Created { get; set; }
+    [JsonPropertyName("created")]
+    public DateTime Created { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
-        [JsonProperty("institution_id")]
-        public string InstitutionId { get; set; }
+    [JsonPropertyName("institution_id")]
+    public string InstitutionId { get; set; }
 
-        [JsonProperty("link")]
-        public string Link { get; set; }
+    [JsonPropertyName("link")]
+    public string Link { get; set; }
 
-        [JsonProperty("redirect")]
-        public string Redirect { get; set; }
+    [JsonPropertyName("redirect")]
+    public string Redirect { get; set; }
 
-        [JsonProperty("reference")]
-        public string Reference { get; set; }
+    [JsonPropertyName("reference")]
+    public string Reference { get; set; }
 
-        [JsonProperty("ssn")]
-        public string Ssn { get; set; }
+    [JsonPropertyName("ssn")]
+    public string Ssn { get; set; }
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
 
-        [JsonProperty("user_language")]
-        public string UserLanguage { get; set; }
+    [JsonPropertyName("user_language")]
+    public string UserLanguage { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

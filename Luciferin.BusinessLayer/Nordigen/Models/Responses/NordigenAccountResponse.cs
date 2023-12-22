@@ -1,30 +1,29 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System;
+using System.Text.Json.Serialization;
+
+public class NordigenAccountResponse
 {
-    public class NordigenAccountResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("created")]
-        public DateTime Created { get; set; }
+    [JsonPropertyName("created")]
+    public DateTime Created { get; set; }
 
-        [JsonProperty("iban")]
-        public string Iban { get; set; }
+    [JsonPropertyName("iban")]
+    public string Iban { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
-        [JsonProperty("institution_id")]
-        public string InstitutionId { get; set; }
+    [JsonPropertyName("institution_id")]
+    public string InstitutionId { get; set; }
 
-        [JsonProperty("last_accessed")]
-        public DateTime LastAccessed { get; set; }
+    [JsonPropertyName("last_accessed")]
+    public DateTime LastAccessed { get; set; }
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

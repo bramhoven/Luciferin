@@ -1,36 +1,37 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Shared;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Shared
+using System;
+using System.Text.Json.Serialization;
+
+public class FireflyApiTag
 {
-    public class FireflyApiTag
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("created_at", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime Created { get; set; }
+    [JsonPropertyName("created_at")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DateTime Created { get; set; }
 
-        [JsonProperty("date")]
-        public DateTime Date { get; set; }
+    [JsonPropertyName("date")]
+    public DateTime Date { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonProperty("latitude")]
-        public long Latitude { get; set; }
+    [JsonPropertyName("latitude")]
+    public long Latitude { get; set; }
 
-        [JsonProperty("longitude")]
-        public double Longitude { get; set; }
+    [JsonPropertyName("longitude")]
+    public double Longitude { get; set; }
 
-        [JsonProperty("tag")]
-        public string Tag { get; set; }
+    [JsonPropertyName("tag")]
+    public string Tag { get; set; }
 
-        [JsonProperty("updated_at", NullValueHandling = NullValueHandling.Ignore)]
-        public string Updated { get; set; }
+    [JsonPropertyName("updated_at")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Updated { get; set; }
 
-        [JsonProperty("zoom_level")]
-        public int ZoomLevel { get; set; }
+    [JsonPropertyName("zoom_level")]
+    public int ZoomLevel { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

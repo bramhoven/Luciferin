@@ -7,15 +7,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Website", "Lucife
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.BusinessLayer", "Luciferin.BusinessLayer\Luciferin.BusinessLayer.csproj", "{D8EC5E39-F73A-4E46-8A20-4D503C9D2B5C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataLayer", "DataLayer", "{664C85F6-13E1-4DC4-9348-875A2BF19D22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Storage", "Luciferin.Infrastructure.Storage\Luciferin.Infrastructure.Storage.csproj", "{B8D96401-0160-4651-B7B7-D52532A8FA13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage", "Luciferin.DataLayer.Storage\Luciferin.DataLayer.Storage.csproj", "{B8D96401-0160-4651-B7B7-D52532A8FA13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Mail", "Luciferin.Infrastructure.Mail\Luciferin.Infrastructure.Mail.csproj", "{C9093248-6F10-4AF3-843A-A6EE045F7D19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Mail", "Luciferin.DataLayer.Mail\Luciferin.DataLayer.Mail.csproj", "{C9093248-6F10-4AF3-843A-A6EE045F7D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Storage.Postgres", "Luciferin.Infrastructure.Storage.Postgres\Luciferin.Infrastructure.Storage.Postgres.csproj", "{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage.Postgres", "Luciferin.DataLayer.Storage.Postgres\Luciferin.DataLayer.Storage.Postgres.csproj", "{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Storage.Mysql", "Luciferin.Infrastructure.Storage.Mysql\Luciferin.Infrastructure.Storage.Mysql.csproj", "{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.DataLayer.Storage.Mysql", "Luciferin.DataLayer.Storage.Mysql\Luciferin.DataLayer.Storage.Mysql.csproj", "{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{99D51DFE-1F07-4379-82D0-4AA5C4862050}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{36B53B95-249E-441C-A51E-0C12F4170DA3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5C4FFB8C-4949-4129-91F8-58FFC52D6106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Core", "Luciferin.Core\Luciferin.Core.csproj", "{7D12E5CA-DD4C-48D5-B649-8E7772EE7131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Application", "Luciferin.Application\Luciferin.Application.csproj", "{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Firefly", "Luciferin.Infrastructure.Firefly\Luciferin.Infrastructure.Firefly.csproj", "{DE7BC3A9-BFF4-4807-859E-541ADA84EF98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Mocks", "Luciferin.Infrastructure.Mocks\Luciferin.Infrastructure.Mocks.csproj", "{E23FA6A7-D823-40FD-8089-97D3640B02CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.GoCardless", "Luciferin.Infrastructure.GoCardless\Luciferin.Infrastructure.GoCardless.csproj", "{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,17 +61,42 @@ Global
 		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D12E5CA-DD4C-48D5-B649-8E7772EE7131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D12E5CA-DD4C-48D5-B649-8E7772EE7131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D12E5CA-DD4C-48D5-B649-8E7772EE7131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D12E5CA-DD4C-48D5-B649-8E7772EE7131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23FA6A7-D823-40FD-8089-97D3640B02CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E23FA6A7-D823-40FD-8089-97D3640B02CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E23FA6A7-D823-40FD-8089-97D3640B02CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E23FA6A7-D823-40FD-8089-97D3640B02CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D12E5CA-DD4C-48D5-B649-8E7772EE7131} = {99D51DFE-1F07-4379-82D0-4AA5C4862050}
+		{C9093248-6F10-4AF3-843A-A6EE045F7D19} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{B8D96401-0160-4651-B7B7-D52532A8FA13} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{1C7FBF80-CC54-478C-BC7C-0D4739A8FD66} = {36B53B95-249E-441C-A51E-0C12F4170DA3}
+		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{E23FA6A7-D823-40FD-8089-97D3640B02CD} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D6D9889-2DD8-404C-BD61-F37FAF67D6FD}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B8D96401-0160-4651-B7B7-D52532A8FA13} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
-		{C9093248-6F10-4AF3-843A-A6EE045F7D19} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
-		{D836FF77-8AC1-4C3D-B630-C3EA98DDF3C7} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
-		{3EF22025-7EB7-4CD4-A0DC-A2D8BC07DDC2} = {664C85F6-13E1-4DC4-9348-875A2BF19D22}
 	EndGlobalSection
 EndGlobal

@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses
+using System.Text.Json.Serialization;
+
+public class FireflyMeta
 {
-    public class FireflyMeta
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("pagination")]
-        public FireflyPagination Pagination { get; set; }
+    [JsonPropertyName("pagination")]
+    public FireflyPagination Pagination { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

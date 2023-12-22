@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
-using Luciferin.BusinessLayer.Firefly.Models.Shared;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Requests;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Requests
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Shared;
+
+public class FireflyStoreTransactionsRequest
 {
-    public class FireflyStoreTransactionsRequest
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("apply_rules")]
-        public bool ApplyRules { get; set; }
+    [JsonPropertyName("apply_rules")]
+    public bool ApplyRules { get; set; }
 
-        [JsonProperty("error_if_duplicate_hash")]
-        public bool ErrorIfDuplicateHash { get; set; }
+    [JsonPropertyName("error_if_duplicate_hash")]
+    public bool ErrorIfDuplicateHash { get; set; }
 
-        [JsonProperty("fire_webhooks")]
-        public bool FireWebhooks { get; set; }
+    [JsonPropertyName("fire_webhooks")]
+    public bool FireWebhooks { get; set; }
 
-        [JsonProperty("group_title")]
-        public string GroupTitle { get; set; }
+    [JsonPropertyName("group_title")]
+    public string GroupTitle { get; set; }
 
-        [JsonProperty("transactions")]
-        public ICollection<FireflyApiTransaction> Transactions { get; set; }
+    [JsonPropertyName("transactions")]
+    public ICollection<FireflyApiTransaction> Transactions { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

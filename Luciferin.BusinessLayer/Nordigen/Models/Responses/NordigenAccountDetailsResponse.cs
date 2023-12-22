@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Text.Json.Serialization;
+
+public class NordigenAccountDetailsResponse
 {
-    public class NordigenAccountDetailsResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("account")]
-        public NordigenAccountDetails Account { get; set; }
+    [JsonPropertyName("account")]
+    public NordigenAccountDetails Account { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

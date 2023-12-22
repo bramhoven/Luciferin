@@ -2,8 +2,8 @@
 using System.Linq;
 using Luciferin.BusinessLayer.Settings.Models;
 using Luciferin.BusinessLayer.Settings.Stores;
-using Luciferin.DataLayer.Storage;
-using Luciferin.DataLayer.Storage.Context;
+using Luciferin.Infrastructure.Storage;
+using Luciferin.Infrastructure.Storage.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ValueType = Luciferin.BusinessLayer.Settings.Enums.ValueType;

@@ -183,7 +183,15 @@ namespace Luciferin.BusinessLayer.Nordigen
 
             await ValidateToken();
 
-            return await _store.GetInstitutions(countryCode, _openIdToken);
+            try
+            {
+
+                return await _store.GetInstitutions(countryCode, _openIdToken);
+            }
+            catch (FlurlHttpException e)
+            {
+                return null;
+            }
         }
 
         /// <inheritdoc />

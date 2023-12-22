@@ -6,7 +6,7 @@ internal static class SettingCategoryConstants
 
     internal const string Firefly = "Firefly";
 
-    internal const string Nordigen = "Nordigen";
+    internal const string GoCardless = "GoCardless";
 
     internal const string Mail = "Mail";
 }

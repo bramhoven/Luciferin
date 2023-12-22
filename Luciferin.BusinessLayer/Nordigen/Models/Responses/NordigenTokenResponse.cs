@@ -1,23 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Text.Json.Serialization;
+
+public class NordigenTokenResponse
 {
-    public class NordigenTokenResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("access")]
-        public string Access { get; set; }
+    [JsonPropertyName("access")]
+    public string Access { get; set; }
 
-        [JsonProperty("access_expires")]
-        public int AccessExpires { get; set; }
+    [JsonPropertyName("access_expires")]
+    public int AccessExpires { get; set; }
 
-        [JsonProperty("refresh")]
-        public string Refresh { get; set; }
+    [JsonPropertyName("refresh")]
+    public string Refresh { get; set; }
 
-        [JsonProperty("refresh_expires")]
-        public int RefreshExpires { get; set; }
+    [JsonPropertyName("refresh_expires")]
+    public int RefreshExpires { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

@@ -16,11 +16,11 @@ internal static class SettingKeyConstants
 
     internal const string ImportDaysKey = "ImportDays";
 
-    internal const string NordigenBaseUrlKey = "nordigen_base_url";
+    internal const string GoCardlessBaseUrlKey = "BaseUrl";
 
-    internal const string NordigenSecretIdKey = "nordigen_secret_id";
+    internal const string GoCardlessSecretIdKey = "SecretId";
 
-    internal const string NordigenSecretKeyKey = "nordigen_secret_key";
+    internal const string GoCardlessSecretKeyKey = "SecretKey";
 
     internal const string MailNotificationEmail = "NotificationEmail";
 

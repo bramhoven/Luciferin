@@ -1,17 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Text.Json.Serialization;
+
+public class NordigenCreditorAccount
 {
-    public class NordigenCreditorAccount
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("iban")]
-        public string Iban { get; set; }
+    [JsonPropertyName("iban")]
+    public string Iban { get; set; }
 
-        [JsonProperty("bban")]
-        public string Bban { get; set; }
+    [JsonPropertyName("bban")]
+    public string Bban { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

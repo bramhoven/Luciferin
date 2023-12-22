@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+public abstract class FireflyCollectionResponseBase<TAttributes> : FireflyResponseBase<TAttributes>
+    where TAttributes : FireflyAttributesBase
 {
-    public abstract class FireflyCollectionResponseBase<TAttributes> : FireflyResponseBase<TAttributes>
-        where TAttributes : FireflyAttributesBase
-    {
-        #region Properties
-        
-        [JsonProperty("data")]
-        public abstract ICollection<FireflyDataContainer<TAttributes>> Data { get; set; }
+    #region Properties
 
-        #endregion
-    }
+    [JsonPropertyName("data")]
+    public abstract ICollection<FireflyDataContainer<TAttributes>> Data { get; set; }
+
+    #endregion
 }

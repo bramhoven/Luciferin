@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Nordigen.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Nordigen.Models.Responses
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+public class NordigenTransactionResponse
 {
-    public class NordigenTransactionResponse
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("transactions")]
-        public NordigenTransactionResponseTransactions Transactions { get; set; }
+    [JsonPropertyName("transactions")]
+    public NordigenTransactionResponseTransactions Transactions { get; set; }
 
-        #endregion
-    }
+    #endregion
+}
 
-    public class NordigenTransactionResponseTransactions
-    {
-        #region Properties
+public class NordigenTransactionResponseTransactions
+{
+    #region Properties
 
-        [JsonProperty("booked")]
-        public ICollection<NordigenTransaction> Booked { get; set; }
+    [JsonPropertyName("booked")]
+    public ICollection<NordigenTransaction> Booked { get; set; }
 
-        [JsonProperty("pending")]
-        public ICollection<NordigenTransaction> Pending { get; set; }
+    [JsonPropertyName("pending")]
+    public ICollection<NordigenTransaction> Pending { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

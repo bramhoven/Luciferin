@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Luciferin.BusinessLayer.Nordigen.Models.Requests
 {
@@ -6,10 +7,10 @@ namespace Luciferin.BusinessLayer.Nordigen.Models.Requests
     {
         #region Properties
 
-        [JsonProperty("secret_id")]
+        [JsonPropertyName("secret_id")]
         public string SecretId { get; set; }
 
-        [JsonProperty("secret_key")]
+        [JsonPropertyName("secret_key")]
         public string SecretKey { get; set; }
 
         #endregion

@@ -3,20 +3,22 @@ using Newtonsoft.Json;
 
 namespace Luciferin.BusinessLayer.Nordigen.Models.Requests
 {
+    using System.Text.Json.Serialization;
+
     public class NordigenEndUserAgreementRequest
     {
         #region Properties
 
-        [JsonProperty("access_scope")]
+        [JsonPropertyName("access_scope")]
         public ICollection<string> AccessScopes { get; set; }
 
-        [JsonProperty("access_valid_for_days")]
+        [JsonPropertyName("access_valid_for_days")]
         public int AccessValidForDays { get; set; }
 
-        [JsonProperty("institution_id")]
+        [JsonPropertyName("institution_id")]
         public string InstitutionId { get; set; }
 
-        [JsonProperty("max_historical_days")]
+        [JsonPropertyName("max_historical_days")]
         public int MaxHistoricalDays { get; set; }
 
         #endregion

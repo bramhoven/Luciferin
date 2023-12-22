@@ -1,24 +1,23 @@
-﻿using Newtonsoft.Json;
+﻿namespace Luciferin.BusinessLayer.Firefly.Models.Responses;
 
-namespace Luciferin.BusinessLayer.Firefly.Models.Responses
+using System.Text.Json.Serialization;
+
+public class FireflyDataContainer<TAttributes>
+    where TAttributes : FireflyAttributesBase
 {
-    public class FireflyDataContainer<TAttributes>
-        where TAttributes : FireflyAttributesBase
-    {
-        #region Properties
+    #region Properties
 
-        [JsonProperty("attributes")]
-        public TAttributes Attributes { get; set; }
+    [JsonPropertyName("attributes")]
+    public TAttributes Attributes { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
-        [JsonProperty("links")]
-        public FireflyLinks Links { get; set; }
+    [JsonPropertyName("links")]
+    public FireflyLinks Links { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; set; }
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

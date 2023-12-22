@@ -19,22 +19,22 @@ public static class PlatformSettingsMapper
     {
         return new PlatformSettings
         {
-            FireflyUrl = settings.GetSetting<StringSetting>(SettingKeyConstants.FireflyUrlKey),
-            FireflyAccessToken = settings.GetSetting<StringSetting>(SettingKeyConstants.FireflyAccessTokenKey),
-            NordigenBaseUrl = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenBaseUrlKey),
-            NordigenSecretId = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretIdKey),
-            NordigenSecretKey = settings.GetSetting<StringSetting>(SettingKeyConstants.NordigenSecretKeyKey),
-            ImportDays = settings.GetSetting<IntegerSetting>(SettingKeyConstants.ImportDaysKey),
-            ExtendedNotes = settings.GetSetting<BooleanSetting>(SettingKeyConstants.ExtendedNotesKey),
-            AutomaticImport = settings.GetSetting<BooleanSetting>(SettingKeyConstants.AutomaticImportKey),
-            FilterAuthorisations = settings.GetSetting<BooleanSetting>(SettingKeyConstants.FilterAuthorisations),
-            NotificationEmail = settings.GetSetting<StringSetting>(SettingKeyConstants.MailNotificationEmail),
-            FromEmail = settings.GetSetting<StringSetting>(SettingKeyConstants.MailFromEmail),
-            Host = settings.GetSetting<StringSetting>(SettingKeyConstants.MailHost),
-            Port = settings.GetSetting<IntegerSetting>(SettingKeyConstants.MailPort),
-            Username = settings.GetSetting<StringSetting>(SettingKeyConstants.MailUsername),
-            Password = settings.GetSetting<StringSetting>(SettingKeyConstants.MailPassword),
-            EnableSsl = settings.GetSetting<BooleanSetting>(SettingKeyConstants.MailEnableSsl)
+            FireflyUrl = settings.GetSetting<StringSetting>(SettingCategoryConstants.Firefly, SettingKeyConstants.FireflyUrlKey),
+            FireflyAccessToken = settings.GetSetting<StringSetting>(SettingCategoryConstants.Firefly, SettingKeyConstants.FireflyAccessTokenKey),
+            GoCardlessBaseUrl = settings.GetSetting<StringSetting>(SettingCategoryConstants.GoCardless, SettingKeyConstants.GoCardlessBaseUrlKey),
+            GoCardlessSecretId = settings.GetSetting<StringSetting>(SettingCategoryConstants.GoCardless, SettingKeyConstants.GoCardlessSecretIdKey),
+            GoCardlessSecretKey = settings.GetSetting<StringSetting>(SettingCategoryConstants.GoCardless, SettingKeyConstants.GoCardlessSecretKeyKey),
+            ImportDays = settings.GetSetting<IntegerSetting>(SettingCategoryConstants.Luciferin, SettingKeyConstants.ImportDaysKey),
+            ExtendedNotes = settings.GetSetting<BooleanSetting>(SettingCategoryConstants.Luciferin, SettingKeyConstants.ExtendedNotesKey),
+            AutomaticImport = settings.GetSetting<BooleanSetting>(SettingCategoryConstants.Luciferin, SettingKeyConstants.AutomaticImportKey),
+            FilterAuthorisations = settings.GetSetting<BooleanSetting>(SettingCategoryConstants.Luciferin, SettingKeyConstants.FilterAuthorisations),
+            NotificationEmail = settings.GetSetting<StringSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailNotificationEmail),
+            FromEmail = settings.GetSetting<StringSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailFromEmail),
+            Host = settings.GetSetting<StringSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailHost),
+            Port = settings.GetSetting<IntegerSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailPort),
+            Username = settings.GetSetting<StringSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailUsername),
+            Password = settings.GetSetting<StringSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailPassword),
+            EnableSsl = settings.GetSetting<BooleanSetting>(SettingCategoryConstants.Mail, SettingKeyConstants.MailEnableSsl)
         };
     }
 

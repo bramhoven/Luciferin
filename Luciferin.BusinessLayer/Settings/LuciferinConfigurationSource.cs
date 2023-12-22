@@ -1,4 +1,4 @@
-﻿using Luciferin.DataLayer.Storage.Context;
+﻿using Luciferin.Infrastructure.Storage.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
