@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.Website.Models.Configuration.FormModels
 {
+    using Core.Entities;
+
     public class ConfigurationAddAccountFormModel
     {
         #region Properties

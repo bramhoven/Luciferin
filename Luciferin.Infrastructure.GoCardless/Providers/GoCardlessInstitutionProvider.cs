@@ -29,4 +29,11 @@ public class GoCardlessInstitutionProvider : IInstitutionProvider
         var goCardlessInstitutions = await _goCardlessService.GetInstitutionsAsync();
         return goCardlessInstitutions.Select(_mapper.Map<Institution>).ToList();
     }
+
+    /// <inheritdoc />
+    public async Task<ICollection<Institution>> GetInstitutionsByCountryCode(string countryCode)
+    {
+        var goCardlessInstitutions = await _goCardlessService.GetInstitutionsAsync(countryCode);
+        return goCardlessInstitutions.Select(_mapper.Map<Institution>).ToList();
+    }
 }

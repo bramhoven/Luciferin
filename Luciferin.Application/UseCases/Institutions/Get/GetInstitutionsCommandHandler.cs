@@ -6,15 +6,18 @@ using MediatR;
 
 public class GetInstitutionsCommandHandler : IRequestHandler<GetInstitutionsCommand, ICollection<Institution>>
 {
-    private readonly IRequisitionProvider _requisitionProvider;
+    private readonly IInstitutionProvider _institutionProvider;
 
-    public GetInstitutionsCommandHandler(IRequisitionProvider requisitionProvider)
+    public GetInstitutionsCommandHandler(IInstitutionProvider institutionProvider)
     {
-        _requisitionProvider = requisitionProvider;
+        _institutionProvider = institutionProvider;
     }
 
-    public Task<ICollection<Institution>> Handle(GetInstitutionsCommand request, CancellationToken cancellationToken)
+    public async Task<ICollection<Institution>> Handle(GetInstitutionsCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if (request.CountryCode == null)
+            return await _institutionProvider.GetAllAsync();
+        
+        return await _institutionProvider.GetInstitutionsByCountryCode(request.CountryCode);
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Luciferin.Website.Controllers;
 
 using System.Collections.Generic;
+using Application.UseCases.Institutions.Get;
 using Application.UseCases.Requisitions.Add;
 using Application.UseCases.Requisitions.Delete;
 using Application.UseCases.Requisitions.Get;
@@ -19,18 +20,12 @@ using Core.Entities;
 [Route("configuration")]
 public class ConfigurationController : Controller
 {
-    public ConfigurationController(INordigenManager nordigenManager, IImportManager importManager, IMediator mediator)
+    public ConfigurationController(IMediator mediator)
     {
-        _nordigenManager = nordigenManager;
-        _importManager = importManager;
         _mediator = mediator;
     }
 
     private readonly IMediator _mediator;
-
-    private readonly IImportManager _importManager;
-
-    private readonly INordigenManager _nordigenManager;
 
     private const string ForwardedPortHeader = "X-Forwarded-Port";
 
@@ -95,11 +90,15 @@ public class ConfigurationController : Controller
     {
         var getProviderAccountsCommand = new GetImportAccountsCommand();
         var accounts = await _mediator.Send(getProviderAccountsCommand);
+
+        var getInstitutionsCommand = new GetInstitutionsCommand("NL");
+        var institutions = await _mediator.Send(getInstitutionsCommand);
+        
         var model = new ConfigurationIndexPageModel
         {
             AddAccountFormModel = new ConfigurationAddAccountFormModel
             {
-                Institutions = await _nordigenManager.GetInstitutions("NL")
+                Institutions = institutions
             },
             AccountList = new RequisitionList(accounts)
             {
