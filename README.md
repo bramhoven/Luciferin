@@ -63,7 +63,7 @@ The idea came after I tried too manually import CSV's or any of the other data i
 
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0)
 * [Docker](https://www.docker.com/)
-* [Nordigen](https://nordigen.com/en/)
+* [GoCardless Bank Account Data](https://gocardless.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
