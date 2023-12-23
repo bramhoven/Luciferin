@@ -1,7 +1,10 @@
 namespace Luciferin.Website.Controllers;
 
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.UseCases.Requisitions.Get;
+using Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -22,9 +25,18 @@ public class HomeController : Controller
     {
         ViewData["Title"] = "Home";
 
-        var getProviderAccountCommand = new GetImportAccountsCommand();
-        var accounts = await _mediator.Send(getProviderAccountCommand);
-        var model = new HomeIndexPageModel { ConfigurationStartUrl = "/configuration", ImportStartUrl = "/import", RequisitionList = new RequisitionList(accounts) };
+        ICollection<Requisition> requisitions;
+        try
+        {
+            var getProviderAccountCommand = new GetRequisitionsCommand();
+            requisitions = await _mediator.Send(getProviderAccountCommand);
+        }
+        catch (Exception)
+        {
+            requisitions = new List<Requisition>();
+        }
+
+        var model = new HomeIndexPageModel { ConfigurationStartUrl = "/configuration", ImportStartUrl = "/import", RequisitionList = new RequisitionList(requisitions) };
         return View(model);
     }
 }

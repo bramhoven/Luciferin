@@ -3,6 +3,6 @@ using Luciferin.Core.Entities;
 
 namespace Luciferin.Application.Abstractions.Stores;
 
-public interface IAccountStore : IGenericRepository<Account>
+public interface IAccountStore : IGenericStore<Account>
 {
 }

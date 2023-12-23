@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
         services.Configure<GoCardlessSettings>(configuration.GetSection("GoCardless"));
     }
 
-    public static void AddStorage(this IServiceCollection services, IConfiguration configuration,
+    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration,
         LuciferinSettings luciferinSettings)
     {
         var connectionString = configuration.GetConnectionString("Luciferin");

@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     public static void AddGoCardless(this IServiceCollection services)
     {
         services.AddTransient<IRequisitionProvider, GoCardlessRequisitionProvider>();
+        services.AddTransient<IInstitutionProvider, GoCardlessInstitutionProvider>();
         services.AddTransient<IGoCardlessService, GoCardlessService>();
         services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
     }

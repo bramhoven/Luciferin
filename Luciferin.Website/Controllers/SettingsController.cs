@@ -1,65 +1,64 @@
-using System.Linq;
+namespace Luciferin.Website.Controllers;
+
+using System;
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Configuration;
-using Luciferin.BusinessLayer.Settings;
-using Luciferin.Website.Models.Settings;
+using Application.UseCases.Settings.Get;
+using Application.UseCases.Settings.Set;
+using Classes.Settings;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Models.Settings;
 
-namespace Luciferin.Website.Controllers
+[Route("settings")]
+public class SettingsController : Controller
 {
-    [Route("settings")]
-    public partial class SettingsController : Controller
+    private readonly IMediator _mediator;
+
+    public SettingsController(IMediator mediator)
     {
-        #region Fields
+        _mediator = mediator;
+    }
 
-        private readonly ISettingsManager _settingsManager;
+    [HttpGet]
+    public virtual async Task<ActionResult> Index()
+    {
+        ViewData["Title"] = "Settings";
 
-        private readonly LuciferinSettings _luciferinSettings;
+        var model = await SetDefaultModel();
+        return View(model);
+    }
 
-        #endregion
+    [HttpPost]
+    public virtual async Task<ActionResult> Index(SettingsPageModel model)
+    {
+        ViewData["Title"] = "Settings";
 
-        #region Constructors
-
-        public SettingsController(ISettingsManager settingsManager, IOptions<LuciferinSettings> luciferinSettings)
+        var setAllSettingsCommand = new SetAllSettingsCommand(model.PlatformSettings.Settings);
+        try
         {
-            _settingsManager = settingsManager;
-            _luciferinSettings = luciferinSettings.Value;
+            await _mediator.Send(setAllSettingsCommand);
+            model.SuccessfullySaved = true;
+        }
+        catch (Exception)
+        {
+            model.SuccessfullySaved = false;
         }
 
-        #endregion
+        model = await SetDefaultModel(model);
+        return View(model);
+    }
 
-        #region Methods
-
-        [HttpGet]
-        public virtual ActionResult Index()
+    private async Task<SettingsPageModel> SetDefaultModel(SettingsPageModel model = null)
+    {
+        if (model == null)
         {
-            ViewData["Title"] = "Settings";
-            
-            var model = SetDefaultModel();
-            return View(model);
+            model = new SettingsPageModel();
         }
 
-        [HttpPost]
-        public async virtual Task<ActionResult> Index(SettingsPageModel model)
-        {
-            ViewData["Title"] = "Settings";
-            
-            model.SuccessfullySaved = _settingsManager.UpdateSettings(model.Settings.Settings);
+        var getSettingsCommand = new GetSettingsCommand();
+        var settings = await _mediator.Send(getSettingsCommand);
 
-            model = SetDefaultModel(model);
-            return View(model);
-        }
-
-        private SettingsPageModel SetDefaultModel(SettingsPageModel model = null)
-        {
-            if (model == null)
-                model = new SettingsPageModel();
-
-            model.Settings = _settingsManager.GetPlatformSettings();
-            return model;
-        }
-
-        #endregion
+        model.PlatformSettings = PlatformSettingsMapper.MapSettingsCollectionToPlatformSettings(settings);
+        return model;
     }
 }

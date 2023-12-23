@@ -88,19 +88,29 @@ public class ConfigurationController : Controller
 
     private async Task<ConfigurationIndexPageModel> GetDefaultModel()
     {
-        var getProviderAccountsCommand = new GetImportAccountsCommand();
-        var accounts = await _mediator.Send(getProviderAccountsCommand);
+        ICollection<Requisition> requisitions;
+        ICollection<Institution> institutions;
+        try
+        {
+            var getProviderAccountCommand = new GetRequisitionsCommand();
+            requisitions = await _mediator.Send(getProviderAccountCommand);
+            
+            var getInstitutionsCommand = new GetInstitutionsCommand("NL");
+            institutions = await _mediator.Send(getInstitutionsCommand);
+        }
+        catch (Exception)
+        {
+            requisitions = new List<Requisition>();
+            institutions = new List<Institution>();
+        }
 
-        var getInstitutionsCommand = new GetInstitutionsCommand("NL");
-        var institutions = await _mediator.Send(getInstitutionsCommand);
-        
         var model = new ConfigurationIndexPageModel
         {
             AddAccountFormModel = new ConfigurationAddAccountFormModel
             {
                 Institutions = institutions
             },
-            AccountList = new RequisitionList(accounts)
+            AccountList = new RequisitionList(requisitions)
             {
                 Deletable = true
             }

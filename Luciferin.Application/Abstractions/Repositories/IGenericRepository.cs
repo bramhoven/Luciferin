@@ -2,14 +2,15 @@ using Luciferin.Core.Abstractions;
 
 namespace Luciferin.Application.Abstractions.Repositories;
 
-public interface IGenericRepository<T> where T : class, IEntity
+public interface IGenericRepository<TEntity, TKey>
+    where TEntity : class
 {
-    IQueryable<T> Entities { get; }
+    IQueryable<TEntity> Entities { get; }
 
-    Task<T> GetByIdAsync(int id);
-    Task<List<T>> GetAllAsync();
-    Task<T> AddAsync(T entity);
-    Task<T> AddListAsync(IEnumerable<T> entities);
-    Task UpdateAsync(T entity);
-    Task DeleteAsync(T entity);
+    Task<TEntity> GetByKeyAsync(TKey key);
+    Task<List<TEntity>> GetAllAsync();
+    Task<TEntity> AddAsync(TEntity entity);
+    Task<ICollection<TEntity>> AddListAsync(IEnumerable<TEntity> entities);
+    Task UpdateAsync(TEntity entity);
+    Task DeleteAsync(TEntity entity);
 }

@@ -31,7 +31,7 @@ public class ImportController : Controller
     {
         ViewData["Title"] = "Import";
 
-        var getProviderAccountsCommand = new GetImportAccountsCommand();
+        var getProviderAccountsCommand = new GetRequisitionsCommand();
         var accounts = await _mediator.Send(getProviderAccountsCommand);
         var model = new ImportIndexPageModel { ConfigurationStartUrl = "/configuration", RequisitionList = new RequisitionList(accounts) };
         return View(model);

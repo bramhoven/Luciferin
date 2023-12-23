@@ -1,51 +1,87 @@
+namespace Luciferin.Infrastructure.Storage;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Luciferin.Application.Abstractions.Repositories;
-using Luciferin.Core.Entities;
-using Luciferin.Infrastructure.Storage.Context;
-
-namespace Luciferin.Infrastructure.Storage;
+using Application.Abstractions.Repositories;
+using AutoMapper;
+using Context;
+using Core.Abstractions;
+using Core.Entities.Settings;
+using Core.Enums;
+using Setting = Entities.Setting;
 
 public class StorageSettingsRepository : ISettingRepository
 {
+    private readonly IMapper _mapper;
     protected readonly StorageContext Db;
 
-    protected StorageSettingsRepository(StorageContext context)
+    public StorageSettingsRepository(StorageContext context, IMapper mapper)
     {
         Db = context;
+        _mapper = mapper;
     }
 
-    public IQueryable<Setting> Entities { get; }
+    public IQueryable<ISetting> Entities { get; }
 
-    public Task<Setting> GetByIdAsync(int id)
+    public async Task<ISetting> GetByKeyAsync(string key)
     {
-        throw new NotImplementedException();
+        var setting = await Db.Settings.FindAsync(key);
+        return _mapper.Map<ISetting>(setting);
     }
 
-    public Task<List<Setting>> GetAllAsync()
+    public Task<List<ISetting>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Db.Settings.Select(_mapper.Map<ISetting>).ToList());
     }
 
-    public Task<Setting> AddAsync(Setting entity)
+    public async Task<ISetting> AddAsync(ISetting entity)
     {
-        throw new NotImplementedException();
+        var dbEntity = _mapper.Map<Setting>(entity);
+        await Db.Settings.AddAsync(dbEntity);
+        return _mapper.Map<ISetting>(dbEntity);
     }
 
-    public Task<Setting> AddListAsync(IEnumerable<Setting> entities)
+    public async Task<ICollection<ISetting>> AddListAsync(IEnumerable<ISetting> entities)
     {
-        throw new NotImplementedException();
+        var dbEntities = entities.Select(_mapper.Map<Setting>).ToList();
+        await Db.Settings.AddRangeAsync(dbEntities);
+        return dbEntities.Select(_mapper.Map<ISetting>).ToList();
     }
 
-    public Task UpdateAsync(Setting entity)
+    public async Task UpdateAsync(ISetting entity)
     {
-        throw new NotImplementedException();
+        var dbEntity = await Db.Settings.FindAsync(entity.Key);
+        if (dbEntity == null)
+        {
+            return;
+        }
+
+        switch (entity.ValueType)
+        {
+            case ValueTypeEnum.Boolean:
+                dbEntity.BooleanValue = (entity as BooleanSetting)?.Value;
+                break;
+            case ValueTypeEnum.Integer:
+                dbEntity.IntValue = (entity as IntegerSetting)?.Value;
+                break;
+            case ValueTypeEnum.String:
+                dbEntity.StringValue = (entity as StringSetting)?.Value ?? string.Empty;
+                break;
+            case ValueTypeEnum.TimeSpan:
+                dbEntity.TimeSpanValue = (entity as TimeSpanSetting)?.Value;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"No updating handling for ValueType {entity.ValueType}");
+        }
+
+        await Db.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Setting entity)
+    public async Task DeleteAsync(ISetting entity)
     {
-        throw new NotImplementedException();
+        var dbEntity = await Db.Settings.FindAsync(entity.Key);
+        Db.Settings.Remove(dbEntity);
     }
 }

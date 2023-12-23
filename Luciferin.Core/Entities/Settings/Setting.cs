@@ -1,6 +1,6 @@
-using Luciferin.Core.Abstractions;
+namespace Luciferin.Core.Entities.Settings;
 
-namespace Luciferin.Core.Entities;
+using Abstractions;
 
 public class Setting : IEntity
 {

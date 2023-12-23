@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿namespace Luciferin.Website.Classes.Settings;
 
-using Luciferin.BusinessLayer.Settings;
-using Luciferin.BusinessLayer.Settings.Extentions;
-using Luciferin.BusinessLayer.Settings.Models;
+using System.Collections.Generic;
+using Core.Abstractions;
+using Core.Entities.Settings;
+using Core.Extensions;
 
 public static class PlatformSettingsMapper
 {

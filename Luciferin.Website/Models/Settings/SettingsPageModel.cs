@@ -2,11 +2,13 @@
 
 namespace Luciferin.Website.Models.Settings
 {
+    using Classes.Settings;
+
     public class SettingsPageModel : PageModelBase
     {
         #region Properties
 
-        public PlatformSettings Settings { get; set; }
+        public PlatformSettings PlatformSettings { get; set; }
 
         public bool SuccessfullySaved { get; set; }
 

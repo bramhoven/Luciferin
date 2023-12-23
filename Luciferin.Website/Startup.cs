@@ -53,6 +53,8 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Luciferin.Website;
 
+using Infrastructure.Storage.Extensions;
+
 public class Startup
 {
     #region Constructors
@@ -137,7 +139,8 @@ public class Startup
 
         services.AddMappers();
         
-        services.AddStorage(Configuration, LuciferinSettings);
+        services.AddStorage();
+        services.AddDbContext(Configuration, LuciferinSettings);
 
         ConfigureDataLayers(services);
         ConfigureStores(services);
@@ -145,9 +148,9 @@ public class Startup
         ConfigureManagers(services);
         ConfigureNotifications(services);
 
-        services.AddApplicationLayer();
         services.AddGoCardless();
         services.AddSettings(Configuration);
+        services.AddApplicationLayer();
 
         services.AddQuartzJobs();
     }

@@ -10,14 +10,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-firefly-url">Firefly III Url</span>
             </div>
-            @Html.EditorFor(m => m.Settings.FireflyUrl)
+            @Html.EditorFor(m => m.PlatformSettings.FireflyUrl)
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-firefly-access-token">Firefly III Access Token</span>
             </div>
-            @Html.EditorFor(m => m.Settings.FireflyAccessToken)
+            @Html.EditorFor(m => m.PlatformSettings.FireflyAccessToken)
         </div>
 
         <h4 class="mb-3 mt-5">GoCardless Settings</h4>
@@ -25,21 +25,21 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-gocardless-url">GoCardlesss Url</span>
             </div>
-            @Html.EditorFor(m => m.Settings.GoCardlessBaseUrl)
+            @Html.EditorFor(m => m.PlatformSettings.GoCardlessBaseUrl)
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-gocardless-secret-id">GoCardless Secret ID</span>
             </div>
-            @Html.EditorFor(m => m.Settings.GoCardlessSecretId)
+            @Html.EditorFor(m => m.PlatformSettings.GoCardlessSecretId)
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-gocardless-secret-key">GoCardless Secret Key</span>
             </div>
-            @Html.EditorFor(m => m.Settings.GoCardlessSecretKey)
+            @Html.EditorFor(m => m.PlatformSettings.GoCardlessSecretKey)
         </div>
 
         <h4 class="mb-3 mt-5">Import Settings</h4>
@@ -47,21 +47,21 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-automatic-import">Automatic Import</span>
             </div>
-            @Html.EditorFor(m => m.Settings.AutomaticImport)
+            @Html.EditorFor(m => m.PlatformSettings.AutomaticImport)
         </div>
 
         <div class="input-group boolean-input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-extended-note">Extended notes</span>
             </div>
-            @Html.EditorFor(m => m.Settings.ExtendedNotes)
+            @Html.EditorFor(m => m.PlatformSettings.ExtendedNotes)
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-import-days">Import days</span>
             </div>
-            @Html.EditorFor(m => m.Settings.ImportDays)
+            @Html.EditorFor(m => m.PlatformSettings.ImportDays)
         </div>
         
 
@@ -69,7 +69,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-filter-authorisations">Filter authorisations</span>
             </div>
-            @Html.EditorFor(m => m.Settings.FilterAuthorisations)
+            @Html.EditorFor(m => m.PlatformSettings.FilterAuthorisations)
         </div>
         
         <h4 class="mb-3">Notification Settings</h4>
@@ -78,49 +78,49 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-notification-email">Notification Email</span>
             </div>
-            @Html.EditorFor(m => m.Settings.NotificationEmail)
+            @Html.EditorFor(m => m.PlatformSettings.NotificationEmail)
         </div>
                                        
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-notification-email">From Email</span>
             </div>
-            @Html.EditorFor(m => m.Settings.FromEmail)
+            @Html.EditorFor(m => m.PlatformSettings.FromEmail)
         </div>
               
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-host">Host</span>
             </div>
-            @Html.EditorFor(m => m.Settings.Host)
+            @Html.EditorFor(m => m.PlatformSettings.Host)
         </div>
         
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-port">Port</span>
             </div>
-            @Html.EditorFor(m => m.Settings.Port)
+            @Html.EditorFor(m => m.PlatformSettings.Port)
         </div>
         
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-username">Username</span>
             </div>
-            @Html.EditorFor(m => m.Settings.Username)
+            @Html.EditorFor(m => m.PlatformSettings.Username)
         </div>
         
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-password">Password</span>
             </div>
-            @Html.EditorFor(m => m.Settings.Password)
+            @Html.EditorFor(m => m.PlatformSettings.Password)
         </div>
         
         <div class="input-group boolean-input-group mb-5">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="input-enable-ssl">Enable SSL</span>
             </div>
-            @Html.EditorFor(m => m.Settings.EnableSsl)
+            @Html.EditorFor(m => m.PlatformSettings.EnableSsl)
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-5">Save</button>

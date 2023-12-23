@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Luciferin.BusinessLayer.Settings.Mappers;
 using Luciferin.BusinessLayer.Settings.Models;
 using Luciferin.BusinessLayer.Settings.Stores;
 using NLog;

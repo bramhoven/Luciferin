@@ -1,18 +1,17 @@
-using Luciferin.Application.Abstractions.Providers;
-using Luciferin.Application.Abstractions.Stores;
-using Luciferin.Core.Abstractions.Services;
-using MediatR;
-
 namespace Luciferin.Application.UseCases.Accounts.Import;
+
+using Abstractions.Providers;
+using Abstractions.Stores;
+using Core.Abstractions.Services;
+using MediatR;
 
 public class ImportAccountCommandHandler : IRequestHandler<ImportAccountCommand>
 {
     private readonly IAccountFilterService _accountFilterService;
-    private readonly IRequisitionProvider _requisitionProvider;
     private readonly IAccountStore _accountStore;
+    private readonly IRequisitionProvider _requisitionProvider;
 
-    public ImportAccountCommandHandler(IRequisitionProvider requisitionProvider, IAccountStore accountStore,
-        IAccountFilterService accountFilterService)
+    public ImportAccountCommandHandler(IRequisitionProvider requisitionProvider, IAccountStore accountStore, IAccountFilterService accountFilterService)
     {
         _requisitionProvider = requisitionProvider;
         _accountStore = accountStore;
