@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.Website.Models
 {
+    using Core.Entities;
+
     public class RequisitionList
     {
         #region Properties
 
-        public bool AnyRequisitions => Requisitions.Any();
+        public bool AnyAccounts => Requisitions.Any();
 
         public bool Deletable { get; set; }
 

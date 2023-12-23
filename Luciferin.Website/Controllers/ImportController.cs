@@ -1,76 +1,60 @@
-using System.Linq;
+namespace Luciferin.Website.Controllers;
+
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Import;
-using Luciferin.Website.Classes.Queue;
-using Luciferin.Website.Models;
-using Luciferin.Website.Models.Import;
+using Application.UseCases.Requisitions.Get;
+using BusinessLayer.Import;
+using Classes.Queue;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Models;
+using Models.Import;
 
-namespace Luciferin.Website.Controllers
+[Route("import")]
+public class ImportController : Controller
 {
-    [Route("import")]
-    public class ImportController : Controller
+    private readonly IBackgroundTaskQueue _backgroundTaskQueue;
+
+    private readonly IMediator _mediator;
+
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+
+    public ImportController(IBackgroundTaskQueue backgroundTaskQueue, IServiceScopeFactory serviceScopeFactory, IMediator mediator)
     {
-        #region Constructors
+        _backgroundTaskQueue = backgroundTaskQueue;
+        _serviceScopeFactory = serviceScopeFactory;
+        _mediator = mediator;
+    }
 
-        public ImportController(IImportManager importManager, IBackgroundTaskQueue backgroundTaskQueue,
-                                IServiceScopeFactory serviceScopeFactory)
-        {
-            _importManager = importManager;
-            _backgroundTaskQueue = backgroundTaskQueue;
-            _serviceScopeFactory = serviceScopeFactory;
-        }
+    [HttpGet]
+    public async Task<ActionResult> Index()
+    {
+        ViewData["Title"] = "Import";
 
-        #endregion
+        var getProviderAccountsCommand = new GetImportAccountsCommand();
+        var accounts = await _mediator.Send(getProviderAccountsCommand);
+        var model = new ImportIndexPageModel { ConfigurationStartUrl = "/configuration", RequisitionList = new RequisitionList(accounts) };
+        return View(model);
+    }
 
-        #region Fields
+    [HttpPost]
+    public async Task<ActionResult> Start()
+    {
+        ViewData["Title"] = "Import";
 
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
+        var scope = _serviceScopeFactory.CreateScope();
+        var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
+        await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
 
-        private readonly IImportManager _importManager;
+        return RedirectToAction("Status");
+    }
 
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+    [HttpGet("status")]
+    public ActionResult Status()
+    {
+        ViewData["Title"] = "Import status";
 
-        #endregion
-
-        #region Methods
-
-        [HttpGet]
-        public async Task<ActionResult> Index()
-        {
-            ViewData["Title"] = "Import";
-            
-            var requisitions = await _importManager.GetImportableRequisitions();
-            var model = new ImportIndexPageModel
-            {
-                ConfigurationStartUrl = "/configuration",
-                RequisitionList = new RequisitionList(requisitions)
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Start()
-        {
-            ViewData["Title"] = "Import";
-            
-            var scope = _serviceScopeFactory.CreateScope();
-            var scopedImportManager = scope.ServiceProvider.GetService<IImportManager>();
-            await _backgroundTaskQueue.QueueBackgroundWorkItemAsync(cancellationToken => scopedImportManager.StartImport(scope, cancellationToken));
-
-            return RedirectToAction("Status");
-        }
-
-        [HttpGet("status")]
-        public ActionResult Status()
-        {
-            ViewData["Title"] = "Import status";
-            
-            var model = new PageModelBase { FullWidth = true };
-            return View(model);
-        }
-
-        #endregion
+        var model = new PageModelBase { FullWidth = true };
+        return View(model);
     }
 }

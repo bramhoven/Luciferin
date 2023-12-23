@@ -11,9 +11,9 @@ public static class GoCardlessResponseMappers
 
     #region Static Methods
 
-    public static Account MapToAccount(this GoCardlessAccountResponse accountResponse)
+    public static GCAccount MapToAccount(this GoCardlessAccountResponse accountResponse)
     {
-        return new Account
+        return new GCAccount
         {
             Created = accountResponse.Created,
             Iban = accountResponse.Iban,
@@ -97,9 +97,9 @@ public static class GoCardlessResponseMappers
         };
     }
 
-    public static Requisition MapToRequisition(this GoCardlessRequisitionResponse requisitionResponse)
+    public static GCRequisition MapToRequisition(this GoCardlessRequisitionResponse requisitionResponse)
     {
-        return new Requisition
+        return new GCRequisition
         {
             Accounts = requisitionResponse.Accounts,
             Agreement = requisitionResponse.Agreement,
@@ -116,7 +116,7 @@ public static class GoCardlessResponseMappers
         };
     }
 
-    public static ICollection<Requisition> MapToRequisitionCollection(
+    public static ICollection<GCRequisition> MapToRequisitionCollection(
         this IEnumerable<GoCardlessRequisitionResponse> requisitionResponses)
     {
         return requisitionResponses.Select(r => r.MapToRequisition()).ToList();

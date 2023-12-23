@@ -179,7 +179,7 @@ public class Startup
         services.AddScoped<IFireflyStore, FireflyStore>();
 
         services.AddScoped<IAccountStore, FireflyAccountStore>();
-        services.AddScoped<IAccountProvider, MockAccountProvider>();
+        services.AddScoped<IRequisitionProvider, MockRequisitionProvider>();
     }
 
     private void MigrateAndSeedDatabases(IApplicationBuilder app)

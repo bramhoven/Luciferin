@@ -1,6 +1,6 @@
 ﻿namespace Luciferin.Infrastructure.GoCardless.Models;
 
-public class Account
+public class GCAccount
 {
     #region Properties
 

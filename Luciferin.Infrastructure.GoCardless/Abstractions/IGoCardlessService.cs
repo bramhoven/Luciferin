@@ -7,13 +7,13 @@ public interface IGoCardlessService
 {
     Task<EndUserAgreement> CreateEndUserAgreementAsync(Institution institution);
 
-    Task<Requisition> CreateRequisitionAsync(Institution institution, string name, EndUserAgreement endUserAgreement, string returnUrl);
+    Task<GCRequisition> CreateRequisitionAsync(Institution institution, string name, EndUserAgreement endUserAgreement, string returnUrl);
 
     Task<bool> DeleteEndUserAgreementAsync(string endUserAgreementId);
 
     Task<bool> DeleteRequisitionAsync(string requisitionId);
 
-    Task<Account> GetAccountAsync(string accountId);
+    Task<GCAccount> GetAccountAsync(string accountId);
 
     Task<ICollection<Balance>> GetAccountBalanceAsync(string accountId);
 
@@ -27,9 +27,10 @@ public interface IGoCardlessService
 
     Task<Institution> GetInstitutionAsync(string institutionId);
 
+    Task<ICollection<Institution>> GetInstitutionsAsync();
     Task<ICollection<Institution>> GetInstitutionsAsync(string countryCode);
 
-    Task<Requisition> GetRequisitionAsync(string requisitionId);
+    Task<GCRequisition> GetRequisitionAsync(string requisitionId);
 
-    Task<ICollection<Requisition>> GetRequisitionsAsync();
+    Task<ICollection<GCRequisition>> GetRequisitionsAsync();
 }

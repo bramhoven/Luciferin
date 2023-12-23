@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Luciferin.Application.UseCases.Accounts.RequestConnection;
 using Luciferin.BusinessLayer.Import;
 using Luciferin.BusinessLayer.Nordigen;
 using Luciferin.Website.Models;
@@ -11,7 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Luciferin.Website.Controllers;
 
-using Application.UseCases.Accounts.Delete;
+using System.Collections.Generic;
+using Application.UseCases.Requisitions.Add;
+using Application.UseCases.Requisitions.Delete;
+using Application.UseCases.Requisitions.Get;
+using Core.Entities;
 
 [Route("configuration")]
 public class ConfigurationController : Controller
@@ -32,18 +35,18 @@ public class ConfigurationController : Controller
     private const string ForwardedPortHeader = "X-Forwarded-Port";
 
     [HttpPost]
-    [Route("/bank")]
+    [Route("/requisition")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> AddBank(ConfigurationIndexPageModel pageModel)
+    public async Task<ActionResult> AddRequisition(ConfigurationIndexPageModel pageModel)
     {
         ViewData["Title"] = "Configuration";
 
-        var formModel = pageModel.AddBankFormModel;
+        var formModel = pageModel.AddAccountFormModel;
         if (!ModelState.IsValid)
         {
             var model = await GetDefaultModel();
-            model.AddBankFormModel.InstitutionId = formModel.InstitutionId;
-            model.AddBankFormModel.BankName = formModel.BankName;
+            model.AddAccountFormModel.InstitutionId = formModel.InstitutionId;
+            model.AddAccountFormModel.RequisitionName = formModel.RequisitionName;
             return View(nameof(Index), model);
         }
 
@@ -57,24 +60,24 @@ public class ConfigurationController : Controller
             Port = forwardHeaderPort ?? Request.Host.Port ?? 80
         }.ToString();
 
-        var requestConnectionAccountCommand = new RequestConnectionAccountCommand(formModel.BankName, formModel.InstitutionId, returnUrl);
+        var requestConnectionAccountCommand = new AddRequisitionCommand(formModel.RequisitionName, formModel.InstitutionId, returnUrl);
         var redirectUrl = await _mediator.Send(requestConnectionAccountCommand);
 
         return Redirect(redirectUrl);
     }
 
     [HttpPost]
-    [Route("/bank/delete")]
+    [Route("/requisition/delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> DeleteBank([Bind(Prefix = "RequisitionList.requisitionId")] string requisitionId)
+    public async Task<ActionResult> DeleteRequisition([Bind(Prefix = "AccountList.accountId")] string requisitionId)
     {
         ViewData["Title"] = "Configuration";
 
         if (string.IsNullOrWhiteSpace(requisitionId))
             return RedirectToAction("Index", "Configuration");
 
-        var deleteAccountCommand = new DeleteAccountCommand(requisitionId);
-        await _mediator.Send(deleteAccountCommand);
+        var deleteAccountCommand = new DeleteRequisitionCommand(requisitionId);
+        await _mediator.Publish(deleteAccountCommand);
 
 
         return RedirectToAction("Index", "Configuration");
@@ -90,13 +93,15 @@ public class ConfigurationController : Controller
 
     private async Task<ConfigurationIndexPageModel> GetDefaultModel()
     {
+        var getProviderAccountsCommand = new GetImportAccountsCommand();
+        var accounts = await _mediator.Send(getProviderAccountsCommand);
         var model = new ConfigurationIndexPageModel
         {
-            AddBankFormModel = new ConfigurationAddBankFormModel
+            AddAccountFormModel = new ConfigurationAddAccountFormModel
             {
                 Institutions = await _nordigenManager.GetInstitutions("NL")
             },
-            RequisitionList = new RequisitionList(await _nordigenManager.GetRequisitions())
+            AccountList = new RequisitionList(accounts)
             {
                 Deletable = true
             }

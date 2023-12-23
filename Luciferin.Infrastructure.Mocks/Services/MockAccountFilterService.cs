@@ -5,8 +5,8 @@ namespace Luciferin.Infrastructure.Mocks.Services;
 
 public class MockAccountFilterService : IAccountFilterService
 {
-    public ICollection<Account> FilterAccounts(ICollection<Account> accounts, ICollection<Account> existingAccounts)
+    public ICollection<Account> FilterAccounts(ICollection<Requisition> accounts, ICollection<Account> existingAccounts)
     {
-        return accounts.Where(a => !existingAccounts.Contains(a)).ToList();
+        return existingAccounts;
     }
 }

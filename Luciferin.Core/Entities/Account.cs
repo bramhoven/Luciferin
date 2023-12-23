@@ -31,7 +31,7 @@ public class Account : IEntity
 
         public string Iban { get; set; }
 
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 

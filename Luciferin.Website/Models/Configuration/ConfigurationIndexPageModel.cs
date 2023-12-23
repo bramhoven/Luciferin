@@ -7,9 +7,9 @@ namespace Luciferin.Website.Models.Configuration
     {
         #region Properties
 
-        public ConfigurationAddBankFormModel AddBankFormModel { get; set; }
+        public ConfigurationAddAccountFormModel AddAccountFormModel { get; set; }
 
-        public RequisitionList? RequisitionList { get; set; }
+        public RequisitionList? AccountList { get; set; }
 
         #endregion
     }

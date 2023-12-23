@@ -1,14 +1,14 @@
+namespace Luciferin.Infrastructure.GoCardless;
+
+using Abstractions;
+using Core.Exceptions;
 using Flurl;
 using Flurl.Http;
-using Luciferin.Core.Exceptions;
-using Luciferin.Infrastructure.GoCardless.Abstractions;
-using Luciferin.Infrastructure.GoCardless.Helpers;
-using Luciferin.Infrastructure.GoCardless.Models;
-using Luciferin.Infrastructure.GoCardless.Models.Requests;
-using Luciferin.Infrastructure.GoCardless.Models.Responses;
+using Helpers;
 using Microsoft.Extensions.Options;
-
-namespace Luciferin.Infrastructure.GoCardless;
+using Models;
+using Models.Requests;
+using Models.Responses;
 
 public class GoCardlessService : IGoCardlessService
 {
@@ -25,13 +25,7 @@ public class GoCardlessService : IGoCardlessService
         CheckConfiguration();
         var openIdToken = await GetToken();
 
-        var request = new GoCardlessEndUserAgreementRequest
-        {
-            AccessScopes = new[] { "balances", "details", "transactions" },
-            InstitutionId = institution.Id,
-            MaxHistoricalDays = institution.TransactionTotalDays,
-            AccessValidForDays = 90
-        };
+        var request = new GoCardlessEndUserAgreementRequest { AccessScopes = new[] { "balances", "details", "transactions" }, InstitutionId = institution.Id, MaxHistoricalDays = institution.TransactionTotalDays, AccessValidForDays = 90 };
 
         var endUserAgreementResponse = await GoCardlessRoutes
             .EndUserAgreements(_goCardlessSettings.BaseUrl)
@@ -42,19 +36,13 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Requisition> CreateRequisitionAsync(Institution institution, string name,
+    public async Task<GCRequisition> CreateRequisitionAsync(Institution institution, string name,
         EndUserAgreement endUserAgreement, string returnUrl)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
 
-        var request = new GoCardlessRequisitionRequest
-        {
-            Reference = name,
-            AgreementId = endUserAgreement.Id,
-            InstitutionId = institution.Id,
-            RedirectUrl = returnUrl
-        };
+        var request = new GoCardlessRequisitionRequest { Reference = name, AgreementId = endUserAgreement.Id, InstitutionId = institution.Id, RedirectUrl = returnUrl };
 
         var requisitionResponse = await GoCardlessRoutes
             .Requisitions(_goCardlessSettings.BaseUrl)
@@ -105,7 +93,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Account> GetAccountAsync(string accountId)
+    public async Task<GCAccount> GetAccountAsync(string accountId)
     {
         try
         {
@@ -121,7 +109,9 @@ public class GoCardlessService : IGoCardlessService
         catch (FlurlHttpException e)
         {
             if (e.StatusCode == 409)
+            {
                 throw new AccountSuspendedException(accountId);
+            }
 
             throw new AccountFailureException(accountId);
         }
@@ -207,6 +197,19 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
+    public async Task<ICollection<Institution>> GetInstitutionsAsync()
+    {
+        CheckConfiguration();
+        var openIdToken = await GetToken();
+
+        var institutionsResponse = await GoCardlessRoutes
+            .Institutions(_goCardlessSettings.BaseUrl)
+            .WithOAuthBearerToken(openIdToken.AccessToken)
+            .GetJsonAsync<ICollection<GoCardlessInstitutionResponse>>();
+        return institutionsResponse.MapToInstitutionCollection();
+    }
+
+    /// <inheritdoc />
     public async Task<ICollection<Institution>> GetInstitutionsAsync(string countryCode)
     {
         CheckConfiguration();
@@ -221,7 +224,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<Requisition> GetRequisitionAsync(string requisitionId)
+    public async Task<GCRequisition> GetRequisitionAsync(string requisitionId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -234,7 +237,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Requisition>> GetRequisitionsAsync()
+    public async Task<ICollection<GCRequisition>> GetRequisitionsAsync()
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -274,7 +277,9 @@ public class GoCardlessService : IGoCardlessService
     private void CheckConfiguration()
     {
         if (!IsConfigured())
+        {
             throw new InvalidOperationException("GoCardless is not configured properly");
+        }
     }
 
     /// <summary>
@@ -285,11 +290,7 @@ public class GoCardlessService : IGoCardlessService
     {
         var tokenResponse = await GoCardlessRoutes
             .TokenNew(_goCardlessSettings.BaseUrl)
-            .PostJsonAsync(new GoCardlessTokenRequest
-            {
-                SecretId = _goCardlessSettings.SecretId,
-                SecretKey = _goCardlessSettings.SecretKey
-            })
+            .PostJsonAsync(new GoCardlessTokenRequest { SecretId = _goCardlessSettings.SecretId, SecretKey = _goCardlessSettings.SecretKey })
             .ReceiveJson<GoCardlessTokenResponse>();
         return tokenResponse.MapToOpenIdToken();
     }
@@ -303,10 +304,7 @@ public class GoCardlessService : IGoCardlessService
     {
         var tokenResponse = await GoCardlessRoutes
             .TokenRefresh(_goCardlessSettings.BaseUrl)
-            .PostJsonAsync(new GoCardlessTokenRefreshRequest
-            {
-                Refresh = token.RefreshToken
-            })
+            .PostJsonAsync(new GoCardlessTokenRefreshRequest { Refresh = token.RefreshToken })
             .ReceiveJson<GoCardlessTokenResponse>();
         return tokenResponse.MapToOpenIdToken();
     }

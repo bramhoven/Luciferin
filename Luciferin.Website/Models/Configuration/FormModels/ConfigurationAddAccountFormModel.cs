@@ -4,12 +4,12 @@ using Luciferin.BusinessLayer.Nordigen.Models;
 
 namespace Luciferin.Website.Models.Configuration.FormModels
 {
-    public class ConfigurationAddBankFormModel
+    public class ConfigurationAddAccountFormModel
     {
         #region Properties
         
         [Required(ErrorMessage = "Bank name is required")]
-        public string BankName { get; set; }
+        public string RequisitionName { get; set; }
 
         [Required(ErrorMessage = "Institution is required")]
         public string InstitutionId { get; set; }

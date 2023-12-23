@@ -3,39 +3,39 @@
 <div class="text-center">
     <h1 class="display-4">Configure the web importer</h1>
 
-    @Html.DisplayFor(m => m.RequisitionList)
+    @Html.DisplayFor(m => m.AccountList)
 
     <div class="mt-5">
         <h4>Connect a new bank account:</h4>
     </div>
 
-    @using (Html.BeginForm("AddBank", "Configuration", FormMethod.Post))
+    @using (Html.BeginForm("AddRequisition", "Configuration", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
         <div class="input-group mt-2">
             <div class="input-group-prepend">
-                <label class="input-group-text" for="institution-select">Choose your bank</label>
+                <label class="input-group-text" for="institution-select">Choose your institution</label>
             </div>
-            <select class="custom-select" id="institution-select" name="AddBankFormModel.InstitutionId">
-                @foreach (var institution in Model.AddBankFormModel.Institutions)
+            <select class="custom-select" id="institution-select" name="AddAccountFormModel.InstitutionId">
+                @foreach (var institution in Model.AddAccountFormModel.Institutions)
                 {
                     <option value="@institution.Id">@institution.Name</option>
                 }
             </select>
         </div>
         <div class="input-group mt-0">
-            @Html.ValidationMessageFor(m => m.AddBankFormModel.InstitutionId, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.AddAccountFormModel.InstitutionId, "", new { @class = "text-danger" })
         </div>
 
         <div class="input-group mt-2">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="bank-name">Name</span>
+                <span class="input-group-text" id="requisition-name">Name</span>
             </div>
-            @Html.EditorFor(m => m.AddBankFormModel.BankName, new { htmlAttributes = new { @class = "form-control", aria_label = "Give the bank a name", aria_describedby = "bank-name" } })
+            @Html.EditorFor(m => m.AddAccountFormModel.RequisitionName, new { htmlAttributes = new { @class = "form-control", aria_label = "Give the requisition a name", aria_describedby = "requisition-name" } })
         </div>
         <div class="input-group mt-0">
-            @Html.ValidationMessageFor(m => m.AddBankFormModel.BankName, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.AddAccountFormModel.RequisitionName, "", new { @class = "text-danger" })
         </div>
 
         <div class="input-group mt-2">

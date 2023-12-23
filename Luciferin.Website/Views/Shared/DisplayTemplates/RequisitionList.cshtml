@@ -1,6 +1,6 @@
 ﻿@model Luciferin.Website.Models.RequisitionList
 
-@if (Model.AnyRequisitions)
+@if (Model.AnyAccounts)
 {
     <div class="mt-5">
         <h4>Connected accounts:</h4>
@@ -13,7 +13,7 @@
                 <span class="badge badge-primary badge-pill" style="min-width: 65px;">@requisition.Status | @(requisition.IsSuspended ? "Suspended" : requisition.IsRevoked ? "Revoked" : "Connected")</span>
                 <span class="pl-3 flex-grow-1 text-left">@requisition.Reference (@requisition.Id)</span>
 
-                @using (Html.BeginForm("DeleteBank", "Configuration"))
+                @using (Html.BeginForm("DeleteRequisition", "Configuration"))
                 {
                     @Html.AntiForgeryToken()
                     @Html.Hidden("requisitionId", requisition.Id)

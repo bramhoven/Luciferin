@@ -1,18 +1,17 @@
-﻿using Luciferin.Infrastructure.GoCardless.Enums;
+namespace Luciferin.Core.Entities;
 
-namespace Luciferin.Infrastructure.GoCardless.Models;
+using Abstractions;
+using Enums;
 
-public class Requisition
+public class Requisition : IEntity
 {
-    public ICollection<string> Accounts { get; set; }
+    public ICollection<Account> Accounts { get; set; }
 
     public bool AccountSelection { get; set; }
 
     public string Agreement { get; set; }
 
     public DateTime Created { get; set; }
-
-    public string Id { get; set; }
 
     public string InstitutionId { get; set; }
 
@@ -24,11 +23,13 @@ public class Requisition
 
     public string Ssn { get; set; }
 
-    public RequisitionStatus Status { get; set; }
+    public ImportAccountStatus Status { get; set; }
 
     public string UserLanguage { get; set; }
 
     public bool IsSuspended { get; set; }
 
     public bool IsRevoked { get; set; }
+
+    public string Id { get; set; }
 }

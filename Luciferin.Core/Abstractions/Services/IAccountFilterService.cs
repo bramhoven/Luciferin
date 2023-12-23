@@ -10,5 +10,5 @@ public interface IAccountFilterService
     /// <param name="accounts">The accounts to filter.</param>
     /// <param name="existingAccounts">The accounts to filter against.</param>
     /// <returns></returns>
-    ICollection<Account> FilterAccounts(ICollection<Account> accounts, ICollection<Account> existingAccounts);
+    ICollection<Account> FilterAccounts(ICollection<Requisition> accounts, ICollection<Account> existingAccounts);
 }

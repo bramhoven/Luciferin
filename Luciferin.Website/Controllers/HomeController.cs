@@ -1,47 +1,30 @@
+namespace Luciferin.Website.Controllers;
+
 using System.Threading.Tasks;
-using Luciferin.BusinessLayer.Import;
-using Luciferin.BusinessLayer.Nordigen;
-using Luciferin.Website.Models;
-using Luciferin.Website.Models.Home;
+using Application.UseCases.Requisitions.Get;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Models;
+using Models.Home;
 
-namespace Luciferin.Website.Controllers
+[Route("/")]
+public class HomeController : Controller
 {
-    [Route("/")]
-    public partial class HomeController : Controller
+    private readonly IMediator _mediator;
+
+    public HomeController(IMediator mediator)
     {
-        #region Fields
+        _mediator = mediator;
+    }
 
-        private readonly IImportManager _importManager;
+    [HttpGet]
+    public virtual async Task<ActionResult> Index()
+    {
+        ViewData["Title"] = "Home";
 
-        #endregion
-
-        #region Constructors
-
-        public HomeController(IImportManager importManager)
-        {
-            _importManager = importManager;
-        }
-
-        #endregion
-
-        #region Methods
-
-        [HttpGet]
-        public virtual async Task<ActionResult> Index()
-        {
-            ViewData["Title"] = "Home";
-            
-            var model = new HomeIndexPageModel
-            {
-                ConfigurationStartUrl = "/configuration",
-                ImportStartUrl = "/import",
-                RequisitionList = new RequisitionList(await _importManager.GetImportableRequisitions())
-            };
-            return View(model);
-        }
-
-        #endregion
+        var getProviderAccountCommand = new GetImportAccountsCommand();
+        var accounts = await _mediator.Send(getProviderAccountCommand);
+        var model = new HomeIndexPageModel { ConfigurationStartUrl = "/configuration", ImportStartUrl = "/import", RequisitionList = new RequisitionList(accounts) };
+        return View(model);
     }
 }
