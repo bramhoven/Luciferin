@@ -1,4 +1,4 @@
-namespace Luciferin.Infrastructure.GoCardless;
+namespace Luciferin.Infrastructure.Settings;
 
 public class GoCardlessSettings
 {

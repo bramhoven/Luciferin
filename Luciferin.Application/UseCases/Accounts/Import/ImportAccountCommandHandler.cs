@@ -1,8 +1,8 @@
 namespace Luciferin.Application.UseCases.Accounts.Import;
 
 using Abstractions.Providers;
+using Abstractions.Services;
 using Abstractions.Stores;
-using Core.Abstractions.Services;
 using MediatR;
 
 public class ImportAccountCommandHandler : IRequestHandler<ImportAccountCommand>

@@ -1,45 +1,44 @@
+namespace Luciferin.Website;
+
 using System;
 using System.Linq;
-using Luciferin.Application.Abstractions.Providers;
-using Luciferin.Application.Abstractions.Repositories;
-using Luciferin.Application.Abstractions.Stores;
-using Luciferin.Application.Extensions;
-using Luciferin.BusinessLayer.Configuration;
-using Luciferin.BusinessLayer.Configuration.Interfaces;
-using Luciferin.BusinessLayer.Converters.Helper;
-using Luciferin.BusinessLayer.Firefly;
-using Luciferin.BusinessLayer.Firefly.Stores;
-using Luciferin.BusinessLayer.Helpers;
-using Luciferin.BusinessLayer.Import;
-using Luciferin.BusinessLayer.Import.Mappers;
-using Luciferin.BusinessLayer.Import.Processors;
-using Luciferin.BusinessLayer.Import.Stores;
-using Luciferin.BusinessLayer.Jobs;
-using Luciferin.BusinessLayer.Logger;
-using Luciferin.BusinessLayer.Nordigen;
-using Luciferin.BusinessLayer.Nordigen.Stores;
-using Luciferin.BusinessLayer.Notifications;
-using Luciferin.BusinessLayer.ServiceBus;
-using Luciferin.BusinessLayer.Settings;
-using Luciferin.BusinessLayer.Settings.Enums;
-using Luciferin.BusinessLayer.Settings.Stores;
-using Luciferin.Core.Abstractions.Services;
-using Luciferin.Core.Services;
-using Luciferin.Infrastructure.Firefly;
-using Luciferin.Infrastructure.Mail;
-using Luciferin.Infrastructure.Mocks;
-using Luciferin.Infrastructure.Mocks.Providers;
-using Luciferin.Infrastructure.Mocks.Services;
-using Luciferin.Infrastructure.GoCardless.Extensions;
-using Luciferin.Infrastructure.Storage;
-using Luciferin.Infrastructure.Storage.Context;
-using Luciferin.Infrastructure.Storage.Mysql;
-using Luciferin.Infrastructure.Storage.Postgres;
-using Luciferin.Website.Classes.Extensions;
-using Luciferin.Website.Classes.Logger;
-using Luciferin.Website.Classes.Queue;
-using Luciferin.Website.Classes.ServiceBus;
-using Luciferin.Website.Hubs;
+using Application.Abstractions.Providers;
+using Application.Abstractions.Services;
+using Application.Abstractions.Stores;
+using Application.Extensions;
+using Application.Services;
+using BusinessLayer.Configuration;
+using BusinessLayer.Configuration.Interfaces;
+using BusinessLayer.Converters.Helper;
+using BusinessLayer.Firefly;
+using BusinessLayer.Firefly.Stores;
+using BusinessLayer.Helpers;
+using BusinessLayer.Import;
+using BusinessLayer.Import.Mappers;
+using BusinessLayer.Import.Processors;
+using BusinessLayer.Import.Stores;
+using BusinessLayer.Logger;
+using BusinessLayer.Nordigen;
+using BusinessLayer.Nordigen.Stores;
+using BusinessLayer.Notifications;
+using BusinessLayer.ServiceBus;
+using BusinessLayer.Settings;
+using BusinessLayer.Settings.Stores;
+using Classes.Extensions;
+using Classes.Logger;
+using Classes.Queue;
+using Classes.ServiceBus;
+using Hubs;
+using Infrastructure.Firefly;
+using Infrastructure.GoCardless.Extensions;
+using Infrastructure.Mail;
+using Infrastructure.Mocks.Providers;
+using Infrastructure.Mocks.Services;
+using Infrastructure.Settings;
+using Infrastructure.Settings.Enums;
+using Infrastructure.Storage;
+using Infrastructure.Storage.Context;
+using Infrastructure.Storage.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -48,12 +47,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Quartz;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
-
-namespace Luciferin.Website;
-
-using Infrastructure.Storage.Extensions;
 
 public class Startup
 {
@@ -138,7 +131,7 @@ public class Startup
         services.AddTransient<ITransactionFilterService, DuplicateTransactionFilterService>();
 
         services.AddMappers();
-        
+
         services.AddStorage();
         services.AddDbContext(Configuration, LuciferinSettings);
 
@@ -161,7 +154,9 @@ public class Startup
         {
             var options = factory.GetRequiredService<IOptionsSnapshot<LuciferinSettings>>().Value;
             if (options == null)
+            {
                 return new NullExpirationNotificationComponent();
+            }
 
             switch (options.NotificationMethod)
             {

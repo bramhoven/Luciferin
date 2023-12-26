@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Models;
 using Models.Requests;
 using Models.Responses;
+using Settings;
 
 public class GoCardlessService : IGoCardlessService
 {
@@ -144,7 +145,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId)
+    public async Task<ICollection<GCTransaction>> GetAccountTransactionsAsync(string accountId)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();
@@ -157,7 +158,7 @@ public class GoCardlessService : IGoCardlessService
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate)
+    public async Task<ICollection<GCTransaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate)
     {
         CheckConfiguration();
         var openIdToken = await GetToken();

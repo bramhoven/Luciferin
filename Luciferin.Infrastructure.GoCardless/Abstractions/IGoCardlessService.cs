@@ -19,9 +19,9 @@ public interface IGoCardlessService
 
     Task<AccountDetails> GetAccountDetailsAsync(string accountId);
 
-    Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId);
+    Task<ICollection<GCTransaction>> GetAccountTransactionsAsync(string accountId);
 
-    Task<ICollection<Transaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate);
+    Task<ICollection<GCTransaction>> GetAccountTransactionsAsync(string accountId, DateTime fromDate);
 
     Task<EndUserAgreement> GetEndUserAgreementAsync(string endUserAgreementId);
 

@@ -1,7 +1,7 @@
-using Luciferin.Core.Abstractions.Services;
-using Luciferin.Core.Entities;
+namespace Luciferin.Application.Services;
 
-namespace Luciferin.Core.Services;
+using Abstractions.Services;
+using Core.Entities;
 
 public class DuplicateTransactionFilterService : ITransactionFilterService
 {

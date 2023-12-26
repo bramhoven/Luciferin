@@ -1,19 +1,17 @@
+namespace Luciferin.Website.Classes.Extensions;
+
 using System;
-using Luciferin.BusinessLayer.Configuration;
-using Luciferin.BusinessLayer.Jobs;
-using Luciferin.Infrastructure.Firefly;
-using Luciferin.Infrastructure.GoCardless;
-using Luciferin.Infrastructure.Mail;
-using Luciferin.Infrastructure.Storage.Context;
-using Luciferin.Infrastructure.Storage.Mysql;
-using Luciferin.Infrastructure.Storage.Postgres;
+using BusinessLayer.Jobs;
+using Infrastructure.Mail;
+using Infrastructure.Settings;
+using Infrastructure.Storage.Context;
+using Infrastructure.Storage.Mysql;
+using Infrastructure.Storage.Postgres;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
-
-namespace Luciferin.Website.Classes.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -25,8 +23,7 @@ public static class ServiceCollectionExtensions
         services.Configure<GoCardlessSettings>(configuration.GetSection("GoCardless"));
     }
 
-    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration,
-        LuciferinSettings luciferinSettings)
+    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration, LuciferinSettings luciferinSettings)
     {
         var connectionString = configuration.GetConnectionString("Luciferin");
         switch (luciferinSettings.StorageProvider)

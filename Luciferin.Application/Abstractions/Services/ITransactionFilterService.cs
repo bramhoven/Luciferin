@@ -1,6 +1,6 @@
-using Luciferin.Core.Entities;
+namespace Luciferin.Application.Abstractions.Services;
 
-namespace Luciferin.Core.Abstractions.Services;
+using Core.Entities;
 
 public interface ITransactionFilterService
 {

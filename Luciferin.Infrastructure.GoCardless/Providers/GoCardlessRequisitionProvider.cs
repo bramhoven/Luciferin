@@ -4,6 +4,7 @@ using Abstractions;
 using Application.Abstractions.Providers;
 using AutoMapper;
 using Core.Entities;
+using Models;
 
 public sealed class GoCardlessRequisitionProvider : IRequisitionProvider
 {
@@ -49,7 +50,12 @@ public sealed class GoCardlessRequisitionProvider : IRequisitionProvider
     public async Task<ICollection<Account>> GetAccountsForRequisition(Requisition requisition)
     {
         var gcRequisition = await _goCardlessService.GetRequisitionAsync(requisition.Id);
-        var accounts = gcRequisition.Accounts.Select(async a => await _goCardlessService.GetAccountAsync(a)).ToList();
+        var accounts = new List<GCAccount>();
+        foreach (var accountId in gcRequisition.Accounts)
+        {
+            var account = await _goCardlessService.GetAccountAsync(accountId);
+            accounts.Add(account);
+        }
         return accounts.Select(_mapper.Map<Account>).ToList();
     }
 }

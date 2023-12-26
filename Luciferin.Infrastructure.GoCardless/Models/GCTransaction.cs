@@ -2,7 +2,7 @@
 
 namespace Luciferin.Infrastructure.GoCardless.Models;
 
-public class Transaction
+public class GCTransaction
 {
     public string BankTransactionCode { get; set; }
 
@@ -10,17 +10,17 @@ public class Transaction
 
     public CreditorAccount CreditorAccount { get; set; }
 
-    public string CreditorName { get; set; }
+    public string? CreditorName { get; set; }
 
     public CreditorAccount DebtorAccount { get; set; }
 
-    public string DebtorName { get; set; }
+    public string? DebtorName { get; set; }
 
     public string EntryReference { get; set; }
 
     public string RawData { get; set; }
 
-    public string RemittanceInformationUnstructured { get; set; }
+    public string? RemittanceInformationUnstructured { get; set; }
 
     public BankType RequisitorBank { get; set; }
 

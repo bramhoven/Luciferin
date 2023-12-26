@@ -3,10 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Luciferin.Application.Extensions;
 
+using Abstractions.Services;
+using Services;
+
 public static class ServiceCollectionExtensions
 {
     public static void AddApplicationLayer(this IServiceCollection services)
     {
+        services.AddScoped<IImportService, ImportService>();
         services.AddMediator();
     }
 

@@ -1,7 +1,8 @@
-using Luciferin.Core.Abstractions.Services;
 using Luciferin.Core.Entities;
 
 namespace Luciferin.Infrastructure.Mocks.Services;
+
+using Application.Abstractions.Services;
 
 public class MockAccountFilterService : IAccountFilterService
 {

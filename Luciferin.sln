@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.GoCardless", "Luciferin.Infrastructure.GoCardless\Luciferin.Infrastructure.GoCardless.csproj", "{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luciferin.Infrastructure.Settings", "Luciferin.Infrastructure.Settings\Luciferin.Infrastructure.Settings.csproj", "{B113AA18-F9A6-45F7-8B7D-D37E33E5B086}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B113AA18-F9A6-45F7-8B7D-D37E33E5B086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B113AA18-F9A6-45F7-8B7D-D37E33E5B086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B113AA18-F9A6-45F7-8B7D-D37E33E5B086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B113AA18-F9A6-45F7-8B7D-D37E33E5B086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{DE7BC3A9-BFF4-4807-859E-541ADA84EF98} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
 		{E23FA6A7-D823-40FD-8089-97D3640B02CD} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
 		{3B41D824-1067-4AD2-B83E-83B9D1B5BA9F} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
+		{B113AA18-F9A6-45F7-8B7D-D37E33E5B086} = {5C4FFB8C-4949-4129-91F8-58FFC52D6106}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D6D9889-2DD8-404C-BD61-F37FAF67D6FD}

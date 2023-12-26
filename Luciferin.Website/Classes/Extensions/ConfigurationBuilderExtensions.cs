@@ -1,18 +1,18 @@
-﻿using System;
-using Luciferin.BusinessLayer.Configuration;
-using Luciferin.BusinessLayer.Settings;
-using Luciferin.Infrastructure.Storage.Context;
+﻿namespace Luciferin.Website.Classes.Extensions;
+
+using System;
+using BusinessLayer.Settings;
+using Infrastructure.Settings;
+using Infrastructure.Storage.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Luciferin.Website.Classes.Extensions;
-
 public static class ConfigurationBuilderExtensions
 {
     /// <summary>
-    /// Add the Luciferin configuration.
-    /// This gets all the Luciferin settings from the database.
+    ///     Add the Luciferin configuration.
+    ///     This gets all the Luciferin settings from the database.
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
@@ -24,7 +24,9 @@ public static class ConfigurationBuilderExtensions
 
         var connectionString = tempConfig.GetConnectionString("Luciferin");
         if (string.IsNullOrWhiteSpace(connectionString))
+        {
             return builder;
+        }
 
         var luciferinSettings = new LuciferinSettings();
         tempConfig.GetSection("Luciferin").Bind(luciferinSettings);

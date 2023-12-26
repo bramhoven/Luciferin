@@ -1,4 +1,4 @@
-namespace Luciferin.Infrastructure.Firefly;
+namespace Luciferin.Infrastructure.Settings;
 
 public class FireflySettings
 {

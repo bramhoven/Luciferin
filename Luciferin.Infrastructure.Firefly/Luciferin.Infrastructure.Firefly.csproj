@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Luciferin.Application\Luciferin.Application.csproj"/>
+        <ProjectReference Include="..\Luciferin.Infrastructure.Settings\Luciferin.Infrastructure.Settings.csproj" />
     </ItemGroup>
 
     <ItemGroup>

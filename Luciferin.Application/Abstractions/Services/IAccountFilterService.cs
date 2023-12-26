@@ -1,11 +1,11 @@
-using Luciferin.Core.Entities;
+namespace Luciferin.Application.Abstractions.Services;
 
-namespace Luciferin.Core.Abstractions.Services;
+using Core.Entities;
 
 public interface IAccountFilterService
 {
     /// <summary>
-    /// Filters a list of accounts.
+    ///     Filters a list of accounts.
     /// </summary>
     /// <param name="accounts">The accounts to filter.</param>
     /// <param name="existingAccounts">The accounts to filter against.</param>

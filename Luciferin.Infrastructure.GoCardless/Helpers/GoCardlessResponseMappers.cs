@@ -122,14 +122,14 @@ public static class GoCardlessResponseMappers
         return requisitionResponses.Select(r => r.MapToRequisition()).ToList();
     }
 
-    public static ICollection<Transaction> MapToTransactionCollection(
+    public static ICollection<GCTransaction> MapToTransactionCollection(
         this GoCardlessTransactionResponse transactionResponse)
     {
-        var transactions = new List<Transaction>();
+        var transactions = new List<GCTransaction>();
 
         var nordigenTransactions =
             transactionResponse.Transactions.Booked.Concat(transactionResponse.Transactions.Pending);
-        transactions.AddRange(nordigenTransactions.Select(b => new Transaction
+        transactions.AddRange(nordigenTransactions.Select(b => new GCTransaction
         {
             Status = TransactionStatus.Booked,
             BookingDate = b.BookingDate,

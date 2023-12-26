@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace Luciferin.Infrastructure.Firefly;
 
+using Settings;
+
 public class FireflyAccountStore : IAccountStore
 {
     private readonly string _fireflyAccessToken;
@@ -16,8 +18,7 @@ public class FireflyAccountStore : IAccountStore
 
     private readonly IServiceBus _serviceBus;
 
-    public FireflyAccountStore(IOptions<FireflySettings> options,
-        ICompositeLogger<FireflyAccountStore> logger, IServiceBus serviceBus)
+    public FireflyAccountStore(IOptions<FireflySettings> options, ICompositeLogger<FireflyAccountStore> logger, IServiceBus serviceBus)
     {
         var fireflySettings = options.Value;
         _fireflyBaseUrl = fireflySettings.BaseUrl;
@@ -54,6 +55,11 @@ public class FireflyAccountStore : IAccountStore
     }
 
     public Task DeleteAsync(Account entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ICollection<Account>> GetNewAssetAccounts()
     {
         throw new NotImplementedException();
     }

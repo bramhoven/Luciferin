@@ -1,7 +1,7 @@
-using Luciferin.Application.Abstractions.Stores;
-using Luciferin.Core.Entities;
-
 namespace Luciferin.Infrastructure.Mocks.Stores;
+
+using Application.Abstractions.Stores;
+using Core.Entities;
 
 public class MockAccountStore : IAccountStore
 {
@@ -33,6 +33,11 @@ public class MockAccountStore : IAccountStore
     }
 
     public Task DeleteAsync(Account entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ICollection<Account>> GetNewAssetAccounts()
     {
         throw new NotImplementedException();
     }
